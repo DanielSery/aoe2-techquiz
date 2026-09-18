@@ -1,23 +1,25 @@
-const { buildDeck, truth, shuffle, attachSwipe, directionFor } = window.Quiz;
+const { buildDeck, truth, shuffle } = window.Quiz;
 
-const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
-const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
 const STORE_KEY = "aoe2-techquiz.topics";
 const MODE_KEY = "aoe2-techquiz.mode";
+const SIZE_KEY = "aoe2-techquiz.size";
 const MODES = ["single", "custom", "all"];
 
-// Where the upgrades sit in the picker, and so which arrows reach them: the
-// four sides first, then the corners, which take two arrows at once.
-// Right is where done sits, so it is not an upgrade slot: seven are left.
-const SLOTS = ["left", "up", "down", "up-left", "up-right", "down-left", "down-right"];
-const DIAGONAL_WAIT = 90; // ms to see whether a second arrow is on its way
+// how long a revealed card waits before it deals the next one itself
+const AUTO_NEXT_MS = 5000;
 
-// Naming the direction is the question; the rest are worth what they cost to
-// find out. An upgrade you leave alone and the civ has is worth nothing: only a
-// claim scores, or doing nothing would be the safe way to play.
+// Two claims that are not upgrades and sit with the actions rather than on the
+// board: the civ's bonus, and "it cannot build this at all". The bonus is part
+// of the answer; the other is a shortcut that says the answer is nothing.
+const BONUS_ID = "bonus";
+const NO_UNIT_ID = "no-unit";
+
+// Naming every upgrade and nothing else is the question; the rest are worth
+// what they cost to find out. An upgrade you leave alone and the civ has is
+// worth nothing: only a claim scores, or doing nothing would be the safe way to
+// play.
 const POINTS = {
   tier: 100,
-  tierWrong: -20,
   spotted: 10,
   falsely: -10,
   missed: -10,
@@ -40,12 +42,12 @@ const state = {
   phase: "answer",
   score: 0,
   picked: {},
-  bonus: null,
   mode: "single",
-  held: new Set(),
-  heldTimer: 0,
-  heldSpent: false,
+  // how many questions a round asks; null is "all of them", and stays all when
+  // the topics change under it
+  limit: null,
   timer: 0,
+  wait: 0,
 };
 
 start();
@@ -60,23 +62,23 @@ function start() {
   restoreSelection();
   renderMenu();
 
-  el("start").addEventListener("click", () =>
-    beginRound(buildDeck(state.data, [...state.selected]), true)
-  );
+  el("start").addEventListener("click", () => beginRound(deckToPlay(), true));
   el("quit").addEventListener("click", () => show("menu"));
   el("to-menu").addEventListener("click", () => show("menu"));
   el("again-all").addEventListener("click", () => beginRound(shuffle(state.fullDeck), true));
   el("again-wrong").addEventListener("click", () =>
-    beginRound(shuffle(state.results.filter((r) => !r.right).map((r) => r.card)), false)
+    beginRound(
+      shuffle(state.results.filter((result) => !wasRight(result)).map((result) => result.card)),
+      false
+    )
   );
   el("pad").addEventListener("click", (event) => {
     if (event.target.closest("#picker-done")) return finishPicks();
+    if (event.target.closest("#claim-all")) return claimAll();
+    const act = event.target.closest(".act[data-claim]");
+    if (act) return pick(act.dataset.claim);
     const upgrade = event.target.closest(".upgrade");
-    if (upgrade) return pick(upgrade.dataset.id);
-    const button = event.target.closest(".answer");
-    if (!button) return;
-    if (button.dataset.bonus) claimBonus();
-    else answer(button.dataset.dir);
+    if (upgrade) pick(upgrade.dataset.id);
   });
   // a revealed card waits for you: anything but the hud moves it on
   screens.game.addEventListener("pointerdown", (event) => {
@@ -86,8 +88,14 @@ function start() {
     const button = event.target.closest(".mode");
     if (button) setMode(button.dataset.mode);
   });
+  // dragging must not redraw the menu under the thumb, so it only moves the count
+  el("size").addEventListener("input", (event) => {
+    const size = Number(event.target.value);
+    state.limit = size >= Number(event.target.max) ? null : size;
+    showSize(size);
+  });
+  el("size").addEventListener("change", rememberSelection);
   document.addEventListener("keydown", onKey);
-  document.addEventListener("keyup", onKeyUp);
 }
 
 /* ---------- menu ---------- */
@@ -98,6 +106,8 @@ function restoreSelection() {
     saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
     const mode = localStorage.getItem(MODE_KEY);
     if (MODES.includes(mode)) state.mode = mode;
+    const size = Number(localStorage.getItem(SIZE_KEY));
+    state.limit = size > 0 ? size : null;
   } catch (ignored) {
     saved = [];
   }
@@ -111,6 +121,7 @@ function rememberSelection() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
     localStorage.setItem(MODE_KEY, state.mode);
+    localStorage.setItem(SIZE_KEY, state.limit === null ? "" : String(state.limit));
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
@@ -170,7 +181,7 @@ function renderMenu() {
       tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
       tile.title = `${topic.name} — ${Object.keys(topic.civs).length} civilisations`;
       tile.setAttribute("aria-label", topic.name);
-      tile.innerHTML = `<img src="${topic.icon}" alt="${topic.name}">`;
+      tile.innerHTML = tileHtml(topic);
       tile.addEventListener("click", () => chooseTopic(topic.id));
       tiles.append(tile);
     }
@@ -180,9 +191,69 @@ function renderMenu() {
   for (const button of el("modes").querySelectorAll(".mode")) {
     button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
   }
-  const size = buildDeck(state.data, [...state.selected]).length;
-  el("start").disabled = size === 0;
+  const whole = deckNow().length;
+  const slider = el("size");
+  slider.max = String(Math.max(whole, 1));
+  slider.disabled = whole < 2;
+  const asking = state.limit === null ? whole : Math.min(state.limit, whole);
+  slider.value = String(Math.max(asking, 1));
+  el("start").disabled = whole === 0;
+  showSize(whole ? asking : 0);
+  markScrollable(grid);
+}
+
+/* The scrollbar is hidden, so a menu taller than the screen looks like the
+   whole menu: nineteen topics in seven sections do not fit a short phone, and a
+   section below the fold is a topic you cannot know is there. The fade is the
+   only thing that says to keep going. */
+function markScrollable(grid) {
+  requestAnimationFrame(() => {
+    grid.classList.toggle("can-scroll", grid.scrollHeight - grid.clientHeight > 2);
+  });
+}
+
+/* A topic that asks about more than one unit wears them all, one slanted band
+   each: the tile is the only thing you see before you start, and a single icon
+   cannot say that the Gurjaras will be asked about an Elephant Archer. */
+function tileHtml(topic) {
+  return splitHtml(tileUnits(topic), topic.name);
+}
+
+/* One icon, or all of them sharing the space. */
+function splitHtml(images, alt = "") {
+  if (images.length < 2) return `<img src="${images[0]}" alt="${alt}">`;
+  const cells = images.map((src) => `<img src="${src}" alt="">`).join("");
+  return `<span class="split n${images.length}">${cells}</span>`;
+}
+
+/* The group the topic's own icon belongs to: that unit first, then whatever
+   stands in for it. */
+function tileUnits(topic) {
+  const groups = Object.values(topic.alts || {}).filter((group) => group.length > 1);
+  const icon = topic.parts.find((part) => part.img === topic.icon);
+  // the icon's own group, or the icon alone: the Light Cavalry is one unit even
+  // though the Hussar above it comes in two
+  const group = icon && groups.find((g) => g.includes(icon.id));
+  if (!group) return [topic.icon];
+  return group.map((id) => topic.parts.find((part) => part.id === id).img);
+}
+
+function deckNow() {
+  return buildDeck(state.data, [...state.selected]);
+}
+
+/* A shorter round is a random handful of the questions, not the first of them:
+   the deck is already shuffled, so the cut is the draw. */
+function deckToPlay() {
+  const deck = deckNow();
+  return state.limit === null ? deck : deck.slice(0, state.limit);
+}
+
+function showSize(size) {
   el("start-count").textContent = size ? `${size}` : "";
+  const slider = el("size");
+  const span = Number(slider.max) - 1 || 1;
+  slider.style.setProperty("--filled", `${((Number(slider.value) - 1) / span) * 100}%`);
 }
 
 /* ---------- round ---------- */
@@ -202,6 +273,7 @@ function beginRound(cards, isFullSet) {
 
 function show(name) {
   clearTimeout(state.timer);
+  clearTimeout(state.wait);
   closePicker();
   for (const [key, node] of Object.entries(screens)) node.classList.toggle("is-active", key === name);
   if (name === "menu") renderMenu();
@@ -238,369 +310,323 @@ function bumpScore(delta) {
 }
 
 function renderCard() {
-  const stack = el("stack");
   const card = state.deck[state.index];
-  const { topic, civ, answer: fact } = truth(state.data, card);
   state.phase = "answer";
-  state.bonus = null;
+  layStack();
+  renderBoardCard(card);
+  renderProgress();
+}
 
+/* the card under this one, and the emblem of the card after it */
+function layStack() {
+  const stack = el("stack");
   stack.innerHTML = "";
-  if (state.index + 1 < state.deck.length) {
-    const under = document.createElement("div");
-    under.className = "card under";
-    under.innerHTML = `<div class="card-inner"><div class="face front"></div></div>`;
-    stack.append(under);
-    new Image().src = state.data.civs[state.deck[state.index + 1].civId].img;
-  }
+  const next = state.deck[state.index + 1];
+  if (!next) return;
+  const under = document.createElement("div");
+  under.className = "card under";
+  under.innerHTML = `<div class="card-inner"><div class="face front"></div></div>`;
+  stack.append(under);
+  new Image().src = state.data.civs[next.civId].img;
+}
 
+/* Who is being asked, and about what: the card says only that, because the
+   question itself is the same every time and lives over the board. The back is
+   the answer -- the same band and the same name, so the flip turns over one
+   card rather than swapping two. */
+function renderBoardCard(card) {
+  const { topic, civ, answer: fact } = truth(state.data, card);
   const node = document.createElement("div");
   node.className = "card";
+  const band = `<div class="topic-band">${tileHtml(topic)}<span>${topic.name}</span></div>`;
   node.innerHTML = `
     <div class="card-inner">
       <div class="face front">
-        <div class="topic-chip"><img src="${topic.icon}" alt="${topic.name}"></div>
-        <img class="emblem" src="${civ.img}" alt="${civ.name}">
+        ${band}
+        <div class="plate"><img class="emblem" src="${civ.img}" alt="${civ.name}"></div>
         <div class="civ-name">${civ.name}</div>
       </div>
       <div class="face back">
-        <div class="card-delta"></div>
+        <div class="topic-band">${tileHtml(topic)}<span>${topic.name}</span>
+          <b class="card-delta"></b>
+        </div>
         <div class="judge-badge"></div>
-        <img class="emblem" src="${civ.img}" alt="">
-        <div class="options"></div>
+        <div class="who">
+          <img class="emblem" src="${civ.img}" alt="">
+          <div class="civ-name">${civ.name}</div>
+        </div>
         <div class="parts">${partsHtml(topic, fact, null)}</div>
         <div class="bonus-slot"></div>
         <div class="next-hint">
           <svg><use href="#icon-play"/></svg><svg><use href="#icon-play"/></svg>
         </div>
+        <div class="auto-bar"></div>
       </div>
     </div>`;
-  stack.append(node);
-
-  attachSwipe(node, {
-    onDrag: (dx, dy) => {
-      if (state.phase !== "answer") return;
-      node.classList.remove("settle");
-      node.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx / 20}deg)`;
-      arm(directionFor(dx, dy));
-    },
-    onRelease: (dx, dy) => {
-      if (state.phase !== "answer") return;
-      const direction = directionFor(dx, dy);
-      arm(null);
-      if (direction && tierAt(topic, direction)) return answer(direction);
-      if (direction === "down") claimBonus();
-      node.classList.add("settle");
-      node.style.transform = "";
-    },
-  });
-
-  renderProgress();
-  renderPad(topic);
+  el("stack").append(node);
+  openBoard(card);
 }
 
-function tierAt(topic, direction) {
-  return topic.tiers.find((tier) => tier.dir === direction);
-}
-
-function tierById(topic, id) {
-  return topic.tiers.find((tier) => tier.id === id);
-}
-
-/* The pad is the only place that says what a direction means, so it is drawn
-   per topic: the arrow, the mark, and the parts that direction claims. */
-function renderPad(topic) {
-  const pad = el("pad");
-  pad.className = "pad";
-  pad.innerHTML =
-    topic.tiers
-      .map(
-        (tier, index) => `<button class="answer is-${tier.mark}" data-dir="${tier.dir}"
-          title="${padTitle(topic, index)}">
-          <svg class="arrow"><use href="#arrow-${tier.dir}"/></svg>
-          <span class="mini">${miniHtml(topic, index)}</span>
-        </button>`
-      )
-      .join("") +
-    `<button class="answer is-bonus" data-dir="down" data-bonus="1"
-       title="a civ bonus, team bonus or unique tech about this unit">
-      <svg class="arrow"><use href="#arrow-down"/></svg>
-      <svg><use href="#icon-star"/></svg>
-    </button>
-    <span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
-}
-
-/* The bonus is a side bet: it scores at once and leaves the card where it is. */
-function claimBonus() {
-  if (state.phase !== "answer" || state.bonus) return;
-  const { answer: fact } = truth(state.data, state.deck[state.index]);
-  const right = Boolean(fact.bonus);
-  state.bonus = { right, delta: right ? POINTS.bonus : POINTS.bonusWrong };
-  bumpScore(state.bonus.delta);
-
-  const button = el("pad").querySelector(".answer.is-bonus");
-  button.classList.add(right ? "spotted" : "falsely");
-  button.querySelector("svg:last-child").innerHTML =
-    `<use href="#mark-${right ? "right" : "wrong"}"/>`;
-}
-
-// A rung is "at least this much, and not all of the next one". One part short
-// of the next rung is a definite gap; two or more is only "not all of these",
-// and the bottom rung is a catch-all, so it claims nothing.
-function rungParts(topic, index) {
-  const has = topic.tiers[index].has;
-  const next = topic.tiers[index + 1] ? topic.tiers[index + 1].has : [];
-  const missing = next.filter((id) => !has.includes(id));
-  const vague = index > 0 && missing.length > 1;
-  return topic.parts.map((part) => ({
-    part,
-    state: has.includes(part.id) ? "on" : vague && missing.includes(part.id) ? "some" : "off",
-  }));
-}
-
-function miniHtml(topic, index) {
-  return rungParts(topic, index)
-    .map(
-      ({ part, state }) =>
-        `<span class="${state}" title="${part.name}"><img src="${part.img}" alt=""></span>`
-    )
-    .join("");
-}
-
-function padTitle(topic, index) {
-  const rows = rungParts(topic, index);
-  const named = (state) => rows.filter((r) => r.state === state).map((r) => r.part.name);
-  const on = named("on");
-  const some = named("some");
-  const off = named("off");
-
-  if (index === 0) {
-    // the bottom rung is "not even the one above"; with no gate unit that is
-    // every part the topic names
-    const above = topic.tiers[1].has;
-    const wanted = topic.parts
-      .filter((part) => !above.length || above.includes(part.id))
-      .map((part) => part.name);
-    return `not even ${wanted.join(" + ")}`;
-  }
-  if (!on.length) return `some of: ${some.join(", ")}`;
-  if (some.length) return `${on.join(", ")} — but not all of: ${some.join(", ")}`;
-  return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
-}
-
-/* Which of a slot's alternatives this civ actually fields; the others are not
-   gaps, so the reveal leaves them out unless the civ has none of them. */
-function shownAlt(topic, key, answer) {
-  const group = (topic.alts || {})[key] || [key];
-  return group.find((id) => answer.has.includes(id)) || null;
-}
-
-function groupKey(topic, partId) {
+/* One entry per slot, so the pad asks the question the same way of every civ:
+   an alternatives group answers to its first member. */
+function topicSlots(topic) {
   const alts = topic.alts || {};
-  return Object.keys(alts).find((key) => alts[key].includes(partId)) || partId;
-}
-
-/* The civ's own row, ringed with how your picks did when the picker ran. */
-function partsHtml(topic, answer, picks) {
-  const alts = topic.alts || {};
-  const fielded = new Set(
-    Object.keys(alts)
-      .map((key) => shownAlt(topic, key, answer))
-      .filter(Boolean)
-  );
   const alternatives = new Set(Object.values(alts).flat());
-  return topic.parts
-    .filter((part) => {
-      if (!alternatives.has(part.id)) return true;
-      const key = groupKey(topic, part.id);
-      const shown = shownAlt(topic, key, answer);
-      return shown ? fielded.has(part.id) : true;
-    })
+  return topic.parts.filter((part) => !alternatives.has(part.id) || part.id in alts);
+}
+
+/* Every unit that can fill a slot, and what to call them. Before the answer the
+   options show them all: drawing the civ's own Winged Hussar would already say
+   it has one. */
+function slotImages(topic, partId) {
+  return slotGroup(topic, partId).map((part) => part.img);
+}
+
+function slotName(topic, part) {
+  return slotGroup(topic, part.id)
+    .map((member) => member.name)
+    .join(" / ");
+}
+
+function slotGroup(topic, partId) {
+  const ids = (topic.alts || {})[partId] || [partId];
+  return ids.map((id) => topic.parts.find((part) => part.id === id));
+}
+
+/* What the civ has, slot by slot, ringed with how your picks did when the picker
+   ran. A slot is drawn the same way it was asked -- every unit that can fill it --
+   and the tick is whether this civ has one of them. */
+function partsHtml(topic, answer, picks) {
+  return topicSlots(topic)
     .map((part) => {
-      const on = answer.has.includes(part.id);
-      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(part, picks, topic)}"
-        title="${part.name}">
-        <img src="${part.img}" alt="${part.name}">
+      const on = slotGroup(topic, part.id).some((member) => answer.has.includes(member.id));
+      const name = slotName(topic, part);
+      return `<span class="part ${on ? "on" : "off"} ${(picks && picks[part.id]) || ""}"
+        title="${name}">
+        ${splitHtml(slotImages(topic, part.id), name)}
         <b><svg><use href="#mark-${on ? "right" : "wrong"}"/></svg></b>
       </span>`;
     })
     .join("");
 }
 
-function pickOutcome(part, picks, topic) {
-  return picks ? picks[groupKey(topic, part.id)] || "" : "";
+/* A card is right only if the board was answered clean. "half" is one you got
+   some of and not the rest, and it counts as not right — in the tally, and in
+   the ones to repeat. */
+function verdictOf(result) {
+  if (result.clean === false) return "half";
+  return result.right ? "right" : "wrong";
 }
 
-function markRow(topic, truthId, wrongId) {
-  return topic.tiers
-    .map((tier) => {
-      const classes = [
-        "mark",
-        `is-${tier.mark}`,
-        tier.id === truthId ? "truth" : "",
-        tier.id === wrongId ? "yours struck" : "",
-      ];
-      return `<span class="${classes.join(" ").trim()}"><svg><use href="#mark-${
-        tier.mark
-      }"/></svg></span>`;
-    })
-    .join("");
+function wasRight(result) {
+  return verdictOf(result) === "right";
 }
 
+/* The card in hand owns a result from the moment it is dealt, so reading the
+   results alone draws every card as wrong before it has been answered: until it
+   is revealed, the one you are on is "now" and nothing else. */
 function renderProgress() {
   const bar = el("progress");
   bar.innerHTML = "";
   state.deck.forEach((_, i) => {
     const tick = document.createElement("i");
-    const done = state.results[i];
-    tick.className = done ? (done.right ? "right" : "wrong") : i === state.index ? "now" : "";
+    const pending = i === state.index && state.phase !== "reveal";
+    const done = pending ? null : state.results[i];
+    tick.className = done ? verdictOf(done) : i === state.index ? "now" : "";
     bar.append(tick);
   });
 }
 
-function arm(direction) {
-  for (const button of el("pad").querySelectorAll(".answer")) {
-    button.classList.toggle("armed", button.dataset.dir === direction);
-  }
-}
+/* ---------- the board: which upgrades the civilisation has ---------- */
 
-function answer(direction) {
-  if (state.phase !== "answer") return;
+/* The upgrades are tiles you tap, and the board reads left to right as none,
+   some, all: the unit it cannot build at all on one side, every upgrade there
+   is on the other, and what it actually has in between. Both ends answer the
+   card outright. Under them the two that are not answers: the bonus, which is
+   points, and done. It is the whole question, so it is up from the moment the
+   card is dealt.
 
-  const card = state.deck[state.index];
-  const { topic, answer: fact } = truth(state.data, card);
-  const guess = tierAt(topic, direction);
-  if (!guess) return;
-
-  const right = guess.id === fact.tier;
-  state.results[state.index] = {
-    card,
-    guess: guess.id,
-    tier: fact.tier,
-    right,
-    delta: (right ? POINTS.tier : POINTS.tierWrong) + (state.bonus ? state.bonus.delta : 0),
-    picks: null,
-    bonus: state.bonus,
-  };
-  arm(null);
-  bumpScore(right ? POINTS.tier : POINTS.tierWrong);
-  renderProgress();
-
-  // saying "partial" is only half an answer -- but only when it was the answer
-  if (right && guess.id === "partial" && topic.upgrades.length > 1) openPicker();
-  else reveal();
-}
-
-/* ---------- which upgrades is it missing? ---------- */
-
-/* The follow-up takes over the pad, so the answers and the upgrades are asked
-   in the same place, and done sits where "has it all" was. */
-function openPicker() {
-  const { topic } = truth(state.data, state.deck[state.index]);
+   The tiles are shuffled for every card: held still, "the third one" becomes an
+   answer of its own, and a position is a thing you can learn instead of the
+   upgrade. The reveal keeps the topic's own order, because there it is being
+   read rather than answered. */
+function openBoard(card) {
+  const { topic, civ } = truth(state.data, card);
   state.phase = "picking";
   state.picked = {};
-  state.held.clear();
-  state.heldSpent = false;
-  clearTimeout(state.heldTimer);
+  state.results[state.index] = { card, right: false, clean: true, delta: 0, picks: null };
 
   const pad = el("pad");
-  pad.className = "pad picking";
-  pad.innerHTML =
-    topic.upgrades
-      .map((id, index) => {
-        const fact = truth(state.data, state.deck[state.index]).answer;
-        const shown = shownAlt(topic, id, fact) || id;
-        const part = topic.parts.find((p) => p.id === shown);
-        const slot = SLOTS[index];
-        return `<button class="upgrade" data-id="${id}" data-slot="${slot}"
-          style="grid-area: ${slot}" title="${part.name}">
-          <img src="${part.img}" alt="${part.name}">
-          <svg class="dir dir-${slot}"><use href="#arrow-up"/></svg>
-          <b class="verdict"></b>
-        </button>`;
-      })
-      .join("") +
-    `<button id="picker-done" class="done" title="that is all of them">
-      <svg class="arrow"><use href="#arrow-right"/></svg>
-      <svg><use href="#mark-right"/></svg>
-    </button>
-    <span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
+  pad.className = "pad claiming";
+  const cannot = cannotHave(topic);
+  // every civ's name is a plural or a collective, so "do the Franks" and "do
+  // the Shu" both read
+  pad.innerHTML = `
+    <p class="ask-words">which upgrades do the <b>${civ.name}</b> have?</p>
+    <div class="board">
+      <button class="act rail" data-claim="${NO_UNIT_ID}" title="${cannot.long}">
+        <svg><use href="#mark-none"/></svg><span>${cannot.short}</span><b class="verdict"></b>
+      </button>
+      <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
+        ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
+          .map(
+            ({ id, name, art }) => `<button class="upgrade" data-id="${id}" title="${name}">
+              ${art}<b class="verdict"></b>
+            </button>`
+          )
+          .join("")}
+      </div>
+      <button id="claim-all" class="act rail" title="every upgrade is there">
+        <svg><use href="#mark-full"/></svg><span>all</span>
+      </button>
+    </div>
+    <div class="claim-actions">
+      <button class="act star" data-claim="${BONUS_ID}"
+        title="a civ bonus, team bonus or unique tech about this unit">
+        <svg><use href="#icon-star"/></svg><span>bonus</span><b class="verdict"></b>
+      </button>
+      <button id="picker-done" class="act primary" title="that is all of them">
+        <svg><use href="#mark-right"/></svg><span>done</span>
+      </button>
+    </div>`;
 }
 
-function closePicker() {
-  const pad = el("pad");
-  if (!pad.classList.contains("picking")) return;
-  const card = state.deck[state.index];
-  if (card) renderPad(truth(state.data, card).topic);
-  else pad.className = "pad";
+function tileCount(topic) {
+  return claimables(topic).filter(({ id }) => id !== BONUS_ID).length;
 }
 
-function slotDirection(held) {
-  const up = held.has("up");
-  const down = held.has("down");
-  const left = held.has("left");
-  const right = held.has("right");
-  const vertical = up ? "up" : down ? "down" : "";
-  const horizontal = left ? "left" : right ? "right" : "";
-  if (vertical && horizontal) return `${vertical}-${horizontal}`;
-  return vertical || horizontal || null;
+/* Two even rows rather than a full one and a remainder: five upgrades are 3 and
+   2, not 4 and 1. Four is the widest the rails leave room for. */
+function columnsFor(tiles) {
+  return tiles <= 4 ? tiles : Math.min(4, Math.ceil(tiles / 2));
 }
 
-function pickAt(slot) {
-  if (slot === "right") return finishPicks();
-  const button = el("pad").querySelector(`.upgrade[data-slot="${slot}"]`);
-  if (button) pick(button.dataset.id);
+/* What the left rail claims depends on what the topic is gated on. A unit is
+   one a civ may not be able to build at all; Defense and Economy are upgrades
+   and nothing else, where the same claim is simply that it has none of them. */
+function cannotHave(topic) {
+  const gates = topic.parts.filter((part) => !topic.upgrades.includes(part.id));
+  const unit = gates.length > 0 && gates.every((part) => part.id.startsWith("unit-"));
+  return unit
+    ? { short: "can't build", long: "it cannot build this unit at all" }
+    : { short: "has none", long: "it has none of these" };
 }
 
-/* Naming an upgrade is a claim, answered on the spot and not taken back. */
-function pick(id) {
-  if (state.phase !== "picking" || state.picked[id]) return;
-  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
-
-  const missing = fact.missing.includes(id);
-  const outcome = missing ? "spotted" : "falsely";
-  state.picked[id] = outcome;
-  state.results[state.index].delta += missing ? POINTS.spotted : POINTS.falsely;
-  bumpScore(missing ? POINTS.spotted : POINTS.falsely);
-
-  const button = el("pad").querySelector(`.upgrade[data-id="${id}"]`);
-  button.classList.add(outcome, "done");
-  button.querySelector(".verdict").innerHTML = `<svg><use href="#mark-${
-    missing ? "right" : "wrong"
-  }"/></svg>`;
-
-  if (topic.upgrades.every((upgrade) => state.picked[upgrade])) finishPicks();
+/* The board itself is the upgrades. The bonus is a claim too, but it is not an
+   upgrade, so it sits with the actions. */
+function claimables(topic) {
+  const tiles = topic.upgrades.map((id) => {
+    const part = topic.parts.find((p) => p.id === id);
+    const name = slotName(topic, part);
+    return { id, name, art: splitHtml(slotImages(topic, id), name) };
+  });
+  return tiles.concat({ id: BONUS_ID, name: "a bonus about this unit", art: "" });
 }
 
-// what you never named: the ones you missed
-function finishPicks() {
+/* "all of them are there": every tile still unanswered, claimed at once, and
+   that is the answer -- the bonus is not an upgrade, so this does not claim it. */
+function claimAll() {
   if (state.phase !== "picking") return;
-  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
+  for (const button of el("pad").querySelectorAll(".upgrade")) {
+    if (!state.picked[button.dataset.id]) pick(button.dataset.id, true);
+  }
+  finishPicks();
+}
+
+/* leaving the game mid-board: the next card draws its own pad */
+function closePicker() {
+  el("pad").className = "pad";
+}
+
+/* A right claim is one the civ has. The two that are not upgrades read their own
+   facts: a bonus about the unit, and not being able to build it at all. */
+function wanted(fact, id) {
+  if (id === BONUS_ID) return Boolean(fact.bonus);
+  if (id === NO_UNIT_ID) return fact.tier === "none";
+  return !fact.missing.includes(id);
+}
+
+/* A claim is answered on the spot and cannot be taken back. Two of them are the
+   whole answer and end the card: every upgrade at once, and "it cannot build
+   this at all". */
+function pick(id, holding) {
+  if (state.phase !== "picking" || state.picked[id]) return;
+  const card = state.deck[state.index];
+  const { topic, answer: fact } = truth(state.data, card);
+
+  const hit = wanted(fact, id);
+  const outcome = hit ? "spotted" : "falsely";
+  state.picked[id] = outcome;
+  state.results[state.index].delta += hit ? POINTS.spotted : POINTS.falsely;
+  bumpScore(hit ? POINTS.spotted : POINTS.falsely);
+  markClaim(id, outcome);
+  if (holding) return;
+
+  // Said and true, "it cannot build this at all" is the whole answer: the civ
+  // may own the techs all the same -- the Aztecs have Bracer and no cavalry
+  // archer -- so the reveal names them, but nothing is charged for not claiming
+  // them. Said and wrong, the card is answered too, and what you never claimed
+  // is charged as ever.
+  if (id === NO_UNIT_ID) return finishPicks(hit);
+
+  // the bonus is worth points, never the answer, so the board ends on its own
+  // only once every tile and any bonus going has been claimed
+  if (claimables(topic).every((tile) => state.picked[tile.id])) finishPicks();
+}
+
+function markClaim(id, outcome) {
+  const button = el("pad").querySelector(`[data-id="${id}"], [data-claim="${id}"]`);
+  if (!button) return;
+  button.classList.add(outcome, "done");
+  const verdict = button.querySelector(".verdict");
+  const mark = `<svg><use href="#mark-${
+    outcome === "spotted" ? "right" : outcome === "falsely" ? "wrong" : "partial"
+  }"/></svg>`;
+  if (verdict) verdict.innerHTML = mark;
+}
+
+/* What you never claimed: the ones you missed. The bonus is not one of them --
+   it is worth points and nothing else, so leaving it costs nothing and cannot
+   make a right card a half one. */
+function finishPicks(answered) {
+  if (state.phase !== "picking") return;
+  const card = state.deck[state.index];
+  const { topic, answer: fact } = truth(state.data, card);
 
   let delta = 0;
-  for (const id of fact.missing) {
-    if (state.picked[id]) continue;
-    state.picked[id] = "missed";
-    delta += POINTS.missed;
+  if (!answered) {
+    for (const { id } of claimables(topic)) {
+      if (id === BONUS_ID || state.picked[id] || !wanted(fact, id)) continue;
+      state.picked[id] = "missed";
+      markClaim(id, "missed");
+      delta += POINTS.missed;
+    }
   }
 
+  // naming them all and nothing else is the answer, and only then is the card
+  // worth its 100; some of them right is a half answer, none of them a wrong one
+  const outcomes = Object.entries(state.picked)
+    .filter(([id]) => id !== BONUS_ID)
+    .map(([, outcome]) => outcome);
+  const clean = outcomes.every((outcome) => outcome === "spotted");
+  const named = outcomes.some((outcome) => outcome === "spotted");
+  if (clean) delta += POINTS.tier;
+
   const result = state.results[state.index];
+  result.right = clean;
+  result.clean = clean || !named;
   result.picks = state.picked;
   result.delta += delta;
   if (delta) bumpScore(delta);
-  closePicker();
   reveal();
 }
 
-/* the civ's bonus, and whether the side bet came off */
-function bonusHtml(fact, claimed) {
-  if (!fact.bonus && !claimed) return "";
-  const said = claimed
-    ? `<svg class="said ${claimed.right ? "right" : "wrong"}"><use href="#mark-${
-        claimed.right ? "right" : "wrong"
-      }"/></svg>`
-    : "";
-  const why = fact.bonus ? (fact.why || []).join(" • ") : "no bonus for this one";
-  return `<div class="bonus-note"><svg><use href="#icon-star"/></svg>${said}<span>${why}</span></div>`;
+/* the civ's bonus, named on the reveal: it is why a civ a slot short can still
+   be good */
+function bonusHtml(fact) {
+  if (!fact.bonus) return "";
+  const why = (fact.why || []).join(" • ");
+  return `<div class="bonus-note"><svg><use href="#icon-star"/></svg><span>${why}</span></div>`;
 }
 
 function reveal() {
@@ -612,33 +638,38 @@ function reveal() {
   const back = node.querySelector(".face.back");
   node.classList.add("settle", "revealed");
   node.style.transform = "";
-  back.classList.add(result.right ? "right" : "wrong");
-
-  const verdict = result.right ? "right" : "wrong";
+  const verdict = verdictOf(result);
+  back.classList.add(verdict);
   back.querySelector(".judge-badge").className = `judge-badge ${verdict}`;
-  back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${verdict}"/></svg>`;
-  back.querySelector(".options").innerHTML = markRow(
-    topic,
-    fact.tier,
-    result.right ? null : result.guess
-  );
+  back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${
+    verdict === "half" ? "partial" : verdict
+  }"/></svg>`;
   back.querySelector(".parts").innerHTML = partsHtml(topic, fact, result.picks);
-  back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact, result.bonus);
+  back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact);
   const delta = back.querySelector(".card-delta");
   delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
   delta.textContent = result.delta > 0 ? `+${result.delta}` : `${result.delta}`;
+
+  // The card waits for you, but not for ever. The bar is filled in here rather
+  // than in the markup, or it would drain while the board was still being
+  // answered, and its duration comes off the clock that actually deals the next
+  // card so the two cannot drift apart.
+  const bar = back.querySelector(".auto-bar");
+  bar.innerHTML = "<i></i>";
+  bar.firstChild.style.animationDuration = `${AUTO_NEXT_MS}ms`;
+  clearTimeout(state.wait);
+  state.wait = setTimeout(advance, AUTO_NEXT_MS);
 
   renderProgress();
 }
 
 function advance() {
   if (state.phase !== "reveal") return;
+  clearTimeout(state.wait);
 
   const node = el("stack").querySelector(".card:not(.under)");
-  const { topic } = truth(state.data, state.deck[state.index]);
-  const [x, y] = FLY[tierById(topic, state.results[state.index].tier).dir];
   node.classList.add("gone");
-  node.style.transform = `translate(${x * 120}%, ${y * 120}%) rotate(${x * 18}deg)`;
+  node.style.transform = "translateY(-120%)";
 
   state.index += 1;
   state.phase = "between";
@@ -651,23 +682,21 @@ function advance() {
 /* ---------- results ---------- */
 
 function showResults() {
-  const right = state.results.filter((r) => r.right).length;
+  const right = state.results.filter(wasRight).length;
   el("final-score").textContent = state.score > 0 ? `+${state.score}` : `${state.score}`;
   el("final-tally").textContent = `${right} / ${state.results.length}`;
 
-  const wrong = state.results.filter((r) => !r.right);
-  el("review").innerHTML = [...wrong, ...state.results.filter((r) => r.right)]
+  const wrong = state.results.filter((result) => !wasRight(result));
+  el("review").innerHTML = [...wrong, ...state.results.filter(wasRight)]
     .map((result) => {
       const { topic, civ } = truth(state.data, result.card);
-      const shown = tierById(topic, result.tier).mark;
-      const yourMark = result.right ? null : tierById(topic, result.guess).mark;
-      const yours = result.right
-        ? ""
-        : `<span class="mark yours struck is-${yourMark}"><svg><use href="#mark-${yourMark}"/></svg></span>`;
-      return `<div class="row ${result.right ? "right" : "wrong"}">
-        <span class="judge"><svg><use href="#mark-${result.right ? "right" : "wrong"}"/></svg></span>
+      const verdict = verdictOf(result);
+      return `<div class="row ${verdict}">
+        <span class="judge"><svg><use href="#mark-${
+          verdict === "half" ? "partial" : verdict
+        }"/></svg></span>
         <img src="${civ.img}" alt="${civ.name}">
-        <div class="pair">${yours}<span class="mark is-${shown}"><svg><use href="#mark-${shown}"/></svg></span></div>
+        <div class="pair">${reviewPair(topic)}</div>
         <em>${civ.name}</em>
       </div>`;
     })
@@ -677,6 +706,12 @@ function showResults() {
   el("wrong-count").textContent = wrong.length ? `${wrong.length}` : "0";
   el("all-count").textContent = `${state.deck.length}`;
   show("results");
+}
+
+/* what the card was about */
+function reviewPair(topic) {
+  return `<span class="asked">${tileHtml(topic)}</span>
+    <span class="mark is-full"><svg><use href="#mark-full"/></svg></span>`;
 }
 
 /* ---------- keyboard ---------- */
@@ -700,21 +735,8 @@ function onKey(event) {
   if (state.phase === "picking") {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      return finishPicks();
+      finishPicks();
     }
-    const direction = KEYS[event.key];
-    if (!direction) return;
-    event.preventDefault();
-    if (event.repeat || state.heldSpent) return;
-
-    // a corner is two arrows at once, so wait a moment for the second
-    state.held.add(direction);
-    clearTimeout(state.heldTimer);
-    state.heldTimer = setTimeout(() => {
-      const slot = slotDirection(state.held);
-      state.heldSpent = true;
-      if (slot) pickAt(slot);
-    }, DIAGONAL_WAIT);
     return;
   }
 
@@ -722,25 +744,6 @@ function onKey(event) {
     if (["Shift", "Control", "Alt", "Meta", "Tab"].includes(event.key)) return;
     event.preventDefault();
     advance();
-    return;
-  }
-
-  const direction = KEYS[event.key];
-  if (direction) {
-    event.preventDefault();
-    if (direction === "down") claimBonus();
-    else answer(direction);
   }
 }
 
-// the arrows for a corner are released one at a time; only a clean release
-// arms the next pick
-function onKeyUp(event) {
-  const direction = KEYS[event.key];
-  if (!direction) return;
-  state.held.delete(direction);
-  if (!state.held.size) {
-    clearTimeout(state.heldTimer);
-    state.heldSpent = false;
-  }
-}

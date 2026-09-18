@@ -1,55 +1,105 @@
 # AoE2 Tech Quiz
 
-A flash-card game for learning the Age of Empires II: DE tech tree. A card is one
-civilisation and one topic, and every topic asks the same three questions — by
-swipe, or with the arrow keys:
+A flash-card game for learning the Age of Empires II: DE tech tree. It asks one
+question, of every civilisation in turn, and it is played by tapping or clicking
+— on a phone as much as on a desktop.
 
-| Answer | Swipe | Key | Means |
-|---|---|---|---|
-| ✗ | left | `←` | the civ does not have the unit |
-| ◐ | up | `↑` | it has the unit, but not every upgrade |
-| ✓ | right | `→` | the unit and all of its upgrades |
-| ★ | down | `↓` | a side bet: this civ has a bonus about it |
+**Which upgrades do they have?** A civilisation and a topic on the card, and
+under it the board. Tap an upgrade to claim it: it is answered on the spot and
+cannot be taken back, **+10** for a right claim, **−10** for a wrong one.
 
-Naming the direction is the question, so it is worth the most; the rest are
-side bets you take when you are sure.
+The board reads **left to right as none, some, all** — the scale the question is
+asked on. The two ends are the answers that need no tiles, and they are rails
+the full height of the tiles, so the board is one block whatever the topic:
 
-Answering scores at once: **+100** right, **−20** wrong, thrown across the card
-and counted in the corner. You never have to remember which way is which — the answers sit on a pad below
-the card, each in the direction you swipe for it, showing the topic's own icons
-lit or dimmed for what that answer claims, and the one you are about to pick
-lights up while you drag.
+```
+ ┌───────┬─────────────────────┬─────┐
+ │   ✗   │  ▣ ▣ ▣ ▣            │  ✓  │
+ │ CAN'T │  ▣ ▣ ▣   upgrades   │ ALL │
+ │ BUILD │                     │     │
+ └───────┴─────────────────────┴─────┘
+            ★ BONUS    ✔ DONE
+```
 
-Say **◐** *correctly* on a topic with more than one upgrade and it asks the
-follow-up: the
-upgrades take over the pad, in the same place the three answers were, laid out
-as a compass — up to seven of them, reached by an arrow key, or two at once for
-the corners. Each pick is answered on the spot and cannot be taken back: green
-border and tick if it really is missing (**+10**), red border and cross if the
-civ has it after all (**−10**). **`→` is done**, which is why right is not one of
-the seven; press it when you think you have found them all, and each one you
-never named costs **−10**. Leaving an upgrade alone that the civ
-really has is worth nothing, so marking nothing is not the safe play.
+**The tiles are shuffled for every card.** Held still, "the third one" becomes an
+answer of its own and a position is something you can learn instead of the
+upgrade. The reveal on the back keeps the topic's own order, because there the
+row is being read rather than answered.
 
-The purple **★** is not one of the three: it claims that the civ has a civ
-bonus, a team bonus or a unique tech about this unit. It scores on the spot,
-**+20** or **−20**, and leaves the card where it is, so you still have to answer.
-Claiming nothing costs nothing — it is there to be taken when you are sure. The
-reveal then names the bonus, whether you called it or not.
+The left rail says what it means for the topic in hand: **can't build** where the
+topic is gated on a unit, **has none** on Defense and Economy, which are
+upgrades and nothing else and have no unit to be unable to build (`cannotHave`).
 
-Where a topic has only one upgrade — Siege Engineers for the siege units, Ring
-Archer Armor for the Hand Cannoneer — there is no follow-up: **◐** already means
-"has the unit, without that upgrade".
+| | Means | |
+|---|---|---|
+| ✗ **can't build**, left rail | it cannot build this unit at all | ±10, **and that is the answer** |
+| ✓ **all**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
+| ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
+| ✔ **done** | that is all of them | ends the card |
 
-The card turns over the moment you are done: green or red for the whole card,
+The two under the board are the two that are not a reading of the scale: the
+bonus, which is points rather than an answer, and done.
+
+**✗ and ⊞ evaluate the card on the tap** — they are whole answers, not claims you
+build on. ✗ said and true ends it there: the civ may own the techs anyway (the
+Aztecs have Bracer and no Cavalry Archer), the reveal names them, and nothing is
+charged for not claiming them. Said and wrong, the card is answered all the
+same, and what you never claimed is charged as ever.
+
+**★ is bonus points and nothing else.** Leaving it costs nothing and cannot turn
+a right card into a half one; claiming one that is not there costs its **−10**
+and no more. Everything else on the board counts: ✔ (or `Enter`) charges **−10**
+for each upgrade you never claimed, and naming them all and nothing else is worth
+a further **+100**, so the card is right only when the set is exactly right. Some
+of them right is amber — out of the tally, and in the ones to repeat. None of
+them right is simply wrong.
+
+## How a round is dealt
+
+A civilisation comes up **once** on a board of its own, so a round is one pass
+over the civilisations — 53 cards on a topic every civ can be asked about. Every
+civ is worth asking, including the ones with no unit at all: "what does it have",
+answered with a ✗ and the techs it owns anyway, is exactly the fact worth
+knowing.
+
+**The card says who is being asked and about what, and nothing else** — the
+emblem, the name, and a band across the top naming the unit. The question itself
+is the same of every civilisation, so it lives over the board it is answered on
+rather than being read and re-read on the card.
+
+The card turns over the moment you are done: green, amber or red for the whole card,
 what the civ actually has icon by icon, your picks ringed in green, red or amber,
-and what the card was worth. It then waits — any key, tap or click deals the next
-one.
+and what the card was worth, in the same band. Any key, tap or click deals the
+next one — and if none comes, **the card deals it itself after five seconds**
+(`AUTO_NEXT_MS`). The bar draining along the bottom edge of the back is that
+clock; it is filled in when the card turns, so it counts the waiting and never
+the answering, and its duration is set from the same constant as the timer so
+the two cannot drift apart.
 
-Nineteen topics so far, and the menu sorts them by where the unit is trained:
-**Archery Range**, **Siege**, **Barracks**, **Stable**, **Monastery**. A topic's
+The strip along the top is the round: one tick per card, green, amber or red as
+they are answered, and the one in hand in **blue** — it is the only mark there
+that is not a verdict, so it is the only one not in the verdict colours. (A card
+owns a result from the moment it is dealt, so reading those results alone drew
+every card as wrong before it had been answered.)
+
+**A topic is named and pictured by the unit it starts from** — the Crossbowman,
+not the Arbalester; the Light Cavalry, not the Hussar; the Pikeman, the Knight,
+the Long Swordsman, the Eagle Scout. What it asks about is the upgrades, and the
+upgraded unit is one of the answers, so putting it on the tile would be showing
+you the answer. Nineteen topics so far, and the menu sorts them by where the unit is trained:
+**Archery Range**, **Siege**, **Barracks**, **Stable**, **Monastery** -- and then
+the two that start from no unit at all, **Defense** and **Economy**, which are
+their upgrades and nothing else, so ✗ there means a civ with none of them rather
+than a civ that cannot build something. A topic's
 `group` in `tools/build_data.py` is what puts it in a section. The tiles are
-the units' own icons, with the name on hover -- the whole menu is one screen. Only the last step of an upgrade line
+the units' own icons, with the name on hover. Nineteen topics in seven sections
+no longer fit one screen on a short phone -- 174px over at 375x553, 43px over at
+390x745 -- and the scrollbar is hidden, so `markScrollable` fades the bottom
+edge while there is more below. That fade is the only thing saying so. A
+topic that covers more than one unit shows them all, whole, sharing the tile --
+biggest cell to the unit it is named for -- so it says up front that Cavalry
+Archer will also ask about the Elephant Archer, the Bolas Rider and the Xianbei
+Raider. Only the last step of an upgrade line
 counts — Bracer, not Fletching and Bodkin Arrow as well, since a civ with Bracer
 necessarily has those.
 
@@ -57,21 +107,42 @@ Where only a handful of civilisations field a unit at all, the deck is only
 those civilisations: asking the other forty "do the Aztecs have a Steppe Lancer"
 teaches nothing. The threshold is `RARE` in `tools/build_data.py`.
 
-A topic is gated on the unit that says the line exists at all, which is not
-always the unit it is named after: Arbalester is gated on the **Crossbowman**,
-so a civ that stops at crossbows is ◐ with the Arbalest as one of the upgrades
-it is missing, and only the two civilisations with no crossbow at all are ✗. A
+A topic is gated on the unit that says the line exists at all, which is where its
+name comes from: the Crossbowman topic asks about the Arbalester upgrade, so a
+civ that stops at crossbows has the unit and is missing that upgrade, and only
+the two civilisations with no crossbow at all have nothing. A
 gate can also be a choice of units — Shu, Wei and Wu field the **Traction
 Trebuchet** where everyone else has a **Bombard Cannon**, and either counts, so
-the reveal shows whichever one the civ actually fields rather than marking the
-other as missing.
+the card asks for one of them rather than marking the other as missing.
+
+**A slot wears every unit that can fill it, everywhere it is drawn**: the menu
+tile, the corner of the card, the board and the card back all show
+the same split. A board drawn with the civ's own Winged Hussar on it would have
+answered the card before you did, so every card looks the same for all 53 and
+the tick on the back says only that the civ has *one* of them. The units that
+stand in for each other are the Gurjaras' **Elephant Archer**, the Mapuche's
+**Bolas Rider**, the Muisca's **Temple Guard**, the Champi Warrior, the Fire
+Lancer, the Siege Elephant, the Savar, the Shrivamsha Rider, the Winged Hussar
+and the Traction Trebuchet. Nothing on the card says which of them this civ is
+the one for -- that is the part the split gives up, and the reason it is worth
+it is that saying so would answer the question. The one unit with nothing above
+it is Wei's **Xianbei Raider**: it is already the top of its line,
+so it stands in its own last-upgrade slot and Wei is never missing an upgrade
+that does not exist.
+
 **Single / Custom / All** under the tiles says how many topics a set draws from:
 Single replaces the selection as you pick, Custom lets the tiles toggle for a
 mixed set, All takes every topic. Picking a tile outside Custom drops back to
 Single on that topic, and the choice is remembered between visits.
 
-At the end of a set you can repeat only the ones you got wrong, repeat the whole
-set, or go back and pick a different topic.
+The slider under it is **how many questions to ask**: all the way over is the
+whole set, anywhere short of that is that many drawn at random from it. Moving
+to another topic keeps the number if it fits and clamps it if it does not, and
+a slider left at the end means "all of them" whatever the next topic's size.
+
+At the end of a set you can repeat the ones you did not get right -- the wrong
+ones *and* the amber half-answers, which is the same set the tally counted
+against you -- repeat the whole set, or go back and pick a different topic.
 
 ## Playing it
 
@@ -122,17 +193,30 @@ python tools/build_data.py --civdata <path>/aoe2planner/gamedata/civdata.json
 
 The second form cross-checks every civ against a second, independent extraction
 of the same `.dat` and refuses to write anything if the two disagree — that
-disagreement would mean one of them is from a different patch. Forty of the
+disagreement would mean one of them is from a different patch. Forty-one of the
 gates pass for all 53 civilisations.
 
-Sixteen do not, and all sixteen are *regional* units — the Savar, the Eagle, the
-Battle Elephant, the Steppe Lancer, the Champi, the Fire Lancer, the Winged
-Hussar, the Camel Rider, the Traction Trebuchet, the Siege Elephant and their
+Twenty-five do not, and all twenty-five are *regional* or *unique* units — the
+Savar, the Shrivamsha Rider, the Eagle, the Battle Elephant, the Steppe Lancer,
+the Champi, the Fire Lancer, the Temple Guard, the Winged Hussar, the Camel
+Rider, the Elephant Archer, the Bolas Rider, the Xianbei Raider, the Traction
+Trebuchet, the Siege Elephant and their
 elites. Their enabling techs sit in no civilisation's disabled list, so reading
 the `.dat`'s enable side hands each of them to all 53; each disagreed for 40 to
 52 civs, where every other gate agreed for all 53. Those are marked `None` in
-`UNIT_ENABLER` and rest on aoe2techtree alone. One genuine single-civ divergence
-is recorded in `KNOWN_DIVERGENCES`: the Mapuche's Fervor.
+`UNIT_ENABLER` and rest on aoe2techtree alone.
+
+One *tech* is the same story and is listed in `UNSETTLED_TECHS`: the Khitans farm
+from Pastures, and the `.dat` extraction on this machine has never heard of that
+line, so nothing turns **Transhumance** off for anybody and the enable side hands
+it to all 53 -- it disagreed for exactly the 52 civs that do not have it. Its
+name is worth knowing twice: `data.json` calls it *Grazing Grasslands* and only
+the per-civ tree files carry the name the game shows.
+
+Two genuine single-civ divergences are recorded in `KNOWN_DIVERGENCES`, both the
+Mapuche's and both the same shape -- nothing in their disabled list turns
+**Fervor** or **Architecture** off, yet the tech tree they are dealt carries
+neither.
 
 A topic is one unit and the upgrades that complete it, at most seven so they fit
 the picker. Adding one is a line in `TOPICS` at the top of `tools/build_data.py`
@@ -142,16 +226,37 @@ a re-run, which fetches the icons too. A `unit` may be a list, and so may one
 of the `upgrades`, when two units answer the same question. List only the last
 step of each
 upgrade line: the run prints how many civs lack each one, and an upgrade no civ
-lacks can never be a right answer in the follow-up, only a wrong one.
+lacks can never be a right answer on the board, only a wrong one.
 
 Whether a civ has a **bonus** about the unit is not in the tech tree at all, so
 it is read out of the game's own civilisation descriptions (string 120150 + civ
 id, the same text the civ panel shows). A topic's `words` are the phrases that
-mean "this claim is about this unit"; `veto` throws out a claim that only
-matches through a different unit — Cavalry Archers are not Arbalesters — and a
-bonus *against* the unit ("+3 vs. Rams") does not count. Where the words still
-get it wrong, `bonus_fix` forces one civ either way. Every run prints every
-matched sentence, so the reading can be checked rather than trusted.
+mean "this claim is about this unit", and the topic's own part names are words
+too without being listed: a bonus about a tech the topic asks you about — free
+Siege Engineers, free Thumb Ring, a free Pikeman upgrade — is a bonus about the
+topic. Four rules decide the rest:
+
+- **A `veto` kills the word, not the sentence.** "Skirmishers and Elephant
+  Archers attack +25% faster" is a Skirmisher bonus; throwing out the whole line
+  because it says *Elephant Archer* somewhere loses it.
+- **`GUARDS` reads what comes before the word.** A bonus *against* the unit
+  ("+3 vs. Rams", "-3 damage **from** Mounted Units"), the unit a bonus leaves
+  out ("(**except** Skirmishers)"), and where some other unit is trained
+  ("Condottiero **available at** the Barracks") are all not bonuses for it.
+- **A civ that cannot build the unit has no bonus about it.** Mongols' Drill is
+  a Siege Workshop bonus and the Mongols have no Bombard Cannon, so that card is
+  a plain ✗ rather than "no unit, and a bonus about it".
+- Where the words still get it wrong, `bonus_fix` forces one civ either way.
+  It carries three: the Huns' Atheism and the Vikings' Chieftains name *enemy*
+  relics and monks, and the Incas' only Spearman-line sentence is about
+  villagers borrowing infantry armour.
+
+Every run prints every matched sentence, so the reading can be checked rather
+than trusted. It stays a reading of English prose, and two known lines still
+read across their own exception: the Armenians' Fereters ("Infantry (except
+Spearman-line)") and the Incas' villager line are listed under units they do not
+help — in both cases the civ has another sentence that counts as a bonus anyway, so
+the answer is right and only the reason shown is generous.
 
 ## Layout
 
@@ -160,8 +265,7 @@ matched sentence, so the reading can be checked rather than trusted.
 | `index.html` | the three screens and the SVG symbols |
 | `js/app.js` | screens, round state, rendering |
 | `data/topics.js` | generated: every civ's answer for every topic |
-| `js/data.js` | deck building and shuffling |
-| `js/swipe.js` | pointer drag to a direction |
+| `js/data.js` | deck building, and what a card knows about its civilisation |
 | `tools/build_data.py` | generates `data/topics.js` and downloads the icons |
 
 The data is a `.js` assignment rather than `.json` on purpose: a page opened

@@ -525,7 +525,7 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Gunpowder Units +2 line of sight"
      ]
@@ -556,8 +556,10 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
+     ]
     },
     "lithuanians": {
      "tier": "full",
@@ -1137,8 +1139,11 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Siege Engineers available in Castle Age",
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster"
+     ]
     },
     "khitans": {
      "tier": "full",
@@ -1575,7 +1580,7 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Blacksmith and Siege Workshop technologies cost -50% food"
      ]
@@ -1620,7 +1625,7 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Siege Weapons attack +25% faster",
       "Furor Celtica (Siege Weapons +40% HP)",
@@ -1642,7 +1647,7 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-377"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
      ]
@@ -1774,6 +1779,8 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Siege Engineers available in Castle Age",
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster",
       "Gunpowder Units +2 line of sight"
      ]
     },
@@ -1870,7 +1877,7 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Drill (Siege Workshop Units move +50% faster)"
      ]
@@ -1963,7 +1970,7 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Siege Workshop Units cost -15%"
      ]
@@ -2074,7 +2081,7 @@ window.QUIZ_DATA = {
    "id": "scorpion",
    "name": "Scorpion",
    "group": "Siege",
-   "icon": "img/topics/unit-542.png",
+   "icon": "img/topics/unit-279.png",
    "unit": "unit-279",
    "gate": [
     "unit-279"
@@ -2433,8 +2440,11 @@ window.QUIZ_DATA = {
       "tech-377"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Siege Engineers available in Castle Age",
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster"
+     ]
     },
     "khitans": {
      "tier": "partial",
@@ -2638,7 +2648,7 @@ window.QUIZ_DATA = {
      "missing": [
       "unit-542"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Siege Weapons and Siege Warships move +10/15% faster in Castle/Imperial Age"
      ]
@@ -2780,7 +2790,7 @@ window.QUIZ_DATA = {
    "id": "onager",
    "name": "Onager",
    "group": "Siege",
-   "icon": "img/topics/unit-588.png",
+   "icon": "img/topics/unit-550.png",
    "unit": "unit-550",
    "gate": [
     "unit-550"
@@ -3141,7 +3151,10 @@ window.QUIZ_DATA = {
       "unit-588"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Siege Engineers available in Castle Age",
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster"
+     ]
     },
     "khitans": {
      "tier": "none",
@@ -3483,9 +3496,9 @@ window.QUIZ_DATA = {
   },
   {
    "id": "arbalester",
-   "name": "Arbalester",
+   "name": "Crossbowman",
    "group": "Archery Range",
-   "icon": "img/topics/unit-492.png",
+   "icon": "img/topics/unit-24.png",
    "unit": "unit-24",
    "gate": [
     "unit-24"
@@ -3954,6 +3967,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Ranged Soldiers and Infantry cost -50% wood",
       "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
      ]
     },
@@ -4212,8 +4226,10 @@ window.QUIZ_DATA = {
      "missing": [
       "unit-492"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Thumb Ring, Parthian Tactics free"
+     ]
     },
     "teutons": {
      "tier": "partial",
@@ -4325,7 +4341,7 @@ window.QUIZ_DATA = {
    "id": "skirmisher",
    "name": "Skirmisher",
    "group": "Archery Range",
-   "icon": "img/topics/unit-6.png",
+   "icon": "img/topics/unit-7.png",
    "unit": "unit-7",
    "gate": [
     "unit-7"
@@ -4338,8 +4354,7 @@ window.QUIZ_DATA = {
    "upgrades": [
     "unit-6",
     "tech-201",
-    "tech-219",
-    "tech-437"
+    "tech-219"
    ],
    "parts": [
     {
@@ -4365,12 +4380,6 @@ window.QUIZ_DATA = {
      "name": "Ring Archer Armor",
      "img": "img/topics/tech-219.png",
      "icon_index": 51
-    },
-    {
-     "id": "tech-437",
-     "name": "Thumb Ring",
-     "img": "img/topics/tech-437.png",
-     "icon_index": 112
     }
    ],
    "tiers": [
@@ -4396,23 +4405,20 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ]
     }
    ],
    "civs": {
     "armenians": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -4424,8 +4430,7 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": true,
      "why": [
@@ -4433,16 +4438,14 @@ window.QUIZ_DATA = {
      ]
     },
     "bengalis": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -4452,40 +4455,33 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
-     "bonus": true,
-     "why": [
-      "Genitour available at the Archery Range starting in Castle Age"
-     ]
+     "bonus": false,
+     "why": []
     },
     "bohemians": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
     "britons": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": true,
      "why": [
       "Foot Archers +1/+2 range in Castle/Imperial Age",
@@ -4498,8 +4494,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4515,8 +4510,7 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
@@ -4529,8 +4523,7 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
@@ -4541,8 +4534,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4558,8 +4550,7 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "bonus": false,
      "why": []
@@ -4570,8 +4561,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -4582,8 +4572,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [
       "tech-201"
@@ -4599,12 +4588,13 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Skirmishers and Elephant Archers attack +25% faster"
+     ]
     },
     "ethiopians": {
      "tier": "full",
@@ -4612,8 +4602,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4629,8 +4618,7 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
@@ -4643,23 +4631,20 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
     },
     "goths": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -4668,8 +4653,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4683,8 +4667,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -4695,8 +4678,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4710,8 +4692,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4725,8 +4706,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4740,24 +4720,21 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
      "why": []
     },
     "jurchens": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -4767,8 +4744,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4778,16 +4754,14 @@ window.QUIZ_DATA = {
      ]
     },
     "khmer": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -4797,12 +4771,14 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Ranged Soldiers and Infantry cost -50% wood",
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
+     ]
     },
     "lithuanians": {
      "tier": "full",
@@ -4810,8 +4786,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4826,8 +4801,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -4839,8 +4813,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -4851,8 +4824,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [
       "tech-201"
@@ -4868,8 +4840,7 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "bonus": true,
      "why": [
@@ -4885,8 +4856,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -4900,8 +4870,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4914,8 +4883,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4930,8 +4898,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [
       "tech-201"
@@ -4944,8 +4911,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "unit-6",
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "missing": [
       "tech-219"
@@ -4959,8 +4925,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -4974,8 +4939,7 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "bonus": false,
      "why": []
@@ -4986,8 +4950,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -5001,8 +4964,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -5019,8 +4981,7 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
@@ -5033,8 +4994,7 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "bonus": false,
      "why": []
@@ -5045,8 +5005,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -5058,8 +5017,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -5073,23 +5031,20 @@ window.QUIZ_DATA = {
       "tech-219"
      ],
      "missing": [
-      "tech-201",
-      "tech-437"
+      "tech-201"
      ],
      "bonus": false,
      "why": []
     },
     "tupi": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": true,
      "why": [
       "Archery Range and Barracks upgrades cost -50% food",
@@ -5101,8 +5056,7 @@ window.QUIZ_DATA = {
      "has": [
       "unit-7",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [
       "unit-6"
@@ -5116,8 +5070,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": true,
@@ -5127,16 +5080,14 @@ window.QUIZ_DATA = {
      ]
     },
     "vikings": {
-     "tier": "partial",
+     "tier": "full",
      "has": [
       "unit-7",
       "unit-6",
       "tech-201",
       "tech-219"
      ],
-     "missing": [
-      "tech-437"
-     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -5146,8 +5097,7 @@ window.QUIZ_DATA = {
       "unit-7",
       "unit-6",
       "tech-201",
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "missing": [],
      "bonus": false,
@@ -5161,8 +5111,7 @@ window.QUIZ_DATA = {
       "tech-201"
      ],
      "missing": [
-      "tech-219",
-      "tech-437"
+      "tech-219"
      ],
      "bonus": false,
      "why": []
@@ -5171,16 +5120,28 @@ window.QUIZ_DATA = {
   },
   {
    "id": "cavalry_archer",
-   "name": "Cavalry Archer",
+   "name": "Cavalry Archer / Elephant Archer / Bolas Rider / Xianbei Raider",
    "group": "Archery Range",
-   "icon": "img/topics/unit-474.png",
+   "icon": "img/topics/unit-39.png",
    "unit": "unit-39",
    "gate": [
-    "unit-39"
+    "unit-39",
+    "unit-873",
+    "unit-2569",
+    "unit-1952"
    ],
    "alts": {
+    "unit-474": [
+     "unit-474",
+     "unit-875",
+     "unit-2571",
+     "unit-1952"
+    ],
     "unit-39": [
-     "unit-39"
+     "unit-39",
+     "unit-873",
+     "unit-2569",
+     "unit-1952"
     ]
    },
    "upgrades": [
@@ -5200,10 +5161,40 @@ window.QUIZ_DATA = {
      "icon_index": 19
     },
     {
+     "id": "unit-873",
+     "name": "Elephant Archer",
+     "img": "img/topics/unit-873.png",
+     "icon_index": 393
+    },
+    {
+     "id": "unit-2569",
+     "name": "Bolas Rider",
+     "img": "img/topics/unit-2569.png",
+     "icon_index": 547
+    },
+    {
+     "id": "unit-1952",
+     "name": "Xianbei Raider",
+     "img": "img/topics/unit-1952.png",
+     "icon_index": 433
+    },
+    {
      "id": "unit-474",
      "name": "Heavy Cavalry Archer",
      "img": "img/topics/unit-474.png",
      "icon_index": 71
+    },
+    {
+     "id": "unit-875",
+     "name": "Elite Elephant Archer",
+     "img": "img/topics/unit-875.png",
+     "icon_index": 93
+    },
+    {
+     "id": "unit-2571",
+     "name": "Elite Bolas Rider",
+     "img": "img/topics/unit-2571.png",
+     "icon_index": 548
     },
     {
      "id": "tech-201",
@@ -5254,7 +5245,10 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-39"
+      "unit-39",
+      "unit-873",
+      "unit-2569",
+      "unit-1952"
      ]
     },
     {
@@ -5263,7 +5257,12 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-39",
+      "unit-873",
+      "unit-2569",
+      "unit-1952",
       "unit-474",
+      "unit-875",
+      "unit-2571",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -5308,15 +5307,16 @@ window.QUIZ_DATA = {
      "why": []
     },
     "bengalis": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-873",
+      "unit-875",
       "tech-201",
       "tech-219",
       "tech-435",
       "tech-39"
      ],
      "missing": [
-      "unit-474",
       "tech-437",
       "tech-436"
      ],
@@ -5493,25 +5493,29 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age",
       "Archery Ranges and Stables cost -75 wood",
       "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)"
      ]
     },
     "dravidians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-873",
+      "unit-875",
       "tech-201",
       "tech-219",
       "tech-437",
       "tech-39"
      ],
      "missing": [
-      "unit-474",
       "tech-435",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Skirmishers and Elephant Archers attack +25% faster"
+     ]
     },
     "ethiopians": {
      "tier": "partial",
@@ -5544,8 +5548,10 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units +20% HP starting in Feudal Age"
+     ]
     },
     "georgians": {
      "tier": "partial",
@@ -5561,8 +5567,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age",
+      "Aznauri Cavalry (Mounted Units take -20% population space)"
+     ]
     },
     "goths": {
      "tier": "partial",
@@ -5582,20 +5591,24 @@ window.QUIZ_DATA = {
      "why": []
     },
     "gurjaras": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-873",
+      "unit-875",
       "tech-201",
       "tech-437",
       "tech-435",
       "tech-39"
      ],
      "missing": [
-      "unit-474",
       "tech-219",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age",
+      "Frontier Guards (Camel Riders and Elephant Archers +4 melee armor)"
+     ]
     },
     "hindustanis": {
      "tier": "partial",
@@ -5698,8 +5711,10 @@ window.QUIZ_DATA = {
       "tech-437",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age"
+     ]
     },
     "khitans": {
      "tier": "partial",
@@ -5751,8 +5766,11 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Ranged Soldiers and Infantry cost -50% wood",
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
+     ]
     },
     "lithuanians": {
      "tier": "partial",
@@ -5825,20 +5843,24 @@ window.QUIZ_DATA = {
      "why": []
     },
     "mapuche": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2569",
+      "unit-2571",
       "tech-219"
      ],
      "missing": [
-      "unit-474",
       "tech-201",
       "tech-437",
       "tech-435",
       "tech-39",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units generate +3 gold when defeating military units",
+      "Malon (Bolas Riders, Slingers and Skirmishers deal pass through damage)"
+     ]
     },
     "mayans": {
      "tier": "none",
@@ -5888,7 +5910,7 @@ window.QUIZ_DATA = {
       "tech-39",
       "tech-436"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Champi Warriors and Archery Range Units +1/2/3 melee armor in Feudal/Castle/Imperial Age"
      ]
@@ -5907,8 +5929,10 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Parthian Tactics available in Castle Age"
+     ]
     },
     "poles": {
      "tier": "partial",
@@ -5924,8 +5948,10 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Bloodlines and Scout Cavalry-line upgrades cost -50% food"
+     ]
     },
     "portuguese": {
      "tier": "partial",
@@ -6062,6 +6088,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Thumb Ring, Parthian Tactics free",
       "Silk Armor (Scout Cavalry-line, Steppe Lancers and Cavalry Archers +1 melee/+1 pierce armor)",
       "Mounted Archers +2 line of sight"
      ]
@@ -6096,7 +6123,7 @@ window.QUIZ_DATA = {
       "tech-39",
       "tech-436"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Archery Range and Barracks upgrades cost -50% food"
      ]
@@ -6156,8 +6183,9 @@ window.QUIZ_DATA = {
      "why": []
     },
     "wei": {
-     "tier": "none",
+     "tier": "full",
      "has": [
+      "unit-1952",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -6165,11 +6193,12 @@ window.QUIZ_DATA = {
       "tech-39",
       "tech-436"
      ],
-     "missing": [
-      "unit-474"
-     ],
-     "bonus": false,
-     "why": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Hei Guang Cavalry and Xianbei Raider +20/30% HP in Castle/Imperial Age",
+      "Ming Guang Armor (Mounted Units +4 melee armor)"
+     ]
     },
     "wu": {
      "tier": "partial",
@@ -6192,9 +6221,9 @@ window.QUIZ_DATA = {
   },
   {
    "id": "halberdier",
-   "name": "Halberdier",
+   "name": "Pikeman",
    "group": "Barracks",
-   "icon": "img/topics/unit-359.png",
+   "icon": "img/topics/unit-358.png",
    "unit": "unit-358",
    "gate": [
     "unit-358"
@@ -6283,6 +6312,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Spearman- and Militia-line upgrades (except Man-at-Arms) available one age earlier",
       "Fereters (Infantry (except Spearman-line) +30 HP; Warrior Priests heal +100% faster)",
       "Infantry +2 line of sight"
      ]
@@ -6429,7 +6459,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry moves +5/10/15/20% faster in Dark/Feudal/",
+      "Infantry moves +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age",
       "Stronghold (Castles and Watch Tower-line attack +33% faster; Castles heal allied Infantry in a 7 tile radius)"
      ]
     },
@@ -6471,6 +6501,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Barracks technologies cost -50%",
       "Wootz Steel (Infantry and Cavalry attacks ignore armor)"
      ]
     },
@@ -6484,8 +6515,10 @@ window.QUIZ_DATA = {
       "tech-215"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Pikeman upgrade free"
+     ]
     },
     "franks": {
      "tier": "full",
@@ -6526,8 +6559,10 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/",
-      "Infantry +1/+2/+3 attack vs. buildings in Feudal/"
+      "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/Imperial Age",
+      "Infantry +1/+2/+3 attack vs. buildings in Feudal/Castle/Imperial Age",
+      "Perfusion (Barracks work +100% faster)",
+      "Barracks work +20% faster"
      ]
     },
     "gurjaras": {
@@ -6582,7 +6617,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [],
      "bonus": false,
-     "why": []
+     "why": [
+      "Villagers affected by Infantry Blacksmith upgrades starting in Castle Age"
+     ]
     },
     "italians": {
      "tier": "partial",
@@ -6640,6 +6677,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Skirmishers, Spearman-, and Scout Cavalry-line train and upgrade +15% faster",
       "Lamellar Armor (Infantry and Skirmishers reflect 25% melee damage back to the attacker)",
       "Infantry +2 attack vs. Ranged Soldiers"
      ]
@@ -6731,8 +6769,10 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Barracks Units +1/+2/+3 pierce armor in Feudal/Castle/Imperial Age"
+     ]
     },
     "mapuche": {
      "tier": "partial",
@@ -6947,6 +6987,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age",
       "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
      ]
     },
@@ -6961,8 +7002,10 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Archery Range and Barracks upgrades cost -50% food"
+     ]
     },
     "turks": {
      "tier": "none",
@@ -7004,7 +7047,8 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry +20% HP starting in Feudal Age"
+      "Infantry +20% HP starting in Feudal Age",
+      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
      ]
     },
     "wei": {
@@ -7040,16 +7084,22 @@ window.QUIZ_DATA = {
   },
   {
    "id": "champion",
-   "name": "Champion",
+   "name": "Long Swordsman / Champi Warrior",
    "group": "Barracks",
-   "icon": "img/topics/unit-567.png",
+   "icon": "img/topics/unit-77.png",
    "unit": "unit-77",
    "gate": [
-    "unit-77"
+    "unit-77",
+    "unit-2552"
    ],
    "alts": {
+    "unit-567": [
+     "unit-567",
+     "unit-2554"
+    ],
     "unit-77": [
-     "unit-77"
+     "unit-77",
+     "unit-2552"
     ]
    },
    "upgrades": [
@@ -7067,10 +7117,22 @@ window.QUIZ_DATA = {
      "icon_index": 13
     },
     {
+     "id": "unit-2552",
+     "name": "Champi Warrior",
+     "img": "img/topics/unit-2552.png",
+     "icon_index": 541
+    },
+    {
      "id": "unit-567",
      "name": "Champion",
      "img": "img/topics/unit-567.png",
      "icon_index": 72
+    },
+    {
+     "id": "unit-2554",
+     "name": "Elite Champi Warrior",
+     "img": "img/topics/unit-2554.png",
+     "icon_index": 542
     },
     {
      "id": "tech-875",
@@ -7109,7 +7171,8 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-77"
+      "unit-77",
+      "unit-2552"
      ]
     },
     {
@@ -7118,7 +7181,9 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-77",
+      "unit-2552",
       "unit-567",
+      "unit-2554",
       "tech-875",
       "tech-215",
       "tech-77",
@@ -7298,7 +7363,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry moves +5/10/15/20% faster in Dark/Feudal/",
+      "Infantry moves +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age",
       "Stronghold (Castles and Watch Tower-line attack +33% faster; Castles heal allied Infantry in a 7 tile radius)"
      ]
     },
@@ -7406,9 +7471,8 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/",
-      "Infantry +1/+2/+3 attack vs. buildings in Feudal/",
-      "Anarchy (Huskarls can be trained at Barracks)",
+      "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/Imperial Age",
+      "Infantry +1/+2/+3 attack vs. buildings in Feudal/Castle/Imperial Age",
       "Perfusion (Barracks work +100% faster)",
       "Barracks work +20% faster"
      ]
@@ -7459,18 +7523,22 @@ window.QUIZ_DATA = {
      "why": []
     },
     "incas": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2552",
+      "unit-2554",
       "tech-215",
       "tech-77",
       "tech-75"
      ],
      "missing": [
-      "unit-567",
       "tech-875"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Villagers affected by Infantry Blacksmith upgrades starting in Castle Age",
+      "Fabric Shields (Kamayuks, Slingers and Champi Warriors +1 melee/+1 pierce armor)"
+     ]
     },
     "italians": {
      "tier": "partial",
@@ -7484,10 +7552,8 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-875"
      ],
-     "bonus": true,
-     "why": [
-      "Condottiero available at the Barracks in Imperial Age"
-     ]
+     "bonus": false,
+     "why": []
     },
     "japanese": {
      "tier": "full",
@@ -7631,17 +7697,18 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Barracks Units +1/+2/+3 pierce armor in Feudal/"
+      "Barracks Units +1/+2/+3 pierce armor in Feudal/Castle/Imperial Age"
      ]
     },
     "mapuche": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2552",
+      "unit-2554",
       "tech-77",
       "tech-75"
      ],
      "missing": [
-      "unit-567",
       "tech-875",
       "tech-215"
      ],
@@ -7681,18 +7748,22 @@ window.QUIZ_DATA = {
      "why": []
     },
     "muisca": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2552",
+      "unit-2554",
       "tech-215",
       "tech-77"
      ],
      "missing": [
-      "unit-567",
       "tech-875",
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Champi Warriors and Archery Range Units +1/2/3 melee armor in Feudal/Castle/Imperial Age",
+      "Herbalism (Archer-line and Champi Warriors move +15% faster)"
+     ]
     },
     "persians": {
      "tier": "partial",
@@ -7813,6 +7884,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Arson, Gambesons free",
       "Druzhina (Infantry deals trample damage)"
      ]
     },
@@ -7863,19 +7935,21 @@ window.QUIZ_DATA = {
      ]
     },
     "tupi": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2552",
+      "unit-2554",
       "tech-215",
       "tech-77"
      ],
      "missing": [
-      "unit-567",
       "tech-875",
       "tech-75"
      ],
      "bonus": true,
      "why": [
-      "Archery Range and Barracks upgrades cost -50% food"
+      "Archery Range and Barracks upgrades cost -50% food",
+      "Caciques (Champi Warriors and Slingers attack +25% faster)"
      ]
     },
     "turks": {
@@ -7921,7 +7995,8 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Infantry +20% HP starting in Feudal Age"
+      "Infantry +20% HP starting in Feudal Age",
+      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
      ]
     },
     "wei": {
@@ -7953,28 +8028,37 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Infantry regenerates 10/15/30 HP per minute in Feudal/Castle/Imperial Age",
-      "Jian Swordsmen and Hei Guang Cavalry +2 attack in Imperial Age"
+      "Infantry regenerates 10/15/30 HP per minute in Feudal/Castle/Imperial Age"
      ]
     }
    }
   },
   {
    "id": "eagle",
-   "name": "Eagle Warrior",
+   "name": "Eagle Scout / Fire Lancer / Temple Guard",
    "group": "Barracks",
-   "icon": "img/topics/unit-752.png",
+   "icon": "img/topics/unit-751.png",
    "unit": "unit-751",
    "gate": [
-    "unit-751"
+    "unit-751",
+    "unit-1901",
+    "unit-2586"
    ],
    "alts": {
+    "unit-752": [
+     "unit-752",
+     "unit-1903",
+     "unit-2587"
+    ],
     "unit-751": [
-     "unit-751"
+     "unit-751",
+     "unit-1901",
+     "unit-2586"
     ]
    },
    "upgrades": [
     "unit-752",
+    "tech-875",
     "tech-215",
     "tech-77",
     "tech-75"
@@ -7987,271 +8071,34 @@ window.QUIZ_DATA = {
      "icon_index": 109
     },
     {
-     "id": "unit-752",
-     "name": "Elite Eagle Warrior",
-     "img": "img/topics/unit-752.png",
-     "icon_index": 149
-    },
-    {
-     "id": "tech-215",
-     "name": "Squires",
-     "img": "img/topics/tech-215.png",
-     "icon_index": 80
-    },
-    {
-     "id": "tech-77",
-     "name": "Plate Mail Armor",
-     "img": "img/topics/tech-77.png",
-     "icon_index": 64
-    },
-    {
-     "id": "tech-75",
-     "name": "Blast Furnace",
-     "img": "img/topics/tech-75.png",
-     "icon_index": 21
-    }
-   ],
-   "tiers": [
-    {
-     "id": "none",
-     "dir": "left",
-     "mark": "none",
-     "has": []
-    },
-    {
-     "id": "partial",
-     "dir": "up",
-     "mark": "partial",
-     "has": [
-      "unit-751"
-     ]
-    },
-    {
-     "id": "full",
-     "dir": "right",
-     "mark": "full",
-     "has": [
-      "unit-751",
-      "unit-752",
-      "tech-215",
-      "tech-77",
-      "tech-75"
-     ]
-    }
-   ],
-   "civs": {
-    "aztecs": {
-     "tier": "full",
-     "has": [
-      "unit-751",
-      "unit-752",
-      "tech-215",
-      "tech-77",
-      "tech-75"
-     ],
-     "missing": [],
-     "bonus": true,
-     "why": [
-      "Garland Wars (Infantry +4 attack)"
-     ]
-    },
-    "mayans": {
-     "tier": "full",
-     "has": [
-      "unit-751",
-      "unit-752",
-      "tech-215",
-      "tech-77",
-      "tech-75"
-     ],
-     "missing": [],
-     "bonus": true,
-     "why": [
-      "Holcans (Eagle Warriors +40 HP)"
-     ]
-    }
-   }
-  },
-  {
-   "id": "champi",
-   "name": "Champi Warrior",
-   "group": "Barracks",
-   "icon": "img/topics/unit-2554.png",
-   "unit": "unit-2552",
-   "gate": [
-    "unit-2552"
-   ],
-   "alts": {
-    "unit-2552": [
-     "unit-2552"
-    ]
-   },
-   "upgrades": [
-    "unit-2554",
-    "tech-215",
-    "tech-77",
-    "tech-75"
-   ],
-   "parts": [
-    {
-     "id": "unit-2552",
-     "name": "Champi Warrior",
-     "img": "img/topics/unit-2552.png",
-     "icon_index": 541
-    },
-    {
-     "id": "unit-2554",
-     "name": "Elite Champi Warrior",
-     "img": "img/topics/unit-2554.png",
-     "icon_index": 542
-    },
-    {
-     "id": "tech-215",
-     "name": "Squires",
-     "img": "img/topics/tech-215.png",
-     "icon_index": 80
-    },
-    {
-     "id": "tech-77",
-     "name": "Plate Mail Armor",
-     "img": "img/topics/tech-77.png",
-     "icon_index": 64
-    },
-    {
-     "id": "tech-75",
-     "name": "Blast Furnace",
-     "img": "img/topics/tech-75.png",
-     "icon_index": 21
-    }
-   ],
-   "tiers": [
-    {
-     "id": "none",
-     "dir": "left",
-     "mark": "none",
-     "has": []
-    },
-    {
-     "id": "partial",
-     "dir": "up",
-     "mark": "partial",
-     "has": [
-      "unit-2552"
-     ]
-    },
-    {
-     "id": "full",
-     "dir": "right",
-     "mark": "full",
-     "has": [
-      "unit-2552",
-      "unit-2554",
-      "tech-215",
-      "tech-77",
-      "tech-75"
-     ]
-    }
-   ],
-   "civs": {
-    "incas": {
-     "tier": "full",
-     "has": [
-      "unit-2552",
-      "unit-2554",
-      "tech-215",
-      "tech-77",
-      "tech-75"
-     ],
-     "missing": [],
-     "bonus": true,
-     "why": [
-      "Fabric Shields (Kamayuks, Slingers and Champi Warriors +1 melee/+1 pierce armor)"
-     ]
-    },
-    "mapuche": {
-     "tier": "partial",
-     "has": [
-      "unit-2552",
-      "unit-2554",
-      "tech-77",
-      "tech-75"
-     ],
-     "missing": [
-      "tech-215"
-     ],
-     "bonus": true,
-     "why": [
-      "Infantry, Slingers and Skirmishers +5/10/15 HP in Feudal/Castle/Imperial Age"
-     ]
-    },
-    "muisca": {
-     "tier": "partial",
-     "has": [
-      "unit-2552",
-      "unit-2554",
-      "tech-215",
-      "tech-77"
-     ],
-     "missing": [
-      "tech-75"
-     ],
-     "bonus": true,
-     "why": [
-      "Champi Warriors and Archery Range Units +1/2/3 melee armor in Feudal/Castle/Imperial Age",
-      "Herbalism (Archer-line and Champi Warriors move +15% faster)"
-     ]
-    },
-    "tupi": {
-     "tier": "partial",
-     "has": [
-      "unit-2552",
-      "unit-2554",
-      "tech-215",
-      "tech-77"
-     ],
-     "missing": [
-      "tech-75"
-     ],
-     "bonus": true,
-     "why": [
-      "Caciques (Champi Warriors and Slingers attack +25% faster)"
-     ]
-    }
-   }
-  },
-  {
-   "id": "fire_lancer",
-   "name": "Fire Lancer",
-   "group": "Barracks",
-   "icon": "img/topics/unit-1903.png",
-   "unit": "unit-1901",
-   "gate": [
-    "unit-1901"
-   ],
-   "alts": {
-    "unit-1901": [
-     "unit-1901"
-    ]
-   },
-   "upgrades": [
-    "unit-1903",
-    "tech-875",
-    "tech-215",
-    "tech-77",
-    "tech-75"
-   ],
-   "parts": [
-    {
      "id": "unit-1901",
      "name": "Fire Lancer",
      "img": "img/topics/unit-1901.png",
      "icon_index": 457
     },
     {
+     "id": "unit-2586",
+     "name": "Temple Guard",
+     "img": "img/topics/unit-2586.png",
+     "icon_index": 553
+    },
+    {
+     "id": "unit-752",
+     "name": "Elite Eagle Warrior",
+     "img": "img/topics/unit-752.png",
+     "icon_index": 149
+    },
+    {
      "id": "unit-1903",
      "name": "Elite Fire Lancer",
      "img": "img/topics/unit-1903.png",
      "icon_index": 458
+    },
+    {
+     "id": "unit-2587",
+     "name": "Elite Temple Guard",
+     "img": "img/topics/unit-2587.png",
+     "icon_index": 554
     },
     {
      "id": "tech-875",
@@ -8290,7 +8137,9 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-1901"
+      "unit-751",
+      "unit-1901",
+      "unit-2586"
      ]
     },
     {
@@ -8298,8 +8147,12 @@ window.QUIZ_DATA = {
      "dir": "right",
      "mark": "full",
      "has": [
+      "unit-751",
       "unit-1901",
+      "unit-2586",
+      "unit-752",
       "unit-1903",
+      "unit-2587",
       "tech-875",
       "tech-215",
       "tech-77",
@@ -8308,6 +8161,22 @@ window.QUIZ_DATA = {
     }
    ],
    "civs": {
+    "aztecs": {
+     "tier": "full",
+     "has": [
+      "unit-751",
+      "unit-752",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Garland Wars (Infantry +4 attack)"
+     ]
+    },
     "chinese": {
      "tier": "partial",
      "has": [
@@ -8377,6 +8246,38 @@ window.QUIZ_DATA = {
       "Ranged Soldiers and Infantry cost -50% wood"
      ]
     },
+    "mayans": {
+     "tier": "partial",
+     "has": [
+      "unit-751",
+      "unit-752",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "tech-875"
+     ],
+     "bonus": true,
+     "why": [
+      "Holcans (Eagle Warriors +40 HP)"
+     ]
+    },
+    "muisca": {
+     "tier": "partial",
+     "has": [
+      "unit-2586",
+      "unit-2587",
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "tech-875",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -8398,9 +8299,9 @@ window.QUIZ_DATA = {
   },
   {
    "id": "hussar",
-   "name": "Hussar / Winged Hussar",
+   "name": "Light Cavalry",
    "group": "Stable",
-   "icon": "img/topics/unit-441.png",
+   "icon": "img/topics/unit-546.png",
    "unit": "unit-546",
    "gate": [
     "unit-546"
@@ -8696,7 +8597,9 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Archery Ranges and Stables cost -75 wood"
+      "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age",
+      "Archery Ranges and Stables cost -75 wood",
+      "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)"
      ]
     },
     "dravidians": {
@@ -8745,6 +8648,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units +20% HP starting in Feudal Age",
       "Chivalry (Stables work +40% faster)"
      ]
     },
@@ -8761,6 +8665,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age",
       "Aznauri Cavalry (Mounted Units take -20% population space)"
      ]
     },
@@ -8791,8 +8696,10 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age"
+     ]
     },
     "hindustanis": {
      "tier": "full",
@@ -8805,8 +8712,10 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Scout Cavalry-line and Camel Units +2 attack vs. buildings"
+     ]
     },
     "huns": {
      "tier": "full",
@@ -8821,7 +8730,6 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Marauders (Tarkans can be trained at Stables)",
       "Stables work +20% faster"
      ]
     },
@@ -8879,8 +8787,10 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age"
+     ]
     },
     "khitans": {
      "tier": "partial",
@@ -9004,7 +8914,9 @@ window.QUIZ_DATA = {
       "tech-80"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units generate +3 gold when defeating military units"
+     ]
     },
     "mayans": {
      "tier": "none",
@@ -9197,8 +9109,10 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Silk Armor (Scout Cavalry-line, Steppe Lancers and Cavalry Archers +1 melee/+1 pierce armor)"
+     ]
     },
     "teutons": {
      "tier": "none",
@@ -9211,7 +9125,7 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-39"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age"
      ]
@@ -9289,6 +9203,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Ming Guang Armor (Mounted Units +4 melee armor)",
       "Cavalry +2 attack vs. Siege Weapons"
      ]
     },
@@ -9310,20 +9225,26 @@ window.QUIZ_DATA = {
   },
   {
    "id": "paladin",
-   "name": "Paladin / Savar",
+   "name": "Knight / Shrivamsha Rider / Hei Guang Cavalry",
    "group": "Stable",
-   "icon": "img/topics/unit-569.png",
+   "icon": "img/topics/unit-38.png",
    "unit": "unit-38",
    "gate": [
-    "unit-38"
+    "unit-38",
+    "unit-1751",
+    "unit-1944"
    ],
    "alts": {
     "unit-569": [
      "unit-569",
-     "unit-1813"
+     "unit-1813",
+     "unit-1753",
+     "unit-1946"
     ],
     "unit-38": [
-     "unit-38"
+     "unit-38",
+     "unit-1751",
+     "unit-1944"
     ]
    },
    "upgrades": [
@@ -9341,6 +9262,18 @@ window.QUIZ_DATA = {
      "icon_index": 1
     },
     {
+     "id": "unit-1751",
+     "name": "Shrivamsha Rider",
+     "img": "img/topics/unit-1751.png",
+     "icon_index": 391
+    },
+    {
+     "id": "unit-1944",
+     "name": "Hei Guang Cavalry",
+     "img": "img/topics/unit-1944.png",
+     "icon_index": 429
+    },
+    {
      "id": "unit-569",
      "name": "Paladin",
      "img": "img/topics/unit-569.png",
@@ -9351,6 +9284,18 @@ window.QUIZ_DATA = {
      "name": "Savar",
      "img": "img/topics/unit-1813.png",
      "icon_index": 410
+    },
+    {
+     "id": "unit-1753",
+     "name": "Elite Shrivamsha Rider",
+     "img": "img/topics/unit-1753.png",
+     "icon_index": 519
+    },
+    {
+     "id": "unit-1946",
+     "name": "Heavy Hei Guang Cavalry",
+     "img": "img/topics/unit-1946.png",
+     "icon_index": 430
     },
     {
      "id": "tech-435",
@@ -9389,7 +9334,9 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-38"
+      "unit-38",
+      "unit-1751",
+      "unit-1944"
      ]
     },
     {
@@ -9398,8 +9345,12 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-38",
+      "unit-1751",
+      "unit-1944",
       "unit-569",
       "unit-1813",
+      "unit-1753",
+      "unit-1946",
       "tech-435",
       "tech-39",
       "tech-80",
@@ -9448,7 +9399,7 @@ window.QUIZ_DATA = {
      "missing": [
       "unit-569"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Cavalry +2 attack vs. Skirmishers"
      ]
@@ -9610,6 +9561,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age",
       "Archery Ranges and Stables cost -75 wood"
      ]
     },
@@ -9624,7 +9576,7 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-80"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Wootz Steel (Infantry and Cavalry attacks ignore armor)"
      ]
@@ -9658,6 +9610,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units +20% HP starting in Feudal Age",
       "Chivalry (Stables work +40% faster)",
       "Knight-line +2 line of sight"
      ]
@@ -9676,6 +9629,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age",
       "Aznauri Cavalry (Mounted Units take -20% population space)"
      ]
     },
@@ -9695,18 +9649,21 @@ window.QUIZ_DATA = {
      "why": []
     },
     "gurjaras": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-1751",
+      "unit-1753",
       "tech-435",
       "tech-39",
       "tech-80"
      ],
      "missing": [
-      "unit-569",
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age"
+     ]
     },
     "hindustanis": {
      "tier": "none",
@@ -9735,7 +9692,6 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Marauders (Tarkans can be trained at Stables)",
       "Stables work +20% faster"
      ]
     },
@@ -9795,7 +9751,9 @@ window.QUIZ_DATA = {
       "unit-569"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age"
+     ]
     },
     "khitans": {
      "tier": "none",
@@ -9808,7 +9766,7 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-75"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Ordo Cavalry (Cavalry regenerates HP in combat)"
      ]
@@ -9918,7 +9876,9 @@ window.QUIZ_DATA = {
       "tech-80"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units generate +3 gold when defeating military units"
+     ]
     },
     "mayans": {
      "tier": "none",
@@ -9992,6 +9952,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Bloodlines and Scout Cavalry-line upgrades cost -50% food",
       "Szlachta Privileges (Knight-line costs -60% gold)"
      ]
     },
@@ -10043,13 +10004,14 @@ window.QUIZ_DATA = {
      "why": []
     },
     "shu": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-1944",
+      "unit-1946",
       "tech-39",
       "tech-80"
      ],
      "missing": [
-      "unit-569",
       "tech-435",
       "tech-75"
      ],
@@ -10193,34 +10155,39 @@ window.QUIZ_DATA = {
      "why": []
     },
     "wei": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-1944",
+      "unit-1946",
       "tech-435",
       "tech-39",
       "tech-75"
      ],
      "missing": [
-      "unit-569",
       "tech-80"
      ],
      "bonus": true,
      "why": [
+      "Hei Guang Cavalry and Xianbei Raider +20/30% HP in Castle/Imperial Age",
+      "Ming Guang Armor (Mounted Units +4 melee armor)",
       "Cavalry +2 attack vs. Siege Weapons"
      ]
     },
     "wu": {
-     "tier": "none",
+     "tier": "full",
      "has": [
+      "unit-1944",
+      "unit-1946",
       "tech-435",
       "tech-39",
       "tech-80",
       "tech-75"
      ],
-     "missing": [
-      "unit-569"
-     ],
-     "bonus": false,
-     "why": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Jian Swordsmen and Hei Guang Cavalry +2 attack in Imperial Age"
+     ]
     }
    }
   },
@@ -10228,7 +10195,7 @@ window.QUIZ_DATA = {
    "id": "camel",
    "name": "Camel Rider",
    "group": "Stable",
-   "icon": "img/topics/unit-330.png",
+   "icon": "img/topics/unit-329.png",
    "unit": "unit-329",
    "gate": [
     "unit-329"
@@ -10368,6 +10335,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Stable Units cost -15/20% in Castle/Imperial Age",
       "Maghrebi Camels (Camel Units regenerate 15 HP per minute)"
      ]
     },
@@ -10498,8 +10466,10 @@ window.QUIZ_DATA = {
       "unit-330",
       "tech-39"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age"
+     ]
     },
     "dravidians": {
      "tier": "none",
@@ -10544,7 +10514,9 @@ window.QUIZ_DATA = {
       "tech-435"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units +20% HP starting in Feudal Age"
+     ]
     },
     "georgians": {
      "tier": "none",
@@ -10558,7 +10530,10 @@ window.QUIZ_DATA = {
       "unit-330"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units regenerate 2/8/14 HP per minute in Feudal/Castle/Imperial Age",
+      "Aznauri Cavalry (Mounted Units take -20% population space)"
+     ]
     },
     "goths": {
      "tier": "none",
@@ -10588,6 +10563,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units deal +20/30/40% bonus damage in Feudal/Castle/Imperial Age",
       "Frontier Guards (Camel Riders and Elephant Archers +4 melee armor)",
       "Camel and Elephant Units train +25% faster"
      ]
@@ -10677,7 +10653,9 @@ window.QUIZ_DATA = {
       "unit-330"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age"
+     ]
     },
     "khitans": {
      "tier": "partial",
@@ -10791,7 +10769,9 @@ window.QUIZ_DATA = {
       "tech-80"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Mounted Units generate +3 gold when defeating military units"
+     ]
     },
     "mayans": {
      "tier": "none",
@@ -10861,7 +10841,9 @@ window.QUIZ_DATA = {
       "tech-80"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Bloodlines and Scout Cavalry-line upgrades cost -50% food"
+     ]
     },
     "portuguese": {
      "tier": "none",
@@ -10989,7 +10971,9 @@ window.QUIZ_DATA = {
       "tech-39"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age"
+     ]
     },
     "tupi": {
      "tier": "none",
@@ -11058,7 +11042,9 @@ window.QUIZ_DATA = {
       "tech-80"
      ],
      "bonus": false,
-     "why": []
+     "why": [
+      "Ming Guang Armor (Mounted Units +4 melee armor)"
+     ]
     },
     "wu": {
      "tier": "none",
@@ -11080,7 +11066,7 @@ window.QUIZ_DATA = {
    "id": "battle_elephant",
    "name": "Battle Elephant",
    "group": "Stable",
-   "icon": "img/topics/unit-1134.png",
+   "icon": "img/topics/unit-1132.png",
    "unit": "unit-1132",
    "gate": [
     "unit-1132"
@@ -11273,7 +11259,7 @@ window.QUIZ_DATA = {
    "id": "steppe_lancer",
    "name": "Steppe Lancer",
    "group": "Stable",
-   "icon": "img/topics/unit-1372.png",
+   "icon": "img/topics/unit-1370.png",
    "unit": "unit-1370",
    "gate": [
     "unit-1370"
@@ -11372,6 +11358,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
+      "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age",
       "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)"
      ]
     },
@@ -11386,8 +11373,10 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Mounted Units and Fire Lancers attack +25% faster starting in Feudal Age"
+     ]
     },
     "khitans": {
      "tier": "partial",
@@ -11401,8 +11390,10 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-75"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Ordo Cavalry (Cavalry regenerates HP in combat)"
+     ]
     },
     "mongols": {
      "tier": "partial",
@@ -11632,6 +11623,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
+      "Fervor and Sanctity affect Villagers",
       "Hussite Reforms (Monks and Monastery technologies gold cost is replaced by food cost)"
      ]
     },
@@ -11909,7 +11901,7 @@ window.QUIZ_DATA = {
       "tech-230",
       "tech-438"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Atheism (Enemy Relics generate -50% resources; Wonder and Relic victory takes +100 years)"
      ]
@@ -12427,7 +12419,7 @@ window.QUIZ_DATA = {
       "tech-233",
       "tech-231"
      ],
-     "bonus": true,
+     "bonus": false,
      "why": [
       "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
      ]
@@ -12462,6 +12454,1801 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-230"
+     ],
+     "bonus": false,
+     "why": []
+    }
+   }
+  },
+  {
+   "id": "defense",
+   "name": "Defense",
+   "group": "Defense",
+   "icon": "img/topics/tech-63.png",
+   "unit": null,
+   "gate": [],
+   "alts": {},
+   "upgrades": [
+    "tech-51",
+    "tech-63",
+    "tech-608",
+    "tech-201",
+    "tech-194",
+    "tech-379",
+    "tech-64"
+   ],
+   "parts": [
+    {
+     "id": "tech-51",
+     "name": "Architecture",
+     "img": "img/topics/tech-51.png",
+     "icon_index": 14
+    },
+    {
+     "id": "tech-63",
+     "name": "Keep",
+     "img": "img/topics/tech-63.png",
+     "icon_index": 16
+    },
+    {
+     "id": "tech-608",
+     "name": "Arrowslits",
+     "img": "img/topics/tech-608.png",
+     "icon_index": 119
+    },
+    {
+     "id": "tech-201",
+     "name": "Bracer",
+     "img": "img/topics/tech-201.png",
+     "icon_index": 37
+    },
+    {
+     "id": "tech-194",
+     "name": "Fortified Wall",
+     "img": "img/topics/tech-194.png",
+     "icon_index": 46
+    },
+    {
+     "id": "tech-379",
+     "name": "Hoardings",
+     "img": "img/topics/tech-379.png",
+     "icon_index": 103
+    },
+    {
+     "id": "tech-64",
+     "name": "Bombard Tower",
+     "img": "img/topics/tech-64.png",
+     "icon_index": 47
+    }
+   ],
+   "tiers": [
+    {
+     "id": "none",
+     "dir": "left",
+     "mark": "none",
+     "has": []
+    },
+    {
+     "id": "partial",
+     "dir": "up",
+     "mark": "partial",
+     "has": []
+    },
+    {
+     "id": "full",
+     "dir": "right",
+     "mark": "full",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ]
+    }
+   ],
+   "civs": {
+    "armenians": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "aztecs": {
+     "tier": "partial",
+     "has": [
+      "tech-608",
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bengalis": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "berbers": {
+     "tier": "partial",
+     "has": [
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Kasbah (Team Castles work +25% faster)"
+     ]
+    },
+    "bohemians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-379"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "britons": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Yeomen (Foot Archers and Skirmisher-line +1 range; Watch Tower-line +2 attack)"
+     ]
+    },
+    "bulgarians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Can build Krepost in Castle Age"
+     ]
+    },
+    "burgundians": {
+     "tier": "full",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "burmese": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "byzantines": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51"
+     ],
+     "bonus": true,
+     "why": [
+      "Buildings +10/20/30/40% HP in Dark/Feudal/Castle/Imperial Age",
+      "Greek Fire (Fire Ships +1 range; Dromons and Bombard Towers increased blast radius)"
+     ]
+    },
+    "celts": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-201",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Stronghold (Castles and Watch Tower-line attack +33% faster; Castles heal allied Infantry in a 7 tile radius)"
+     ]
+    },
+    "chinese": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-379"
+     ],
+     "bonus": true,
+     "why": [
+      "Great Wall (Walls, Watch Tower-line and Bombard Towers +30% HP)"
+     ]
+    },
+    "cumans": {
+     "tier": "partial",
+     "has": [
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": [
+      "Cuman Mercenaries (All team members can train 5 free Elite Kipchaks per Castle)"
+     ]
+    },
+    "dravidians": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "ethiopians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "franks": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-608",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-201",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Castles cost -15/25% in Castle/Imperial Age"
+     ]
+    },
+    "georgians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Units and buildings receive -15% damage when located on higher elevation",
+      "Svan Towers (Fortifications +2 attack; Watch Tower-line deals pass through damage)",
+      "Building repairs cost -25%"
+     ]
+    },
+    "goths": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-201"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-608",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "gurjaras": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "hindustanis": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "huns": {
+     "tier": "partial",
+     "has": [
+      "tech-201"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "incas": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Buildings cost -15% stone"
+     ]
+    },
+    "italians": {
+     "tier": "full",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "japanese": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Yasama (Watch Tower-line fires additional arrows)"
+     ]
+    },
+    "jurchens": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster",
+      "Fortified Bastions (Fortifications regenerate 500 HP per minute)"
+     ]
+    },
+    "khitans": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "khmer": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": [
+      "No buildings required to advance to the next Age or to unlock other buildings"
+     ]
+    },
+    "koreans": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-379"
+     ],
+     "bonus": true,
+     "why": [
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)",
+      "Eupseong (Watch Tower-line +2 range)"
+     ]
+    },
+    "lithuanians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-608"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "magyars": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "malay": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-201",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-608",
+      "tech-194",
+      "tech-379"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "malians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-201",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Buildings cost -15% wood"
+     ]
+    },
+    "mapuche": {
+     "tier": "partial",
+     "has": [
+      "tech-608",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mayans": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Walls cost -50%"
+     ]
+    },
+    "mongols": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "muisca": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-201",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-608",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "persians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Citadels (Castles +4 attack, +3 vs. Rams, +3 vs. Infantry and receive -25% bonus damage)"
+     ]
+    },
+    "poles": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "portuguese": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-379"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "romans": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-201",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "saracens": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "shu": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "sicilians": {
+     "tier": "partial",
+     "has": [
+      "tech-608",
+      "tech-201",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Can build Donjon in Dark Age, replaces Watch Tower-line",
+      "Fortifications built +50% faster; Town Centers built +100% faster"
+     ]
+    },
+    "slavs": {
+     "tier": "partial",
+     "has": [
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Detinets (Replaces 40% of Castle and Watch Tower-line stone cost with additional wood cost)"
+     ]
+    },
+    "spanish": {
+     "tier": "full",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "tatars": {
+     "tier": "partial",
+     "has": [
+      "tech-201",
+      "tech-194",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-379"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "teutons": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-201"
+     ],
+     "bonus": true,
+     "why": [
+      "Town Centers +10 garrison capacity; Towers +5 garrison capacity",
+      "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
+     ]
+    },
+    "tupi": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Curare (Foot Archers and Fortifications deal poison damage)",
+      "Towers and Castles provide +10 population space"
+     ]
+    },
+    "turks": {
+     "tier": "full",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Artillery (Bombard Towers, Bombard Cannons, Cannon Galleons +2 range)"
+     ]
+    },
+    "vietnamese": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "missing": [
+      "tech-51"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "vikings": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wei": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-608",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wu": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-201"
+     ],
+     "missing": [
+      "tech-608",
+      "tech-194",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": [
+      "Red Cliffs Tactics (Demolition Ships and Fire Archers deal fire damage to ships and buildings)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "economy",
+   "name": "Economy",
+   "group": "Economy",
+   "icon": "img/topics/tech-12.png",
+   "unit": null,
+   "gate": [],
+   "alts": {
+    "tech-12": [
+     "tech-12",
+     "tech-1012"
+    ]
+   },
+   "upgrades": [
+    "tech-12",
+    "tech-221",
+    "tech-182",
+    "tech-279"
+   ],
+   "parts": [
+    {
+     "id": "tech-12",
+     "name": "Crop Rotation",
+     "img": "img/topics/tech-12.png",
+     "icon_index": 0
+    },
+    {
+     "id": "tech-1012",
+     "name": "Transhumance",
+     "img": "img/topics/tech-1012.png",
+     "icon_index": 136
+    },
+    {
+     "id": "tech-221",
+     "name": "Two-Man Saw",
+     "img": "img/topics/tech-221.png",
+     "icon_index": 81
+    },
+    {
+     "id": "tech-182",
+     "name": "Gold Shaft Mining",
+     "img": "img/topics/tech-182.png",
+     "icon_index": 62
+    },
+    {
+     "id": "tech-279",
+     "name": "Stone Shaft Mining",
+     "img": "img/topics/tech-279.png",
+     "icon_index": 88
+    }
+   ],
+   "tiers": [
+    {
+     "id": "none",
+     "dir": "left",
+     "mark": "none",
+     "has": []
+    },
+    {
+     "id": "partial",
+     "dir": "up",
+     "mark": "partial",
+     "has": []
+    },
+    {
+     "id": "full",
+     "dir": "right",
+     "mark": "full",
+     "has": [
+      "tech-12",
+      "tech-1012",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ]
+    }
+   ],
+   "civs": {
+    "armenians": {
+     "tier": "partial",
+     "has": [
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "aztecs": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bengalis": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "berbers": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bohemians": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
+     ],
+     "bonus": true,
+     "why": [
+      "Mining Camp technologies free"
+     ]
+    },
+    "britons": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bulgarians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "burgundians": {
+     "tier": "full",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Economic upgrades available one age earlier and cost -40% food",
+      "Burgundian Vineyards (Farmers slowly generate gold in addition to food)"
+     ]
+    },
+    "burmese": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Lumber Camp technologies free"
+     ]
+    },
+    "byzantines": {
+     "tier": "full",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "celts": {
+     "tier": "partial",
+     "has": [
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-221"
+     ],
+     "bonus": true,
+     "why": [
+      "Lumberjacks work +15% faster"
+     ]
+    },
+    "chinese": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
+     ],
+     "bonus": true,
+     "why": [
+      "Farms +10% food"
+     ]
+    },
+    "cumans": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "dravidians": {
+     "tier": "partial",
+     "has": [
+      "tech-221"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "ethiopians": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "franks": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-221",
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Mill technologies free"
+     ]
+    },
+    "georgians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221",
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "goths": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "gurjaras": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": true,
+     "why": [
+      "Can garrison livestock in Mills to passively produce food"
+     ]
+    },
+    "hindustanis": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "huns": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "incas": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "italians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "japanese": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Mills, Lumber- and Mining Camps cost -50%"
+     ]
+    },
+    "jurchens": {
+     "tier": "full",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "khitans": {
+     "tier": "partial",
+     "has": [
+      "tech-1012",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": true,
+     "why": [
+      "Pastures replace Farms"
+     ]
+    },
+    "khmer": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": true,
+     "why": [
+      "Farmers don't require Mills or Town Centers to drop off food"
+     ]
+    },
+    "koreans": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
+     ],
+     "bonus": true,
+     "why": [
+      "Stone miners work +20% faster"
+     ]
+    },
+    "lithuanians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "magyars": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "malay": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "malians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mapuche": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mayans": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mongols": {
+     "tier": "partial",
+     "has": [
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-221"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "muisca": {
+     "tier": "full",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "persians": {
+     "tier": "full",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "poles": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221",
+      "tech-182"
+     ],
+     "bonus": true,
+     "why": [
+      "Folwark replaces Mill",
+      "Stone Miners generate gold in addition to stone"
+     ]
+    },
+    "portuguese": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "romans": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-221",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "saracens": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "shu": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Lumberjacks generate food in addition to wood"
+     ]
+    },
+    "sicilians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": true,
+     "why": [
+      "Farm upgrades provide +125% additional food"
+     ]
+    },
+    "slavs": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Farmers work +15% faster"
+     ]
+    },
+    "spanish": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "tatars": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-221",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "teutons": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": true,
+     "why": [
+      "Farms cost -40%"
+     ]
+    },
+    "tupi": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "turks": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Gold miners work +25% faster"
+     ]
+    },
+    "vietnamese": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": true,
+     "why": [
+      "Economic upgrades cost no wood and research +100% faster",
+      "Paper Money (Lumberjacks slowly generate gold in addition to wood)"
+     ]
+    },
+    "vikings": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wei": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-221"
+     ],
+     "bonus": true,
+     "why": [
+      "Receive one free Villager for each economic upgrade researched"
+     ]
+    },
+    "wu": {
+     "tier": "partial",
+     "has": [
+      "tech-221",
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12"
      ],
      "bonus": false,
      "why": []

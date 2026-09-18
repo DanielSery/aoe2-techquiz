@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AoE2 Tech Quiz</title>
 <meta name="description" content="Learn which Age of Empires II civilisations have which units and upgrades.">
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=31">
 <link rel="icon" href="img/topics/unit-5.png">
 </head>
 <body>
@@ -13,14 +13,9 @@
 <svg class="sprites" aria-hidden="true">
   <symbol id="mark-full" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="mark-partial" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 3.5a8.5 8.5 0 000 17z" fill="currentColor"/></symbol>
-  <symbol id="mark-bare" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 12V3.5A8.5 8.5 0 0120.5 12z" fill="currentColor"/></symbol>
   <symbol id="mark-none" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></symbol>
   <symbol id="mark-right" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="mark-wrong" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></symbol>
-  <symbol id="arrow-left" viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="arrow-up" viewBox="0 0 24 24"><path d="M4 15l8-8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="arrow-right" viewBox="0 0 24 24"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="arrow-down" viewBox="0 0 24 24"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-replay" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.2 6.1L12 16.8 6.6 19.7l1.2-6.1L3.3 9.4l6.1-.8z" fill="currentColor"/></symbol>
@@ -46,6 +41,10 @@
       <button class="mode" data-mode="all" aria-pressed="false">
         <svg><use href="#icon-all"/></svg><span>All</span>
       </button>
+    </div>
+
+    <div class="sizer">
+      <input id="size" type="range" min="1" max="1" value="1" aria-label="how many questions">
     </div>
 
     <div class="menu-actions">
@@ -86,9 +85,8 @@
   Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
 </footer>
 
-<script src="data/topics.js?v=22"></script>
-<script src="js/data.js?v=22"></script>
-<script src="js/swipe.js?v=22"></script>
-<script src="js/app.js?v=22"></script>
+<script src="data/topics.js?v=31"></script>
+<script src="js/data.js?v=31"></script>
+<script src="js/app.js?v=31"></script>
 </body>
 </html>

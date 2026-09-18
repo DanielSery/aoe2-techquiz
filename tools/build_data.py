@@ -23,6 +23,10 @@ REPO = "SiegeEngineers/aoe2techtree"
 API = f"https://api.github.com/repos/{REPO}"
 ROOT = Path(__file__).resolve().parent.parent
 
+# A topic is named and pictured by the unit it starts from -- the Crossbowman,
+# not the Arbalester; the Light Cavalry, not the Hussar -- because what it asks
+# about is the upgrades, and the upgraded unit is one of the answers.
+#
 # A topic is one unit and the upgrades that complete it, at most seven: the
 # follow-up is a compass, one upgrade per direction, and right is taken by done. Every topic answers the same
 # three ways: the civ has no unit, has it with something missing, or has it all.
@@ -39,10 +43,24 @@ MAX_UPGRADES = 7
 # `bonus` decides the down answer: does the civ have a civ bonus, team bonus or
 # unique tech about this unit? That is not in the tech tree, so it is read out
 # of the game's own civilisation descriptions -- `words` are the phrases that
-# mean "this claim is about this unit", `veto` throws out a claim that only
-# matches through a different unit (Cavalry Archers are not Arbalesters), and
-# `bonus_fix` forces a civ either way when the words get it wrong. Every build
-# prints what it matched, so the reading stays reviewable.
+# mean "this claim is about this unit", `veto` marks the words that mean
+# something else (Cavalry Archers are not Arbalesters), and `bonus_fix` forces a
+# civ either way when the reading is wrong. Every build prints what it matched,
+# so the reading stays reviewable.
+#
+# The topic's own part names are words too and are not repeated here: a bonus
+# about a tech the topic asks you about -- free Siege Engineers, free Thumb Ring
+# -- is a bonus about the topic.
+#
+# Three things the words alone cannot say, all of them mistakes that were in
+# here:
+#   - a veto kills the *word*, not the claim. "Skirmishers and Elephant Archers
+#     attack +25% faster" is a Skirmisher bonus, and throwing out the whole line
+#     loses it.
+#   - what a unit is strong *against*, and where a different unit is trained,
+#     are not bonuses for it -- GUARDS reads what comes before the word.
+#   - a bonus about a unit the civ cannot build is not a bonus about it, so
+#     `build_topic` drops it: no card says "no unit, and a bonus about it".
 TOPICS = [
     {
         "id": "hand_cannoneer",
@@ -50,7 +68,7 @@ TOPICS = [
         "name": "Hand Cannoneer",
         "unit": 5,
         "upgrades": [219],
-        "words": [r"gunpowder", r"hand cannon\w*"],
+        "words": [r"gunpowder", r"hand cannon\w*", r"archer armou?r"],
     },
     {
         # Four civs field the Armored Elephant where everyone else has a ram,
@@ -59,7 +77,7 @@ TOPICS = [
         "group": "Siege",
         "name": "Siege Ram / Siege Elephant",
         "upgrades": [[("Unit", 548), ("Unit", 1746)], 377],
-        "words": [r"rams?", r"siege workshops?", r"siege weapons?", r"siege elephants?"],
+        "words": [r"rams?", r"siege", r"siege elephants?"],
     },
     {
         # Shu, Wei and Wu field the Traction Trebuchet where everyone else has a
@@ -69,25 +87,23 @@ TOPICS = [
         "name": "Bombard Cannon / Traction Trebuchet",
         "unit": [36, 1942],
         "upgrades": [377],
-        "words": [r"gunpowder", r"bombard cannons?", r"siege workshops?", r"siege weapons?"],
+        "words": [r"gunpowder", r"bombard cannons?", r"siege"],
     },
     {
         "id": "scorpion",
         "group": "Siege",
         "name": "Scorpion",
         "unit": 279,
-        "icon": ("Unit", 542),
         "upgrades": [("Unit", 542), 377],
-        "words": [r"scorpions?", r"siege workshops?", r"siege weapons?"],
+        "words": [r"scorpions?", r"siege"],
     },
     {
         "id": "onager",
         "group": "Siege",
         "name": "Onager",
         "unit": 550,
-        "icon": ("Unit", 588),
         "upgrades": [("Unit", 588), 377],
-        "words": [r"onagers?", r"mangonels?", r"siege workshops?", r"siege weapons?"],
+        "words": [r"onagers?", r"mangonels?", r"siege"],
     },
     {
         # Gated on the Crossbowman, so a civ that stops at crossbows is partial
@@ -95,122 +111,124 @@ TOPICS = [
         # is missing. Only the Bulgarians and the Spanish have no crossbow at all.
         "id": "arbalester",
         "group": "Archery Range",
-        "name": "Arbalester",
+        "name": "Crossbowman",
         "unit": 24,
-        "icon": ("Unit", 492),
         "upgrades": [("Unit", 492), 201, 219, 437],
-        "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?"],
+        "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?",
+                  r"ranged soldiers?", r"archer armou?r"],
         "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer",
-                 r"fire archer", r"genitour", r"ballista", r"scorpion", r"chu ko nu"],
+                 r"fire archer", r"genitour", r"ballista", r"scorpion", r"chu ko nu",
+                 r"double crossbow"],
     },
     {
+        # No Thumb Ring: it is an archer tech the Skirmisher barely trades on,
+        # and one more icon to weigh up on every card.
         "id": "skirmisher",
         "group": "Archery Range",
         "name": "Skirmisher",
         "unit": 7,
-        "icon": ("Unit", 6),
-        "upgrades": [("Unit", 6), 201, 219, 437],
-        "words": [r"skirmishers?", r"skirmisher-line", r"foot archers?", r"archery ranges?"],
+        "upgrades": [("Unit", 6), 201, 219],
+        "words": [r"skirmishers?", r"skirmisher-line", r"foot archers?", r"archery ranges?",
+                  r"ranged soldiers?", r"archer armou?r"],
         "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer"],
     },
     {
+        # Seven civs field a mounted archer of their own instead of the Cavalry
+        # Archer, and no civ has two of them. Each has an Elite except the
+        # Xianbei Raider, which stands in its own last-upgrade slot: it is
+        # already the top of its line, so Wei is not missing an upgrade that
+        # does not exist.
         "id": "cavalry_archer",
         "group": "Archery Range",
-        "name": "Cavalry Archer",
-        "unit": 39,
-        "icon": ("Unit", 474),
-        "upgrades": [("Unit", 474), 201, 219, 437, 435, 39, 436],
-        "words": [r"cavalry archers?", r"mounted archers?", r"archery ranges?"],
+        "name": "Cavalry Archer / Elephant Archer / Bolas Rider / Xianbei Raider",
+        "unit": [39, 873, 2569, 1952],
+        "upgrades": [[("Unit", 474), ("Unit", 875), ("Unit", 2571), ("Unit", 1952)],
+                     201, 219, 437, 435, 39, 436],
+        "words": [r"cavalry archers?", r"mounted archers?", r"archery ranges?",
+                  r"elephant archers?", r"bolas riders?", r"xianbei raiders?",
+                  r"ranged soldiers?", r"archer armou?r", r"mounted units?"],
         "veto": [r"genitour", r"foot archers?"],
     },
     {
         "id": "halberdier",
         "group": "Barracks",
-        "name": "Halberdier",
+        "name": "Pikeman",
         "unit": 358,
-        "icon": ("Unit", 359),
         "upgrades": [("Unit", 359), 77, 75, 215],
-        "words": [r"halberdiers?", r"pikemen", r"spearman-line", r"spearmen", r"infantry"],
+        "words": [r"halberdiers?", r"pikemen", r"spearman", r"spearmen", r"infantry",
+                  r"barracks"],
         "veto": [r"villagers?"],
+        # the Incas' only Spearman-line line is "Villagers affected by Infantry
+        # Blacksmith upgrades", where the infantry named are what the villagers
+        # borrow from, not who gains
+        "bonus_fix": {"Incas": False},
     },
     {
         "id": "champion",
         "group": "Barracks",
-        "name": "Champion",
-        "unit": 77,
-        "icon": ("Unit", 567),
-        "upgrades": [("Unit", 567), 875, 215, 77, 75],
-        "words": [r"militia-line", r"champions?", r"swordsm\w*", r"infantry", r"barracks"],
+        "name": "Long Swordsman / Champi Warrior",
+        "unit": [77, 2552],
+        "upgrades": [[("Unit", 567), ("Unit", 2554)], 875, 215, 77, 75],
+        "words": [r"militia-line", r"champions?", r"champi\w*", r"infantry", r"barracks"],
         "veto": [r"villagers?"],
     },
     {
+        # The Barracks unit nobody else has: the Eagle for the Aztecs and the
+        # Maya, the Fire Lancer for the Chinese civs, the Temple Guard for the
+        # Muisca. It is one question, asked of each civ about its own.
         "id": "eagle",
         "group": "Barracks",
-        "name": "Eagle Warrior",
-        "unit": 751,
-        "icon": ("Unit", 752),
-        "upgrades": [("Unit", 752), 215, 77, 75],
-        "words": [r"eagles?", r"eagle warriors?", r"infantry"],
-        "veto": [r"villagers?"],
-    },
-    {
-        "id": "champi",
-        "group": "Barracks",
-        "name": "Champi Warrior",
-        "unit": 2552,
-        "icon": ("Unit", 2554),
-        "upgrades": [("Unit", 2554), 215, 77, 75],
-        "words": [r"champi\w*", r"infantry"],
-        "veto": [r"villagers?"],
-    },
-    {
-        "id": "fire_lancer",
-        "group": "Barracks",
-        "name": "Fire Lancer",
-        "unit": 1901,
-        "icon": ("Unit", 1903),
-        "upgrades": [("Unit", 1903), 875, 215, 77, 75],
-        "words": [r"fire lancers?", r"infantry"],
+        "name": "Eagle Scout / Fire Lancer / Temple Guard",
+        "unit": [751, 1901, 2586],
+        "upgrades": [[("Unit", 752), ("Unit", 1903), ("Unit", 2587)], 875, 215, 77, 75],
+        "words": [r"eagles?", r"eagle warriors?", r"fire lancers?", r"temple guards?",
+                  r"infantry", r"barracks"],
         "veto": [r"villagers?"],
     },
     {
         "id": "hussar",
         "group": "Stable",
-        "name": "Hussar / Winged Hussar",
+        "name": "Light Cavalry",
         "unit": 546,
-        "icon": ("Unit", 441),
         "upgrades": [[("Unit", 441), ("Unit", 1707)], 435, 39, 80, 75],
-        "words": [r"hussars?", r"light cavalry", r"scout cavalry", r"cavalry", r"stables?"],
-        "veto": [r"cavalry archer", r"camel", r"elephant", r"hei guang", r"xianbei"],
+        "words": [r"hussars?", r"light cavalry", r"scout cavalry", r"cavalry", r"stables?",
+                  r"mounted units?", r"stable units?"],
+        "veto": [r"cavalry archer", r"camel", r"elephant", r"hei guang cavalry",
+                 r"xianbei raiders?"],
     },
     {
+        # Three civs field a knight of their own: the Persians' Savar tops the
+        # Knight line itself, the Gurjaras have the Shrivamsha Rider and Shu, Wei
+        # and Wu the Hei Guang Cavalry. No civ has two of them.
         "id": "paladin",
         "group": "Stable",
-        "name": "Paladin / Savar",
-        "unit": 38,
-        "icon": ("Unit", 569),
-        "upgrades": [[("Unit", 569), ("Unit", 1813)], 435, 39, 80, 75],
-        "words": [r"paladins?", r"knights?", r"knight-line", r"cavalry", r"stables?"],
+        "name": "Knight / Shrivamsha Rider / Hei Guang Cavalry",
+        "unit": [38, 1751, 1944],
+        "upgrades": [[("Unit", 569), ("Unit", 1813), ("Unit", 1753), ("Unit", 1946)], 435, 39, 80, 75],
+        "words": [r"paladins?", r"knights?", r"knight-line", r"shrivamsha riders?",
+                  r"hei guang cavalry", r"cavalry", r"stables?", r"mounted units?",
+                  r"stable units?"],
+        # Steppe Husbandry is its own tech and carries the Husbandry the topic
+        # asks about only as part of its name
         "veto": [r"cavalry archer", r"camel", r"elephant", r"scout cavalry", r"light cavalry",
-                 r"hei guang", r"xianbei"],
+                 r"xianbei raiders?", r"steppe husbandry"],
     },
     {
         "id": "camel",
         "group": "Stable",
         "name": "Camel Rider",
         "unit": 329,
-        "icon": ("Unit", 330),
         "upgrades": [("Unit", 330), 435, 39, 80, 75],
-        "words": [r"camels?", r"camel riders?"],
+        "words": [r"camels?", r"camel riders?", r"mounted units?", r"stable units?"],
+        "veto": [r"steppe husbandry"],
     },
     {
         "id": "battle_elephant",
         "group": "Stable",
         "name": "Battle Elephant",
         "unit": 1132,
-        "icon": ("Unit", 1134),
         "upgrades": [("Unit", 1134), 435, 39, 80, 75],
-        "words": [r"battle elephants?", r"elephants?"],
+        "words": [r"battle elephants?", r"elephants?", r"mounted units?", r"stable units?"],
         "veto": [r"elephant archer", r"ballista elephant", r"armored elephant", r"siege elephant"],
     },
     {
@@ -218,9 +236,9 @@ TOPICS = [
         "group": "Stable",
         "name": "Steppe Lancer",
         "unit": 1370,
-        "icon": ("Unit", 1372),
         "upgrades": [("Unit", 1372), 435, 39, 80, 75],
-        "words": [r"steppe lancers?"],
+        "words": [r"steppe lancers?", r"cavalry", r"mounted units?", r"stable units?"],
+        "veto": [r"scout cavalry", r"light cavalry", r"cavalry archer", r"heavy cavalry archer"],
     },
     {
         "id": "monk",
@@ -229,6 +247,50 @@ TOPICS = [
         "unit": 125,
         "upgrades": [316, 230, 252, 438, 319, 233, 231],
         "words": [r"monks?", r"monasteries", r"monastery", r"relics?", r"missionar\w*"],
+        # Both name Monks or Relics as somebody else's: Atheism is about the
+        # enemy's relics and a victory clock, and Chieftains pays for killing
+        # a Monk. Neither does anything for a Monk of your own.
+        "bonus_fix": {"Huns": False, "Vikings": False},
+    },
+    {
+        # No unit at the foot of it: the topic is the upgrades themselves, so a
+        # civ with none of the seven is the ✗ rather than "no unit". Bracer is
+        # here because it is what gives a tower its range, which is the one
+        # archer tech that is also a defensive one.
+        "id": "defense",
+        "group": "Defense",
+        "name": "Defense",
+        "icon": ("Tech", 63),
+        "upgrades": [51, 63, 608, 201, 194, 379, 64],
+        # "Castle" is the age as often as the building, and every civ has a
+        # bonus that mentions an age
+        "words": [r"towers?", r"walls?", r"fortifications?", r"keeps?", r"donjons?",
+                  r"krepost", r"buildings?", r"castles?(?!\s*(?:age|/\s*imperial))"],
+        # a Palisade is not the wall this topic upgrades -- and the veto has to
+        # cover the word "Walls" beside it, not just "Palisade" -- while a siege
+        # bonus is about knocking defences down rather than putting them up.
+        # Tower Shields is a tech that arms infantry, an enemy Castle revealed
+        # is not one of yours, and a military building is where units come from.
+        "veto": [r"palisade walls?", r"palisade", r"siege", r"tower shields",
+                 r"enemy castles?", r"military \w*\s?buildings?"],
+        # What is left of these two after the vetoes still only mentions a
+        # defence in passing: Kipchaks are trained per Castle, Red Cliffs
+        # Tactics sets fire to somebody else's buildings, and needing no
+        # buildings to advance an age is the Khmer's economy.
+        "bonus_fix": {"Cumans": False, "Khmer": False, "Wu": False},
+    },
+    {
+        # The Khitans farm from Pastures, so their last farm upgrade is
+        # Transhumance -- Grazing Grasslands to the .dat -- and they have no
+        # Crop Rotation at all: one slot, either tech. The other three are the
+        # last rung of their own ladders.
+        "id": "economy",
+        "group": "Economy",
+        "name": "Economy",
+        "upgrades": [[12, 1012], 221, 182, 279],
+        "words": [r"farm\w*", r"lumberjacks?", r"lumber camps?", r"mining camps?",
+                  r"gold miners?", r"stone miners?", r"miners?", r"mills?",
+                  r"economic upgrades?", r"economic technolog\w*"],
     },
 ]
 
@@ -272,7 +334,8 @@ def tiers_for(gate_ids: list, upgrade_ids: list) -> list:
     return [
         {"id": "none", "dir": "left", "mark": "none", "has": []},
         {"id": "partial", "dir": "up", "mark": "partial", "has": partial},
-        {"id": "full", "dir": "right", "mark": "full", "has": partial + upgrade_ids},
+        {"id": "full", "dir": "right", "mark": "full",
+         "has": list(dict.fromkeys(partial + upgrade_ids))},
     ]
 
 # aoe2techtree's civ keys map to img/Civs/<lowercase>.png; Aoe2Planner's
@@ -300,14 +363,22 @@ UNIT_ENABLER = {
     329: None, 330: None, 358: 197, 359: 429, 422: 96, 441: 428, 474: 218, 492: 237, 542: 239,
     546: 254, 548: 255, 550: 257, 567: 264, 569: 265, 588: 320, 751: None, 752: None, 1132: None,
     1134: None, 1258: 162, 1370: None, 1372: None, 1707: None, 1744: 837, 1746: None, 1813: None,
-    1901: None, 1903: None, 2552: None, 2554: None, 1942: None,
+    873: None, 875: None, 1751: None, 1753: None, 1944: None, 1946: None, 1901: None, 1903: None, 1942: None,
+    1952: None, 2552: None, 2554: None, 2569: None, 2571: None, 2586: None, 2587: None,
 }
 
+# The same blind spot on the tech side. The .dat extraction on this machine has
+# never heard of the Khitans' Pasture line, so nothing turns Grazing Grasslands
+# off for anybody and the enable side hands it to all 53 -- it disagreed for
+# exactly the 52 civs that do not have it. This one node rests on aoe2techtree
+# alone; the other ten the two new topics name are still double-sourced.
+UNSETTLED_TECHS = {1012}
+
 # The two sources disagree here and the .dat is the one that cannot be trusted:
-# nothing in the Mapuche's disabled list turns Fervor off, yet the tech tree
-# they are dealt does not carry it -- the same enable-side blind spot as the
-# Traction Trebuchet. Recorded rather than silently accepted.
-KNOWN_DIVERGENCES = {("Mapuche", "Tech", 252)}
+# nothing in the Mapuche's disabled list turns Fervor or Architecture off, yet
+# the tech tree they are dealt carries neither -- the same enable-side blind spot
+# as the Traction Trebuchet. Recorded rather than silently accepted.
+KNOWN_DIVERGENCES = {("Mapuche", "Tech", 252), ("Mapuche", "Tech", 51)}
 
 
 def fetch(url: str) -> bytes:
@@ -370,22 +441,36 @@ def civ_claims(description: str) -> list:
         if skip_next:
             skip_next = False
             continue
+        # the game wraps a long bonus mid-sentence, always after a "/", and the
+        # continuation carries no bullet: "in Dark/Feudal/Castle/" + "Imperial Age"
+        if lines and lines[-1].endswith("/"):
+            lines[-1] += claim
+            continue
         lines.append(claim)
     return lines
 
 
-def bonus_claims(spec: dict, claims: list) -> list:
-    words = spec.get("words", [])
+# What a word means when it is somebody else's: "+3 vs. Rams" and "-3 damage
+# from Mounted Units" are bonuses against them, "(except Skirmishers)" is the
+# one unit the bonus leaves out, and "Condottiero available at the Barracks" is
+# not a bonus about the unit the Barracks otherwise makes.
+GUARDS = ("vs.", "from ", "except", "available at", "trained at")
+
+
+def bonus_claims(spec: dict, claims: list, parts: list = ()) -> list:
+    words = list(spec.get("words", [])) + [re.escape(name.lower()) for name in parts]
     veto = spec.get("veto", [])
     found = []
     for claim in claims:
         low = claim.lower()
-        if any(re.search(r"\b" + pattern, low) for pattern in veto):
-            continue
+        # a veto covers the words it names, not the sentence they stand in
+        dead = [m.span() for pattern in veto for m in re.finditer(r"\b" + pattern, low)]
         for pattern in words:
-            hit = re.search(r"\b" + pattern + r"\b", low)
-            # "+3 vs. Rams" is a bonus against them, not one about your own
-            if hit and "vs." not in low[max(0, hit.start() - 8) : hit.start()]:
+            if any(
+                not any(start <= hit.start() < end for start, end in dead)
+                and not any(g in low[max(0, hit.start() - 18) : hit.start()] for g in GUARDS)
+                for hit in re.finditer(r"\b" + pattern + r"\b", low)
+            ):
                 found.append(claim)
                 break
     return found
@@ -400,8 +485,10 @@ def gate_units(spec: dict) -> list:
 
 
 def nodes_of(spec: dict) -> list:
-    """Every (kind, id) the topic names: the gate units first, then the upgrades."""
-    return [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec)
+    """Every (kind, id) the topic names once each: the gate units first, then the
+    upgrades. A unit that is its own last upgrade is named twice and drawn once."""
+    ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec)
+    return list(dict.fromkeys(ordered))
 
 
 def part_id(kind: str, item: int) -> str:
@@ -441,13 +528,16 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
             else len(missing) == len(upgrade_ids)
         )
         tier = "none" if nothing else "partial" if missing else "full"
-        found = bonus_claims(spec, descriptions[name])
+        found = bonus_claims(spec, descriptions[name], [part["name"] for part in parts])
         fixed = spec.get("bonus_fix", {}).get(name)
+        claimed = bool(found) if fixed is None else fixed
         civs[name.lower()] = {
             "tier": tier,
             "has": has,
             "missing": missing,
-            "bonus": bool(found) if fixed is None else fixed,
+            # a civ that cannot build the unit has no bonus about it, whatever
+            # its siege or stable bonus says
+            "bonus": claimed and tier != "none",
             "why": found,
         }
 
@@ -484,7 +574,9 @@ def cross_check(techtree: dict, civdata_path: Path) -> int:
     checked = []
     for spec in TOPICS:
         for kind, item in nodes_of(spec):
-            if kind == "Tech":
+            if kind == "Tech" and item in UNSETTLED_TECHS:
+                print(f"cross-check: {kind} {item} cannot be settled by the .dat", file=sys.stderr)
+            elif kind == "Tech":
                 checked.append((kind, item, item))
             elif UNIT_ENABLER.get(item):
                 checked.append((kind, item, UNIT_ENABLER[item]))

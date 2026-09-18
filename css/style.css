@@ -7,6 +7,7 @@
   --ink: #efe3d0;
   --ink-dim: #a8968014;
 
+  --now: #4f93d6;
   --none: #cf5340;
   --bare: #d4763a;
   --partial: #dfa338;
@@ -15,17 +16,16 @@
 
   --max-card: min(80vw, 380px);
   --cell: 78px;
-  --mini: 17px;
   --radius: 14px;
 }
 
 /* The pad is the floor the card stands on, so it shrinks before the card does;
    svh is the viewport with the phone's toolbars *out*, which is the only height
-   guaranteed to be on screen. */
+   guaranteed to be on screen. The width term carries the two rails as well as
+   the four tiles — 5.44 cells and 30px of gaps across — so 15vw, not 19. */
 @supports (height: 100svh) {
   :root {
-    --cell: clamp(54px, min(19vw, 8.6svh), 78px);
-    --mini: clamp(11px, calc(var(--cell) * .218), 17px);
+    --cell: clamp(46px, min(15vw, 8.6svh), 78px);
   }
 }
 
@@ -142,6 +142,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .topic-grid::-webkit-scrollbar { display: none; }
 
+/* set by markScrollable, and only while there is more below: a fade over a menu
+   that already fits would dim its last row for nothing */
+.topic-grid.can-scroll {
+  -webkit-mask-image: linear-gradient(#000 calc(100% - 26px), transparent);
+  mask-image: linear-gradient(#000 calc(100% - 26px), transparent);
+}
+
 .group h2 {
   margin: 0 0 3px;
   font-size: 11px;
@@ -158,6 +165,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .topic {
+  --tile-icon: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,7 +175,9 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   border-radius: 10px;
 }
 
-.topic img { width: 50px; height: 50px; border-radius: 7px; }
+.topic img { width: var(--tile-icon); height: var(--tile-icon); border-radius: 7px; }
+
+.topic .split { width: var(--tile-icon); height: var(--tile-icon); border-radius: 7px; }
 
 
 
@@ -178,6 +188,37 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   gap: 10px;
   align-items: center;
   padding-bottom: max(6px, env(safe-area-inset-bottom));
+}
+
+
+/* how many of the questions to ask: all of them, or a handful drawn at random */
+.sizer { display: flex; align-items: center; gap: 8px; width: min(100%, 320px); }
+
+.sizer input {
+  flex: 1;
+  height: 4px;
+  appearance: none;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold) var(--filled, 100%), #3a2f23 var(--filled, 100%));
+}
+
+.sizer input::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #17120b;
+  background: var(--gold);
+  cursor: pointer;
+}
+
+.sizer input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #17120b;
+  background: var(--gold);
+  cursor: pointer;
 }
 
 /* single / custom / all, one of them always on */
@@ -243,6 +284,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .is-partial { color: var(--partial); }
 .is-full { color: var(--full); }
 .is-bonus { color: var(--bonus); }
+.is-swap { color: var(--bare); }
 
 /* ---------- game ---------- */
 
@@ -268,9 +310,12 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   background: #3a2f23;
 }
 
+/* the one in hand is not a verdict, so it wears the one colour that is not one */
+.progress i.now { background: var(--now); box-shadow: 0 0 6px #4f93d688; }
+
 .progress i.right { background: var(--full); }
 .progress i.wrong { background: var(--none); }
-.progress i.now { background: var(--gold); }
+.progress i.half { background: var(--partial); }
 
 .tally {
   position: relative;
@@ -401,7 +446,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   align-items: center;
   justify-content: center;
   gap: clamp(5px, 3cqh, 12px);
-  padding: clamp(8px, 4cqw, 16px);
+  /* the band is out of flow across the top, so the face keeps clear of it */
+  padding: clamp(30px, 12cqw, 50px) clamp(8px, 4cqw, 16px) clamp(8px, 4cqw, 16px);
   overflow: hidden;
   background: linear-gradient(160deg, var(--panel-2), var(--panel));
   border: 2px solid var(--edge);
@@ -424,32 +470,85 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   box-shadow: 0 0 0 4px #cf534055, 0 0 30px #cf534033, 0 10px 24px #0008;
 }
 
+/* the direction was right and the follow-up was not: it does not count as a
+   right card, and it is not a wrong one either */
+.face.back.half {
+  background: linear-gradient(160deg, #4a3a1c, #2a2013);
+  border-color: var(--partial);
+  box-shadow: 0 0 0 4px #dfa33855, 0 0 30px #dfa33833, 0 10px 24px #0008;
+}
+
+/* Which unit the card is about, named rather than left to its icon: a mixed set
+   deals seventeen topics and the icon is 24px. The same band sits on both
+   faces, so the flip turns one card over instead of swapping two. */
+.topic-band {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: clamp(5px, 2.5cqh, 9px) clamp(8px, 4cqw, 12px);
+  border-bottom: 1px solid #ffffff12;
+  background: #00000030;
+}
+
+.topic-band img,
+.topic-band .split {
+  flex: none;
+  width: clamp(18px, 8cqw, 26px);
+  height: clamp(18px, 8cqw, 26px);
+  border-radius: 5px;
+}
+
+.topic-band .split img { width: 100%; height: 100%; border-radius: 0; }
+
+.topic-band span {
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(8px, 3.4cqw, 11px);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #bda986;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* the emblem is the card; a plate of light under it says so */
+.plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #ffffff1c 0%, #ffffff09 46%, transparent 68%);
+}
+
 .emblem {
-  width: 62%;
+  width: 86%;
   aspect-ratio: 1;
   object-fit: contain;
   filter: drop-shadow(0 4px 10px #0009);
 }
 
 .civ-name {
-  font-size: clamp(13px, 6cqw, 19px);
-  letter-spacing: .03em;
+  font-size: clamp(14px, 6.4cqw, 21px);
+  letter-spacing: .04em;
   color: var(--gold);
   text-align: center;
 }
 
-.topic-chip {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+/* the answer side has more to say, so whose card it is becomes one line */
+.face.back .who {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: clamp(5px, 2.5cqw, 9px);
 }
 
-.topic-chip img { width: clamp(20px, 9cqw, 28px); height: clamp(20px, 9cqw, 28px); border-radius: 5px; }
-
-.face.back .emblem { width: 21%; }
+.face.back .emblem { width: clamp(24px, 12cqw, 40px); }
+.face.back .civ-name { font-size: clamp(12px, 5.5cqw, 17px); }
 
 .judge-badge {
   display: flex;
@@ -466,6 +565,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .judge-badge svg { width: 68%; height: 68%; }
 .judge-badge.right { background: var(--full); box-shadow: 0 0 22px #62a76566; }
 .judge-badge.wrong { background: var(--none); box-shadow: 0 0 22px #cf534066; }
+.judge-badge.half { background: var(--partial); box-shadow: 0 0 22px #dfa33866; }
 
 @keyframes pop {
   from { transform: scale(.5); opacity: 0; }
@@ -482,30 +582,49 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .next-hint svg { width: 16px; height: 16px; }
 
+/* how long the card will wait before it deals the next one itself; filled in
+   when the card turns, so it counts the waiting and not the answering */
+.auto-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  overflow: hidden;
+  background: #ffffff10;
+}
+
+.auto-bar i {
+  display: block;
+  height: 100%;
+  background: currentColor;
+  opacity: .65;
+  transform-origin: left center;
+  animation: drain linear forwards;
+}
+
+@keyframes drain {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
 @keyframes breathe {
   0%, 100% { opacity: .25; }
   50% { opacity: .75; }
 }
 
-.options { display: flex; gap: 12px; }
-
-.options .mark {
-  width: clamp(26px, 11cqw, 36px);
-  height: clamp(26px, 11cqw, 36px);
-  opacity: .28;
-  transition: opacity .2s, transform .2s;
+/* The question, over the board it is answered on rather than on the card: it is
+   the same question of every civilisation, so on the card it was a line you
+   stop reading by the third one, saying the name the card has just said. */
+.ask-words {
+  margin: 0;
+  font-size: 12px;
+  color: #a8967f;
+  text-align: center;
 }
 
-.options .mark svg { width: 66%; height: 66%; }
+.ask-words b { font-weight: 600; color: var(--gold); }
 
-.options .mark.truth {
-  opacity: 1;
-  border-width: 2px;
-  background: #ffffff0f;
-  transform: scale(1.12);
-}
-
-.options .mark.yours { opacity: .9; }
 
 .parts {
   display: flex;
@@ -531,11 +650,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .part.falsely { border-color: var(--none); box-shadow: 0 0 0 2px var(--none); }
 .part.missed { border-color: var(--partial); box-shadow: 0 0 0 2px var(--partial); }
 
+/* what the card was worth, at the end of its own band: anywhere else on the
+   back and it lands on the band or on the parts */
 .card-delta {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: clamp(14px, 6cqw, 20px);
+  flex: none;
+  margin-left: auto;
+  padding-left: 6px;
+  font-size: clamp(12px, 5.2cqw, 18px);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -594,8 +715,120 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   .bonus-note { padding: 4px 6px; }
 }
 
-/* which upgrades is it missing? the pad turns into a compass, and the corners
-   take two arrows at once */
+/* The board under the card: the upgrades as tiles you tap, and the answers
+   that are not upgrades beside them. */
+.pad {
+  display: flex;
+  justify-content: center;
+  flex: none;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+}
+
+.pad.claiming {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+/* None on one side, all on the other, and what it actually has in between: the
+   row reads as the scale the question is asked on, and the two ends are the two
+   answers that need no tiles at all. They stretch to the tiles, however many
+   rows of them there are, so the board is one block whatever the topic. */
+.board {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 6px;
+  align-items: stretch;
+}
+
+/* Flex and a width of exactly N tiles, not a grid of N columns: a last row with
+   a tile missing centres under the others instead of hanging off the left. */
+.claims {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  width: calc(var(--columns, 4) * var(--cell) + (var(--columns, 4) - 1) * 6px);
+}
+
+.claim-actions { display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* everything that is not an upgrade tile: the two rails, the bonus, and done */
+.act {
+  position: relative;
+  padding: 0;
+  color: #a8967f;
+  border-color: var(--edge);
+  background: var(--panel);
+}
+
+.act .verdict {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--cell) * .3);
+  height: calc(var(--cell) * .3);
+  border-radius: 8px 0 0 0;
+  background: #15110dd9;
+}
+
+.act .verdict svg { width: 70%; height: 70%; }
+
+/* nothing claimed yet is nothing to say: an empty badge is a notch cut out of
+   the corner of the button */
+.verdict:empty { background: none; }
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: calc(var(--cell) * .72);
+  padding: 4px 2px;
+}
+
+.rail svg { width: 42%; height: auto; aspect-ratio: 1; }
+
+.rail span,
+.claim-actions .act span {
+  font-size: min(9px, calc(var(--cell) * .17));
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .85;
+}
+
+/* two words on a rail one tile wide: "can't build" wraps rather than clips */
+.rail span {
+  line-height: 1.15;
+  text-align: center;
+}
+
+.rail[data-claim="no-unit"] { color: var(--none); border-color: #5e332c; background: #2a1714; }
+#claim-all.rail { color: var(--full); border-color: #2f5233; background: #172a1a; }
+
+.claim-actions .act {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: calc(var(--cell) * 1.5);
+  height: calc(var(--cell) * .68);
+}
+
+.claim-actions .act svg { width: calc(var(--cell) * .3); height: calc(var(--cell) * .3); }
+.claim-actions .act.star { color: var(--bonus); border-color: #4a3a5e; background: #2a1f38; }
+
+/* answered on the tap, and it outranks whatever the button wears at rest */
+.act.spotted { border-color: var(--full); color: var(--full); }
+.act.falsely { border-color: var(--none); color: var(--none); }
+.act.missed { border-color: var(--partial); color: var(--partial); }
+.act.done { cursor: default; }
+
 .upgrade {
   position: relative;
   padding: 0;
@@ -607,26 +840,6 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .upgrade img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-/* which arrows reach it; the diagonals are two at once */
-.upgrade .dir {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: calc(var(--cell) * .22);
-  height: calc(var(--cell) * .22);
-  opacity: .85;
-  filter: drop-shadow(0 0 2px #000);
-}
-
-.dir-up { transform: rotate(0deg); }
-.dir-up-right { transform: rotate(45deg); }
-.dir-right { transform: rotate(90deg); }
-.dir-down-right { transform: rotate(135deg); }
-.dir-down { transform: rotate(180deg); }
-.dir-down-left { transform: rotate(225deg); }
-.dir-left { transform: rotate(270deg); }
-.dir-up-left { transform: rotate(315deg); }
 
 .upgrade .verdict {
   position: absolute;
@@ -643,112 +856,42 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .upgrade .verdict svg { width: 70%; height: 70%; }
 
-/* answered on the spot: the border is whether you were right, the icon going
-   grey is the civ not having it */
+/* answered on the tap: the border is whether you were right */
 .upgrade.done { cursor: default; }
 .upgrade.spotted { border-color: var(--full); color: var(--full); }
-.upgrade.spotted img { filter: grayscale(1) brightness(.4); }
 .upgrade.falsely { border-color: var(--none); color: var(--none); }
+.upgrade.missed { border-color: var(--partial); color: var(--partial); }
 
-#picker-done {
-  grid-area: right;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  width: var(--cell);
-  height: var(--cell);
-  padding: 0;
-  border: 2px solid var(--gold);
-  border-radius: 10px;
-  background: linear-gradient(#a9833c, #8a6729);
-  color: #1c150c;
-}
+#picker-done { border-width: 2px; }
+#picker-done span { opacity: 1; font-weight: 700; }
 
-#picker-done .arrow { width: calc(var(--cell) * .23); height: calc(var(--cell) * .23); opacity: .8; }
-#picker-done svg:last-child { width: calc(var(--cell) * .38); height: calc(var(--cell) * .38); }
-
-/* Each answer sits where its swipe goes: the pad is the legend. */
-.pad {
+/* Where more than one unit can fill a slot they share its space, whole, biggest
+   cell to the one the topic is named for -- on the menu tile, and everywhere the
+   question is asked, since drawing the civ's own Winged Hussar would answer it. */
+.split {
   display: grid;
-  grid-template-areas: "up-left up up-right" "left topic right" "down-left down down-right";
-  grid-template-columns: repeat(3, var(--cell));
-  grid-template-rows: repeat(3, var(--cell));
-  gap: 6px;
-  align-items: center;
-  justify-items: center;
-  flex: none;
-  padding-bottom: max(6px, env(safe-area-inset-bottom));
-}
-
-.answer.is-bonus svg:last-child { width: calc(var(--cell) * .33); height: calc(var(--cell) * .33); }
-.answer.spotted { border-color: var(--full); color: var(--full); }
-.answer.falsely { border-color: var(--none); color: var(--none); }
-
-.pad.dim { opacity: .3; pointer-events: none; }
-
-.pad-topic {
-  grid-area: topic;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(var(--cell) * .56);
-  height: calc(var(--cell) * .56);
-}
-
-.pad-topic img { width: calc(var(--cell) * .44); height: calc(var(--cell) * .44); border-radius: 6px; opacity: .8; }
-
-.answer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 4px;
-  width: var(--cell);
-  height: var(--cell);
-  border-width: 2px;
-  border-color: currentColor;
-  background: var(--panel);
-}
-
-.answer[data-dir="left"] { grid-area: left; }
-.answer[data-dir="up"] { grid-area: up; }
-.answer[data-dir="right"] { grid-area: right; }
-.answer[data-dir="down"] { grid-area: down; }
-
-.answer .arrow { width: calc(var(--cell) * .23); height: calc(var(--cell) * .23); opacity: .85; }
-
-.answer.armed {
-  background: #ffffff14;
-  box-shadow: 0 0 0 3px currentColor inset;
-}
-
-/* what that direction claims the civ has; wraps, so seven upgrades do not
-   push the pad off the sides of the screen */
-.mini {
-  display: grid;
-  grid-template-columns: repeat(3, var(--mini));
   gap: 2px;
-  justify-content: center;
-}
-
-.mini span {
-  width: var(--mini);
-  height: var(--mini);
-  border-radius: 3px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-.mini span.on { outline: 1px solid currentColor; outline-offset: -1px; }
+.split img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; display: block; }
 
-.mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.mini span.off img { filter: grayscale(1) brightness(.35); }
+.split.n2 { grid-template-columns: 1fr 1fr; }
 
-/* "some of these, not all" */
-.mini span.some img { filter: grayscale(.55) brightness(.62); }
-.mini span.some { outline: 1px dashed currentColor; outline-offset: -1px; }
+.split.n3,
+.split.n4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+
+.split.n3 img:first-child { grid-row: 1 / span 2; }
+
+/* a half cell is twice as tall as it is wide, so filling it would cut the unit
+   in half: pull the icon back to nearer its own shape instead */
+.split.n2 img,
+.split.n3 img:first-child {
+  height: 68%;
+  align-self: center;
+}
 
 /* ---------- results ---------- */
 
@@ -785,6 +928,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .review .row.right { background: #62a7651f; border-color: #62a76577; }
 .review .row.wrong { background: #cf53401f; border-color: var(--none); }
+.review .row.half { background: #dfa3381f; border-color: var(--partial); }
 
 /* whether you got it right is the point of this screen */
 .review .judge {
@@ -803,6 +947,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .review .judge svg { width: 16px; height: 16px; }
 .review .row.right .judge { background: var(--full); }
 .review .row.wrong .judge { background: var(--none); }
+.review .row.half .judge { background: var(--partial); }
 
 .review .row img { width: 34px; height: 34px; object-fit: contain; }
 .review .row.right img { opacity: .75; }
@@ -810,6 +955,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .review .row .mark { width: 18px; height: 18px; border-radius: 5px; opacity: .75; }
 .review .row .mark svg { width: 12px; height: 12px; }
 .review .row .mark.yours { opacity: .45; }
+.review .row .asked { display: block; width: 18px; height: 18px; }
+.review .row .asked img, .review .row .asked .split { width: 100%; height: 100%; border-radius: 4px; }
 .review .row em { font-style: normal; font-size: 9px; color: #a8967f; text-align: center; }
 
 .actions {
@@ -853,7 +1000,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 @media (max-height: 820px) {
   .group .tiles { grid-template-columns: repeat(auto-fill, 54px); }
-  .topic img { width: 42px; height: 42px; }
+  .topic { --tile-icon: 42px; }
 }
 
 @media (max-height: 700px) {
