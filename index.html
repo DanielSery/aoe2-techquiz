@@ -39,18 +39,30 @@
     <div class="hud">
       <button id="quit" class="ghost" title="Back to topics"><svg><use href="#icon-home"/></svg></button>
       <div id="progress" class="progress"></div>
-      <div id="tally" class="tally"></div>
+      <div class="tally"><b id="score-now">0</b><span id="delta" class="delta"></span></div>
     </div>
 
     <div class="arena">
       <div id="stack" class="stack"></div>
+
+      <div id="picker" class="picker">
+        <div class="picker-head">
+          <img id="picker-civ" src="" alt="">
+          <span class="mark is-partial"><svg><use href="#mark-partial"/></svg></span>
+          <img id="picker-topic" src="" alt="">
+        </div>
+        <div id="picker-grid" class="picker-grid"></div>
+        <button id="picker-done" class="primary">
+          <svg><use href="#mark-right"/></svg><span id="picker-count"></span>
+        </button>
+      </div>
     </div>
 
     <div id="pad" class="pad"></div>
   </section>
 
   <section id="results" class="screen">
-    <div id="score" class="score"></div>
+    <div class="score"><b id="final-score"></b><small id="final-tally"></small></div>
     <div id="review" class="review"></div>
     <div class="actions">
       <button id="again-wrong" class="primary"><svg><use href="#icon-replay"/></svg><span id="wrong-count"></span></button>

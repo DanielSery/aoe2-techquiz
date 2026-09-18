@@ -4,6 +4,10 @@ const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown:
 const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
 const STORE_KEY = "aoe2-techquiz.topics";
 
+// An upgrade you leave alone and the civ has is worth nothing: only a claim
+// scores, or doing nothing would be the safe way to play.
+const POINTS = { tier: 1, spotted: 1, falsely: -1, missed: -1 };
+
 const el = (id) => document.getElementById(id);
 const screens = { menu: el("menu"), game: el("game"), results: el("results") };
 
@@ -17,6 +21,8 @@ const state = {
   index: 0,
   results: [],
   phase: "answer",
+  score: 0,
+  picks: new Set(),
   timer: 0,
 };
 
@@ -45,6 +51,11 @@ function start() {
     const button = event.target.closest(".answer");
     if (button) answer(button.dataset.dir);
   });
+  el("picker-grid").addEventListener("click", (event) => {
+    const button = event.target.closest(".upgrade");
+    if (button) togglePick(button.dataset.id);
+  });
+  el("picker-done").addEventListener("click", submitPicks);
   // a revealed card waits for you: anything but the hud moves it on
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
@@ -128,14 +139,28 @@ function beginRound(cards, isFullSet) {
   if (isFullSet) state.fullDeck = cards;
   state.index = 0;
   state.results = [];
+  state.score = 0;
+  el("score-now").textContent = "0";
   show("game");
   renderCard();
 }
 
 function show(name) {
   clearTimeout(state.timer);
+  closePicker();
   for (const [key, node] of Object.entries(screens)) node.classList.toggle("is-active", key === name);
   if (name === "menu") renderMenu();
+}
+
+function bumpScore(delta) {
+  state.score += delta;
+  el("score-now").textContent = `${state.score}`;
+
+  const flash = el("delta");
+  flash.textContent = delta > 0 ? `+${delta}` : `${delta}`;
+  flash.className = `delta ${delta >= 0 ? "up" : "down"}`;
+  void flash.offsetWidth; // restart the animation on a repeated delta
+  flash.classList.add("show");
 }
 
 function renderCard() {
@@ -163,10 +188,11 @@ function renderCard() {
         <div class="civ-name">${civ.name}</div>
       </div>
       <div class="face back">
+        <div class="card-delta"></div>
         <div class="judge-badge"></div>
         <img class="emblem" src="${civ.img}" alt="">
         <div class="options"></div>
-        <div class="parts">${partsHtml(topic, fact)}</div>
+        <div class="parts">${partsHtml(topic, fact, null)}</div>
         <div class="next-hint">
           <svg><use href="#icon-play"/></svg><svg><use href="#icon-play"/></svg>
         </div>
@@ -262,16 +288,25 @@ function padTitle(topic, index) {
   return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
 }
 
-function partsHtml(topic, answer) {
+/* The civ's own row, ringed with how your picks did when the picker ran. */
+function partsHtml(topic, answer, picks) {
   return topic.parts
     .map((part) => {
       const on = answer.has.includes(part.id);
-      return `<span class="part ${on ? "on" : "off"}" title="${part.name}">
+      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(topic, part, on, picks)}"
+        title="${part.name}">
         <img src="${part.img}" alt="${part.name}">
         <b><svg><use href="#mark-${on ? "right" : "wrong"}"/></svg></b>
       </span>`;
     })
     .join("");
+}
+
+function pickOutcome(topic, part, civHasIt, picks) {
+  if (!picks || !topic.upgrades.includes(part.id)) return "";
+  const marked = picks.includes(part.id);
+  if (marked) return civHasIt ? "falsely" : "spotted";
+  return civHasIt ? "" : "missed";
 }
 
 function markRow(topic, truthId, wrongId) {
@@ -299,9 +334,6 @@ function renderProgress() {
     tick.className = done ? (done.right ? "right" : "wrong") : i === state.index ? "now" : "";
     bar.append(tick);
   });
-  const answered = state.results.filter(Boolean).length;
-  const right = state.results.filter((r) => r.right).length;
-  el("tally").textContent = answered ? `${right}/${answered}` : "";
 }
 
 function arm(direction) {
@@ -316,24 +348,109 @@ function answer(direction) {
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
   const guess = tierAt(topic, direction);
-  if (!guess) return; // a direction this topic does not use
+  if (!guess) return;
 
-  state.phase = "reveal";
   const right = guess.id === fact.tier;
-  state.results[state.index] = { card, guess: guess.id, tier: fact.tier, right };
+  state.results[state.index] = {
+    card,
+    guess: guess.id,
+    tier: fact.tier,
+    right,
+    delta: right ? POINTS.tier : -POINTS.tier,
+    picks: null,
+  };
+  arm(null);
+  bumpScore(right ? POINTS.tier : -POINTS.tier);
+  renderProgress();
+
+  // saying "partial" is only half an answer: which upgrades are missing?
+  if (guess.id === "partial" && topic.upgrades.length > 1) openPicker();
+  else reveal();
+}
+
+/* ---------- which upgrades is it missing? ---------- */
+
+function openPicker() {
+  const { topic, civ } = truth(state.data, state.deck[state.index]);
+  state.phase = "picking";
+  state.picks = new Set();
+
+  el("picker-civ").src = civ.img;
+  el("picker-topic").src = topic.icon;
+  el("picker-grid").innerHTML = topic.upgrades
+    .map((id) => {
+      const part = topic.parts.find((p) => p.id === id);
+      return `<button class="upgrade" data-id="${id}" title="${part.name}">
+        <img src="${part.img}" alt="${part.name}">
+        <span class="cross"><svg><use href="#mark-none"/></svg></span>
+      </button>`;
+    })
+    .join("");
+  el("picker").classList.add("is-open");
+  el("pad").classList.add("dim");
+  renderPickCount();
+}
+
+function closePicker() {
+  el("picker").classList.remove("is-open");
+  el("pad").classList.remove("dim");
+}
+
+function togglePick(id) {
+  if (state.phase !== "picking") return;
+  state.picks.has(id) ? state.picks.delete(id) : state.picks.add(id);
+  const button = el("picker-grid").querySelector(`[data-id="${id}"]`);
+  button.classList.toggle("marked", state.picks.has(id));
+  renderPickCount();
+}
+
+function renderPickCount() {
+  el("picker-count").textContent = state.picks.size ? `${state.picks.size}` : "";
+}
+
+function submitPicks() {
+  if (state.phase !== "picking") return;
+  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
+
+  let delta = 0;
+  for (const id of topic.upgrades) {
+    const marked = state.picks.has(id);
+    const missing = fact.missing.includes(id);
+    if (marked) delta += missing ? POINTS.spotted : POINTS.falsely;
+    else if (missing) delta += POINTS.missed;
+  }
+
+  const result = state.results[state.index];
+  result.picks = [...state.picks];
+  result.delta += delta;
+  bumpScore(delta);
+  closePicker();
+  reveal();
+}
+
+function reveal() {
+  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
+  const result = state.results[state.index];
+  state.phase = "reveal";
 
   const node = el("stack").querySelector(".card:not(.under)");
   const back = node.querySelector(".face.back");
   node.classList.add("settle", "revealed");
   node.style.transform = "";
-  back.classList.add(right ? "right" : "wrong");
+  back.classList.add(result.right ? "right" : "wrong");
 
-  back.querySelector(".judge-badge").className = `judge-badge ${right ? "right" : "wrong"}`;
-  back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${
-    right ? "right" : "wrong"
-  }"/></svg>`;
-  back.querySelector(".options").innerHTML = markRow(topic, fact.tier, right ? null : guess.id);
-  arm(null);
+  const verdict = result.right ? "right" : "wrong";
+  back.querySelector(".judge-badge").className = `judge-badge ${verdict}`;
+  back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${verdict}"/></svg>`;
+  back.querySelector(".options").innerHTML = markRow(
+    topic,
+    fact.tier,
+    result.right ? null : result.guess
+  );
+  back.querySelector(".parts").innerHTML = partsHtml(topic, fact, result.picks);
+  const delta = back.querySelector(".card-delta");
+  delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
+  delta.textContent = result.delta > 0 ? `+${result.delta}` : `${result.delta}`;
 
   renderProgress();
 }
@@ -359,7 +476,8 @@ function advance() {
 
 function showResults() {
   const right = state.results.filter((r) => r.right).length;
-  el("score").textContent = `${right} / ${state.results.length}`;
+  el("final-score").textContent = state.score > 0 ? `+${state.score}` : `${state.score}`;
+  el("final-tally").textContent = `${right} / ${state.results.length}`;
 
   const wrong = state.results.filter((r) => !r.right);
   el("review").innerHTML = [...wrong, ...state.results.filter((r) => r.right)]
@@ -402,6 +520,20 @@ function onKey(event) {
   }
 
   if (event.key === "Escape") return show("menu");
+
+  if (state.phase === "picking") {
+    const slot = Number(event.key);
+    const upgrades = truth(state.data, state.deck[state.index]).topic.upgrades;
+    if (slot >= 1 && slot <= upgrades.length) {
+      event.preventDefault();
+      return togglePick(upgrades[slot - 1]);
+    }
+    if (event.key === "Enter" || event.key === " " || event.key === "ArrowRight") {
+      event.preventDefault();
+      submitPicks();
+    }
+    return;
+  }
 
   if (state.phase === "reveal") {
     if (["Shift", "Control", "Alt", "Meta", "Tab"].includes(event.key)) return;

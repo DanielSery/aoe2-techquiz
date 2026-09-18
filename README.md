@@ -1,26 +1,34 @@
 # AoE2 Tech Quiz
 
 A flash-card game for learning the Age of Empires II: DE tech tree. A card is one
-civilisation and one topic, and you say how far up that topic's ladder the civ
-gets — by swiping, or with the arrow keys. Four topics so far:
+civilisation and one topic, and every topic asks the same three questions — by
+swipe, or with the arrow keys:
 
-| Topic | ← | ↓ | ↑ | → |
-|---|---|---|---|---|
-| Hand Cannoneer | no Hand Cannoneer | | the unit, not all the armour | unit + all three armour upgrades |
-| Siege Ram | worse than either | Capped Ram + Siege Engineers | Siege Ram, no Siege Engineers | Siege Ram + Siege Engineers |
-| Bombard Cannon | no Bombard Cannon | | the unit, no Siege Engineers | unit + Siege Engineers |
-| Arbalester | worse than that | | Arbalest + Bracer + Ring, no Thumb Ring | all four |
+| Answer | Swipe | Key | Means |
+|---|---|---|---|
+| ✗ | left | `←` | the civ does not have the unit |
+| ◐ | up | `↑` | it has the unit, but not every upgrade |
+| ✓ | right | `→` | the unit and all of its upgrades |
 
-You never have to remember which way is which: the answers sit on a pad below
-the card, each in the direction you swipe for it, showing the topic's own icons
-lit or dimmed for what that answer claims. The one you are about to pick lights
-up while you drag. A topic uses the fourth direction only when its ladder has
-four rungs, as Siege Ram does.
+Answering scores at once: **+1** right, **−1** wrong, shown on the counter in the
+corner. You never have to remember which way is which — the answers sit on a pad
+below the card, each in the direction you swipe for it, showing the topic's own
+icons lit or dimmed for what that answer claims, and the one you are about to
+pick lights up while you drag.
 
-The card turns over the moment you answer: green or red for the whole card, and
-under it what that civ actually has, icon by icon. It then waits — any key, tap
-or click deals the next one, so nothing moves on before you have read it.
+Say **◐** and it asks the follow-up: up to seven upgrade icons, and you mark the
+ones you think that civ is missing, then press done. **+1** for each one you
+correctly call missing, **−1** for each one you accuse wrongly, **−1** for each
+one you miss — leaving an upgrade alone that the civ really has is worth nothing,
+so playing it safe does not pay. A topic with only one upgrade skips the
+follow-up: saying ◐ has already named it.
 
+The card turns over the moment you are done: green or red for the whole card,
+what the civ actually has icon by icon, your picks ringed in green, red or amber,
+and what the card was worth. It then waits — any key, tap or click deals the next
+one.
+
+Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
 At the end of a set you can repeat only the ones you got wrong, repeat the whole
 set, or go back and pick a different mix of topics.
 
@@ -52,14 +60,13 @@ of the same `.dat` and refuses to write anything if the two disagree — that
 disagreement would mean one of them is from a different patch. The current data
 passes for all 53 civilisations and all four topics.
 
-A topic is a ladder of rungs, worst first, and a civ sits on the highest rung it
-can reach. Adding one is a few lines in `TOPICS` at the top of
-`tools/build_data.py` — a unit id and the tech ids that complete it, as
-[aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) numbers them —
-and a re-run, which fetches the icons too. That short form expands to the
-three-rung ladder in `default_ladder`; write the rungs out in full to use all
-four directions. Techs that every civilisation has (Chemistry, Ballistics) are
-deliberately left out: they cannot tell two civs apart.
+A topic is one unit and the upgrades that complete it, at most seven so they fit
+the picker. Adding one is a line in `TOPICS` at the top of `tools/build_data.py`
+— a unit id and the tech ids, as
+[aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) numbers them — and
+a re-run, which fetches the icons too. The run prints how many civs lack each
+upgrade: an upgrade every civ has (Fletching, Bodkin Arrow, Padded Archer Armor)
+can never be a right answer in the picker, only a wrong one.
 
 ## Layout
 

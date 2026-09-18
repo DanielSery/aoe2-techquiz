@@ -223,6 +223,12 @@ window.QUIZ_DATA = {
    "id": "hand_cannoneer",
    "name": "Hand Cannoneer",
    "icon": "img/topics/unit-5.png",
+   "unit": "unit-5",
+   "upgrades": [
+    "tech-211",
+    "tech-212",
+    "tech-219"
+   ],
    "parts": [
     {
      "id": "unit-5",
@@ -283,13 +289,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "aztecs": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "bengalis": {
@@ -298,7 +308,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "berbers": {
      "tier": "full",
@@ -307,7 +318,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "bohemians": {
      "tier": "full",
@@ -316,7 +328,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "britons": {
      "tier": "none",
@@ -324,13 +337,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "bulgarians": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "burgundians": {
@@ -339,12 +356,19 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "burmese": {
      "tier": "none",
      "has": [
       "tech-211"
+     ],
+     "missing": [
+      "tech-212",
+      "tech-219"
      ]
     },
     "byzantines": {
@@ -354,7 +378,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "celts": {
      "tier": "none",
@@ -362,7 +387,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "chinese": {
      "tier": "none",
@@ -370,7 +396,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "cumans": {
      "tier": "none",
@@ -378,7 +405,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "dravidians": {
      "tier": "full",
@@ -387,7 +415,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "ethiopians": {
      "tier": "none",
@@ -395,7 +424,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "franks": {
      "tier": "partial",
@@ -403,6 +433,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "georgians": {
@@ -411,6 +444,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "goths": {
@@ -420,7 +456,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "gurjaras": {
      "tier": "partial",
@@ -428,6 +465,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "hindustanis": {
@@ -437,13 +477,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "huns": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "incas": {
@@ -452,7 +496,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "italians": {
      "tier": "full",
@@ -461,7 +506,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "japanese": {
      "tier": "full",
@@ -470,7 +516,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "jurchens": {
      "tier": "none",
@@ -478,7 +525,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "khitans": {
      "tier": "none",
@@ -486,7 +534,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "khmer": {
      "tier": "full",
@@ -495,7 +544,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "koreans": {
      "tier": "full",
@@ -504,7 +554,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "lithuanians": {
      "tier": "full",
@@ -513,7 +564,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "magyars": {
      "tier": "none",
@@ -521,7 +573,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "malay": {
      "tier": "none",
@@ -529,7 +582,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "malians": {
      "tier": "full",
@@ -538,7 +592,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "mapuche": {
      "tier": "none",
@@ -546,7 +601,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "mayans": {
      "tier": "none",
@@ -554,13 +610,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "mongols": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "muisca": {
@@ -568,6 +628,9 @@ window.QUIZ_DATA = {
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "persians": {
@@ -577,13 +640,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "poles": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "portuguese": {
@@ -593,7 +660,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "romans": {
      "tier": "none",
@@ -601,7 +669,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "saracens": {
      "tier": "full",
@@ -610,7 +679,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "shu": {
      "tier": "none",
@@ -618,13 +688,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "sicilians": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "slavs": {
@@ -633,7 +707,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "spanish": {
      "tier": "full",
@@ -642,7 +717,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "tatars": {
      "tier": "full",
@@ -651,7 +727,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "teutons": {
      "tier": "full",
@@ -660,7 +737,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "tupi": {
      "tier": "none",
@@ -668,7 +746,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "turks": {
      "tier": "full",
@@ -677,7 +756,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "vietnamese": {
      "tier": "none",
@@ -685,7 +765,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "vikings": {
      "tier": "none",
@@ -693,7 +774,8 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "wei": {
      "tier": "none",
@@ -701,13 +783,17 @@ window.QUIZ_DATA = {
       "tech-211",
       "tech-212",
       "tech-219"
-     ]
+     ],
+     "missing": []
     },
     "wu": {
      "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
+     ],
+     "missing": [
+      "tech-219"
      ]
     }
    }
@@ -715,14 +801,12 @@ window.QUIZ_DATA = {
   {
    "id": "siege_ram",
    "name": "Siege Ram",
-   "icon": "img/topics/unit-422.png",
+   "icon": "img/topics/unit-548.png",
+   "unit": "unit-548",
+   "upgrades": [
+    "tech-377"
+   ],
    "parts": [
-    {
-     "id": "unit-422",
-     "name": "Capped Ram",
-     "img": "img/topics/unit-422.png",
-     "icon_index": 63
-    },
     {
      "id": "unit-548",
      "name": "Siege Ram",
@@ -744,20 +828,10 @@ window.QUIZ_DATA = {
      "has": []
     },
     {
-     "id": "bare",
-     "dir": "down",
-     "mark": "bare",
-     "has": [
-      "unit-422",
-      "tech-377"
-     ]
-    },
-    {
      "id": "partial",
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-422",
       "unit-548"
      ]
     },
@@ -766,7 +840,6 @@ window.QUIZ_DATA = {
      "dir": "right",
      "mark": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
      ]
@@ -776,375 +849,413 @@ window.QUIZ_DATA = {
     "armenians": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "aztecs": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bengalis": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "berbers": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bohemians": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "britons": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bulgarians": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "burgundians": {
      "tier": "none",
-     "has": [
-      "unit-422"
+     "has": [],
+     "missing": [
+      "tech-377"
      ]
     },
     "burmese": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "byzantines": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "celts": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "chinese": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "cumans": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "dravidians": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "ethiopians": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "franks": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "georgians": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "goths": {
      "tier": "none",
-     "has": [
-      "unit-422"
+     "has": [],
+     "missing": [
+      "tech-377"
      ]
     },
     "gurjaras": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "hindustanis": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "huns": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "incas": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "italians": {
      "tier": "none",
-     "has": [
-      "unit-422"
+     "has": [],
+     "missing": [
+      "tech-377"
      ]
     },
     "japanese": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "jurchens": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "khitans": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "khmer": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "koreans": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "lithuanians": {
      "tier": "none",
-     "has": [
-      "unit-422"
+     "has": [],
+     "missing": [
+      "tech-377"
      ]
     },
     "magyars": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "malay": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "malians": {
      "tier": "none",
-     "has": [
-      "unit-422"
+     "has": [],
+     "missing": [
+      "tech-377"
      ]
     },
     "mapuche": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "mayans": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "mongols": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "muisca": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "persians": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "poles": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "portuguese": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "romans": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "saracens": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "shu": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "sicilians": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "slavs": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "spanish": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "tatars": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "teutons": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "tupi": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "turks": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "vietnamese": {
-     "tier": "bare",
+     "tier": "none",
      "has": [
-      "unit-422",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "vikings": {
      "tier": "full",
      "has": [
-      "unit-422",
       "unit-548",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "wei": {
      "tier": "partial",
      "has": [
-      "unit-422",
       "unit-548"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "wu": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     }
    }
   },
@@ -1152,6 +1263,10 @@ window.QUIZ_DATA = {
    "id": "bombard_cannon",
    "name": "Bombard Cannon",
    "icon": "img/topics/unit-36.png",
+   "unit": "unit-36",
+   "upgrades": [
+    "tech-377"
+   ],
    "parts": [
     {
      "id": "unit-36",
@@ -1194,50 +1309,62 @@ window.QUIZ_DATA = {
    "civs": {
     "armenians": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "aztecs": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bengalis": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "berbers": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bohemians": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "britons": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "bulgarians": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "burgundians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "burmese": {
@@ -1245,32 +1372,46 @@ window.QUIZ_DATA = {
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "byzantines": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "celts": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "chinese": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "cumans": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "dravidians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "ethiopians": {
@@ -1278,31 +1419,40 @@ window.QUIZ_DATA = {
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "franks": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "georgians": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "goths": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "gurjaras": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "hindustanis": {
@@ -1310,107 +1460,137 @@ window.QUIZ_DATA = {
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "huns": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "incas": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "italians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "japanese": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "jurchens": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "khitans": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "khmer": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "koreans": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "lithuanians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "magyars": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "malay": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "malians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "mapuche": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "mayans": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "mongols": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "muisca": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "persians": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "poles": {
@@ -1418,73 +1598,91 @@ window.QUIZ_DATA = {
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "portuguese": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "romans": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "saracens": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "shu": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "sicilians": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "slavs": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "spanish": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "tatars": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "teutons": {
      "tier": "full",
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "tupi": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "turks": {
      "tier": "partial",
      "has": [
       "unit-36"
+     ],
+     "missing": [
+      "tech-377"
      ]
     },
     "vietnamese": {
@@ -1492,21 +1690,29 @@ window.QUIZ_DATA = {
      "has": [
       "unit-36",
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "vikings": {
      "tier": "none",
      "has": [
       "tech-377"
-     ]
+     ],
+     "missing": []
     },
     "wei": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     },
     "wu": {
      "tier": "none",
-     "has": []
+     "has": [],
+     "missing": [
+      "tech-377"
+     ]
     }
    }
   },
@@ -1514,6 +1720,16 @@ window.QUIZ_DATA = {
    "id": "arbalester",
    "name": "Arbalester",
    "icon": "img/topics/unit-492.png",
+   "unit": "unit-492",
+   "upgrades": [
+    "tech-199",
+    "tech-200",
+    "tech-201",
+    "tech-211",
+    "tech-212",
+    "tech-219",
+    "tech-437"
+   ],
    "parts": [
     {
      "id": "unit-492",
@@ -1522,10 +1738,34 @@ window.QUIZ_DATA = {
      "icon_index": 90
     },
     {
+     "id": "tech-199",
+     "name": "Fletching",
+     "img": "img/topics/tech-199.png",
+     "icon_index": 34
+    },
+    {
+     "id": "tech-200",
+     "name": "Bodkin Arrow",
+     "img": "img/topics/tech-200.png",
+     "icon_index": 35
+    },
+    {
      "id": "tech-201",
      "name": "Bracer",
      "img": "img/topics/tech-201.png",
      "icon_index": 37
+    },
+    {
+     "id": "tech-211",
+     "name": "Padded Archer Armor",
+     "img": "img/topics/tech-211.png",
+     "icon_index": 49
+    },
+    {
+     "id": "tech-212",
+     "name": "Leather Archer Armor",
+     "img": "img/topics/tech-212.png",
+     "icon_index": 50
     },
     {
      "id": "tech-219",
@@ -1552,9 +1792,7 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-492",
-      "tech-201",
-      "tech-219"
+      "unit-492"
      ]
     },
     {
@@ -1563,7 +1801,11 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
      ]
@@ -1574,409 +1816,748 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "aztecs": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-437"
      ]
     },
     "bengalis": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "berbers": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "bohemians": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "britons": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "bulgarians": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "burgundians": {
      "tier": "none",
      "has": [
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-437"
      ]
     },
     "burmese": {
      "tier": "none",
      "has": [
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211"
+     ],
+     "missing": [
+      "tech-212",
+      "tech-219",
+      "tech-437"
      ]
     },
     "byzantines": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "celts": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-437"
      ]
     },
     "chinese": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "cumans": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
+     ],
+     "missing": [
+      "tech-201"
      ]
     },
     "dravidians": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "ethiopians": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212",
+      "tech-219",
+      "tech-437"
+     ],
+     "missing": []
+    },
+    "franks": {
+     "tier": "none",
+     "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
       "tech-201",
       "tech-219",
       "tech-437"
      ]
     },
-    "franks": {
-     "tier": "none",
-     "has": []
-    },
     "georgians": {
      "tier": "none",
      "has": [
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-437"
      ]
     },
     "goths": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "gurjaras": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "hindustanis": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "huns": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "incas": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "italians": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "japanese": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "jurchens": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "khitans": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "khmer": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "koreans": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "lithuanians": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "magyars": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "malay": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "malians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
+     ],
+     "missing": [
+      "tech-201"
      ]
     },
     "mapuche": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-437"
      ]
     },
     "mayans": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "mongols": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "muisca": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "persians": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
+     ],
+     "missing": [
+      "tech-201"
      ]
     },
     "poles": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-437"
+     ],
+     "missing": [
+      "tech-219"
      ]
     },
     "portuguese": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "romans": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-437"
      ]
     },
     "saracens": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "shu": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "sicilians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-437"
      ]
     },
     "slavs": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-437"
      ]
     },
     "spanish": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "tatars": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "teutons": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-437"
      ]
     },
     "tupi": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "turks": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "vietnamese": {
      "tier": "full",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "vikings": {
      "tier": "partial",
      "has": [
       "unit-492",
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219"
+     ],
+     "missing": [
+      "tech-437"
      ]
     },
     "wei": {
      "tier": "none",
      "has": [
+      "tech-199",
+      "tech-200",
       "tech-201",
+      "tech-211",
+      "tech-212",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "missing": []
     },
     "wu": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "unit-492",
-      "tech-201"
+      "tech-199",
+      "tech-200",
+      "tech-201",
+      "tech-211",
+      "tech-212"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-437"
      ]
     }
    }

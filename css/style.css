@@ -212,7 +212,32 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .progress i.wrong { background: var(--none); }
 .progress i.now { background: var(--gold); }
 
-.tally { font-variant-numeric: tabular-nums; font-size: 14px; color: #a8967f; }
+.tally {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tally b { font-size: 18px; color: var(--gold); }
+
+.delta {
+  position: absolute;
+  left: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+}
+
+.delta.up { color: var(--full); }
+.delta.down { color: var(--none); }
+.delta.show { animation: float-up 1s ease-out; }
+
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(6px); }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
 
 .arena {
   position: relative;
@@ -395,6 +420,22 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .part.off img { filter: grayscale(1) brightness(.4); }
 
+.part.spotted { border-color: var(--full); box-shadow: 0 0 0 2px var(--full); }
+.part.falsely { border-color: var(--none); box-shadow: 0 0 0 2px var(--none); }
+.part.missed { border-color: var(--partial); box-shadow: 0 0 0 2px var(--partial); }
+
+.card-delta {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-delta.up { color: var(--full); }
+.card-delta.down { color: var(--none); }
+
 .part b {
   position: absolute;
   right: 0;
@@ -413,6 +454,68 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .part.on b { color: var(--full); }
 .part.off b { color: var(--none); }
 
+/* which upgrades is it missing? one tap each, then done */
+.picker {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 10px;
+  background: #15110de6;
+}
+
+.picker.is-open { display: flex; }
+
+.picker-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.picker-head img { width: 44px; height: 44px; object-fit: contain; }
+.picker-head #picker-topic { border-radius: 7px; }
+
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 58px);
+  gap: 10px;
+  max-width: 262px;
+  justify-content: center;
+}
+
+.upgrade {
+  position: relative;
+  padding: 0;
+  width: 58px;
+  height: 58px;
+  border: 2px solid var(--edge);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.upgrade img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.upgrade .cross {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #15110dcc;
+  color: var(--none);
+}
+
+.upgrade .cross svg { width: 34px; height: 34px; }
+
+.upgrade.marked { border-color: var(--none); }
+.upgrade.marked .cross { display: flex; }
+
+#picker-done { min-width: 96px; }
+
 /* Each answer sits where its swipe goes: the pad is the legend. */
 .pad {
   display: grid;
@@ -424,6 +527,8 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 }
 
 .pad.no-down { grid-template-areas: ". up ." "left topic right"; }
+
+.pad.dim { opacity: .3; pointer-events: none; }
 
 .pad-topic {
   grid-area: topic;
@@ -462,8 +567,14 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   box-shadow: 0 0 0 3px currentColor inset;
 }
 
-/* what that direction claims the civ has */
-.mini { display: flex; gap: 2px; }
+/* what that direction claims the civ has; wraps, so seven upgrades do not
+   push the pad off the sides of the screen */
+.mini {
+  display: grid;
+  grid-template-columns: repeat(4, 18px);
+  gap: 2px;
+  justify-content: center;
+}
 
 .mini span {
   width: 18px;
@@ -484,11 +595,15 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 /* ---------- results ---------- */
 
 .score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 8px;
-  font-size: 34px;
   font-variant-numeric: tabular-nums;
-  color: var(--gold);
 }
+
+.score b { font-size: 40px; color: var(--gold); }
+.score small { font-size: 13px; color: #a8967f; }
 
 .review {
   display: grid;

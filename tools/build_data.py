@@ -22,84 +22,29 @@ REPO = "SiegeEngineers/aoe2techtree"
 API = f"https://api.github.com/repos/{REPO}"
 ROOT = Path(__file__).resolve().parent.parent
 
-# A topic is a ladder of rungs, worst first, and a civ sits on the highest rung
-# it can reach. The short form below -- a unit and the techs that complete it --
-# expands to the three-rung ladder in `default_ladder`; write `ladder` out in
-# full for a topic that wants all four directions, e.g. the stable:
-#
-#   {"id": "knight_line", "name": "Knight line", "ladder": [
-#       {"id": "none",    "dir": "left",  "mark": "none",    "units": [], "techs": []},
-#       {"id": "bare",    "dir": "down",  "mark": "bare",    "units": [38], "techs": []},
-#       {"id": "partial", "dir": "up",    "mark": "partial", "units": [283], "techs": []},
-#       {"id": "full",    "dir": "right", "mark": "full",    "units": [569], "techs": []}]}
-#
-# Techs that every civ has (Chemistry, Ballistics) are left out of Hand
-# Cannoneer: they cannot tell two civs apart, so they would be icons saying
-# nothing.
+# A topic is one unit and the upgrades that complete it, at most seven so they
+# fit the picker. Every topic answers the same three ways: the civ has no unit,
+# has it with something missing, or has all of it.
+MAX_UPGRADES = 7
+
 TOPICS = [
-    {
-        "id": "hand_cannoneer",
-        "name": "Hand Cannoneer",
-        "unit": 5,
-        "techs": [211, 212, 219],
-    },
-    {
-        # A rung lists everything it has, not only what it adds, because the pad
-        # draws a rung's icons: say only "Siege Ram" and the Capped Ram it was
-        # upgraded from would be drawn as missing.
-        "id": "siege_ram",
-        "name": "Siege Ram",
-        "ladder": [
-            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
-            {"id": "bare", "dir": "down", "mark": "bare", "units": [422], "techs": [377]},
-            {"id": "partial", "dir": "up", "mark": "partial", "units": [422, 548], "techs": []},
-            {"id": "full", "dir": "right", "mark": "full", "units": [422, 548], "techs": [377]},
-        ],
-    },
-    {
-        "id": "bombard_cannon",
-        "name": "Bombard Cannon",
-        "ladder": [
-            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
-            {"id": "partial", "dir": "up", "mark": "partial", "units": [36], "techs": []},
-            {"id": "full", "dir": "right", "mark": "full", "units": [36], "techs": [377]},
-        ],
-    },
+    {"id": "hand_cannoneer", "name": "Hand Cannoneer", "unit": 5, "upgrades": [211, 212, 219]},
+    {"id": "siege_ram", "name": "Siege Ram", "unit": 548, "upgrades": [377]},
+    {"id": "bombard_cannon", "name": "Bombard Cannon", "unit": 36, "upgrades": [377]},
     {
         "id": "arbalester",
         "name": "Arbalester",
-        "ladder": [
-            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
-            {
-                "id": "partial",
-                "dir": "up",
-                "mark": "partial",
-                "units": [492],
-                "techs": [201, 219],
-            },
-            {
-                "id": "full",
-                "dir": "right",
-                "mark": "full",
-                "units": [492],
-                "techs": [201, 219, 437],
-            },
-        ],
+        "unit": 492,
+        "upgrades": [199, 200, 201, 211, 212, 219, 437],
     },
 ]
 
-
-def default_ladder(spec: dict) -> list:
+def tiers_for(unit_id: str, upgrade_ids: list) -> list:
+    """The same three answers for every topic; `has` is what each one claims."""
     return [
-        {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
-        {"id": "partial", "dir": "up", "mark": "partial", "units": [spec["unit"]], "techs": []},
-        {
-            "id": "full",
-            "dir": "right",
-            "mark": "full",
-            "units": [spec["unit"]],
-            "techs": spec["techs"],
-        },
+        {"id": "none", "dir": "left", "mark": "none", "has": []},
+        {"id": "partial", "dir": "up", "mark": "partial", "has": [unit_id]},
+        {"id": "full", "dir": "right", "mark": "full", "has": [unit_id] + upgrade_ids},
     ]
 
 # aoe2techtree's civ keys map to img/Civs/<lowercase>.png; Aoe2Planner's
@@ -160,19 +105,9 @@ def walk(node):
             yield from walk(value)
 
 
-def ladder_of(spec: dict) -> list:
-    return spec.get("ladder") or default_ladder(spec)
-
-
 def nodes_of(spec: dict) -> list:
-    """Every (kind, id) the topic mentions: units first, then techs, in rung order."""
-    seen = []
-    for kind in ("Unit", "Tech"):
-        for rung in ladder_of(spec):
-            for item in rung["units" if kind == "Unit" else "techs"]:
-                if (kind, item) not in seen:
-                    seen.append((kind, item))
-    return seen
+    """Every (kind, id) the topic names: the unit first, then its upgrades."""
+    return [("Unit", spec["unit"])] + [("Tech", t) for t in spec["upgrades"]]
 
 
 def part_id(kind: str, item: int) -> str:
@@ -192,30 +127,27 @@ def build_topic(spec: dict, techtree: dict, icons: dict) -> dict:
             }
         )
 
-    ladder = ladder_of(spec)
-    tiers = [
-        {
-            "id": rung["id"],
-            "dir": rung["dir"],
-            "mark": rung["mark"],
-            "has": [part_id("Unit", u) for u in rung["units"]]
-            + [part_id("Tech", t) for t in rung["techs"]],
-        }
-        for rung in ladder
-    ]
+    unit_id = part_id("Unit", spec["unit"])
+    upgrade_ids = [part_id("Tech", t) for t in spec["upgrades"]]
 
     civs = {}
     for name, tree in sorted(techtree["civs"].items()):
         has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
-        reached = [tier["id"] for tier in tiers if all(need in has for need in tier["has"])]
-        civs[name.lower()] = {"tier": reached[-1], "has": has}
+        missing = [u for u in upgrade_ids if u not in has]
+        if unit_id not in has:
+            tier = "none"
+        else:
+            tier = "partial" if missing else "full"
+        civs[name.lower()] = {"tier": tier, "has": has, "missing": missing}
 
     return {
         "id": spec["id"],
         "name": spec["name"],
         "icon": parts[0]["img"],
+        "unit": unit_id,
+        "upgrades": upgrade_ids,
         "parts": parts,
-        "tiers": tiers,
+        "tiers": tiers_for(unit_id, upgrade_ids),
         "civs": civs,
     }
 
@@ -273,6 +205,11 @@ def main() -> int:
     parser.add_argument("--commit", help="pin to this aoe2techtree commit instead of master")
     args = parser.parse_args()
 
+    for spec in TOPICS:
+        if len(spec["upgrades"]) > MAX_UPGRADES:
+            print(f"{spec['id']}: more than {MAX_UPGRADES} upgrades", file=sys.stderr)
+            return 1
+
     commit = args.commit or head_commit()
     print(f"aoe2techtree @ {commit}")
     techtree = json.loads(fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/data.json"))
@@ -313,6 +250,11 @@ def main() -> int:
         for civ in topic["civs"].values():
             counts[civ["tier"]] = counts.get(civ["tier"], 0) + 1
         print(f"{topic['id']}: {counts}")
+        # an upgrade no civ lacks can never be a right answer in the picker
+        for upgrade in topic["upgrades"]:
+            lacking = sum(1 for civ in topic["civs"].values() if upgrade in civ["missing"])
+            name = next(p["name"] for p in topic["parts"] if p["id"] == upgrade)
+            print(f"    {name}: lacked by {lacking}")
     return 0
 
 
