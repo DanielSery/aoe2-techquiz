@@ -50,7 +50,7 @@ main {
   display: none;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   width: min(100%, 760px);
   padding: 14px 14px 0;
   min-height: 0;
@@ -102,39 +102,59 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 10px 0 0;
-  font-size: 26px;
+  margin: 2px 0 0;
+  font-size: 22px;
   letter-spacing: .04em;
   color: var(--gold);
 }
 
-h1 img { width: 40px; height: 40px; border-radius: 6px; }
+h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .lede { margin: 0; color: #a8967f; font-size: 13px; }
 
 .topic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: 100%;
+  min-height: 0;
   overflow-y: auto;
   padding: 2px;
+  scrollbar-width: none;
+}
+
+.topic-grid::-webkit-scrollbar { display: none; }
+
+.group h2 {
+  margin: 0 0 3px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #8a7a64;
+}
+
+.group .tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 5px;
 }
 
 .topic {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
+  justify-content: flex-start;
+  gap: 3px;
+  padding: 5px 3px;
   background: var(--panel);
   border: 2px solid var(--edge);
-  border-radius: var(--radius);
+  border-radius: 10px;
 }
 
-.topic img { width: 56px; height: 56px; border-radius: 8px; }
+.topic img { width: 34px; height: 34px; border-radius: 6px; }
 
-.topic span { font-size: 13px; text-align: center; }
+.topic span { font-size: 10px; line-height: 1.12; text-align: center; }
 
 .topic small { font-size: 11px; color: #8a7a64; }
 
@@ -257,11 +277,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 /* the arena's own scoreboard: big, brief, centred on the card */
 .burst {
   position: absolute;
-  top: 52%;
-  left: 50%;
+  top: 0;
+  right: 4px;
   z-index: 3;
-  transform: translate(-50%, -50%);
-  font-size: 68px;
+  transform: translate(0, -50%);
+  font-size: 46px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: -.02em;
@@ -275,11 +295,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .burst.show { animation: burst 1.9s cubic-bezier(.2, .9, .3, 1); }
 
 @keyframes burst {
-  0% { opacity: 0; transform: translate(-50%, -30%) scale(.3); }
-  12% { opacity: 1; transform: translate(-50%, -52%) scale(1.25); }
-  22% { transform: translate(-50%, -50%) scale(1); }
-  70% { opacity: 1; transform: translate(-50%, -54%) scale(1.04); }
-  100% { opacity: 0; transform: translate(-50%, -96%) scale(1); }
+  0% { opacity: 0; transform: translate(0, 40%) scale(.3); }
+  12% { opacity: 1; transform: translate(0, -40%) scale(1.25); }
+  22% { transform: translate(0, -50%) scale(1); }
+  70% { opacity: 1; transform: translate(0, -54%) scale(1.04); }
+  100% { opacity: 0; transform: translate(0, -130%) scale(1); }
 }
 
 .tally b.bumped { animation: bump .7s ease-out; }
@@ -756,9 +776,20 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   justify-content: center;
 }
 
-@media (max-height: 620px) {
-  .lede, footer { display: none; }
-  h1 { font-size: 20px; margin-top: 4px; }
+/* the topic list is the menu; everything else gives way to it */
+@media (max-height: 900px) {
+  .lede { display: none; }
+}
+
+@media (max-height: 820px) {
+  .group .tiles { grid-template-columns: repeat(auto-fill, minmax(66px, 1fr)); }
+  .topic img { width: 30px; height: 30px; }
+  .topic span { font-size: 9px; }
+}
+
+@media (max-height: 700px) {
+  h1 span { display: none; }
+  footer { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -46,8 +46,9 @@ what the civ actually has icon by icon, your picks ringed in green, red or amber
 and what the card was worth. It then waits — any key, tap or click deals the next
 one.
 
-Nineteen topics so far, across the siege workshop, the archery range, the
-barracks, the stable and the monastery. Only the last step of an upgrade line
+Nineteen topics so far, and the menu sorts them by where the unit is trained:
+**Archery Range**, **Siege**, **Barracks**, **Stable**, **Monastery**. A topic's
+`group` in `tools/build_data.py` is what puts it in a section. Only the last step of an upgrade line
 counts — Bracer, not Fletching and Bodkin Arrow as well, since a civ with Bracer
 necessarily has those.
 

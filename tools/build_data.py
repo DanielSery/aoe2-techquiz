@@ -46,6 +46,7 @@ MAX_UPGRADES = 7
 TOPICS = [
     {
         "id": "hand_cannoneer",
+        "group": "Archery Range",
         "name": "Hand Cannoneer",
         "unit": 5,
         "upgrades": [219],
@@ -55,6 +56,7 @@ TOPICS = [
         # Four civs field the Armored Elephant where everyone else has a ram,
         # and the top of either line is the same question.
         "id": "siege_ram",
+        "group": "Siege",
         "name": "Siege Ram / Siege Elephant",
         "upgrades": [[("Unit", 548), ("Unit", 1746)], 377],
         "words": [r"rams?", r"siege workshops?", r"siege weapons?", r"siege elephants?"],
@@ -63,6 +65,7 @@ TOPICS = [
         # Shu, Wei and Wu field the Traction Trebuchet where everyone else has a
         # Bombard Cannon, so either of them is "has the unit".
         "id": "bombard_cannon",
+        "group": "Siege",
         "name": "Bombard Cannon / Traction Trebuchet",
         "unit": [36, 1942],
         "upgrades": [377],
@@ -70,6 +73,7 @@ TOPICS = [
     },
     {
         "id": "scorpion",
+        "group": "Siege",
         "name": "Scorpion",
         "unit": 279,
         "icon": ("Unit", 542),
@@ -78,6 +82,7 @@ TOPICS = [
     },
     {
         "id": "onager",
+        "group": "Siege",
         "name": "Onager",
         "unit": 550,
         "icon": ("Unit", 588),
@@ -89,6 +94,7 @@ TOPICS = [
         # rather than "has nothing": the Arbalest is then one of the upgrades it
         # is missing. Only the Bulgarians and the Spanish have no crossbow at all.
         "id": "arbalester",
+        "group": "Archery Range",
         "name": "Arbalester",
         "unit": 24,
         "icon": ("Unit", 492),
@@ -99,6 +105,7 @@ TOPICS = [
     },
     {
         "id": "skirmisher",
+        "group": "Archery Range",
         "name": "Skirmisher",
         "unit": 7,
         "icon": ("Unit", 6),
@@ -108,6 +115,7 @@ TOPICS = [
     },
     {
         "id": "cavalry_archer",
+        "group": "Archery Range",
         "name": "Cavalry Archer",
         "unit": 39,
         "icon": ("Unit", 474),
@@ -117,6 +125,7 @@ TOPICS = [
     },
     {
         "id": "halberdier",
+        "group": "Barracks",
         "name": "Halberdier",
         "unit": 358,
         "icon": ("Unit", 359),
@@ -126,6 +135,7 @@ TOPICS = [
     },
     {
         "id": "champion",
+        "group": "Barracks",
         "name": "Champion",
         "unit": 77,
         "icon": ("Unit", 567),
@@ -135,6 +145,7 @@ TOPICS = [
     },
     {
         "id": "eagle",
+        "group": "Barracks",
         "name": "Eagle Warrior",
         "unit": 751,
         "icon": ("Unit", 752),
@@ -144,6 +155,7 @@ TOPICS = [
     },
     {
         "id": "champi",
+        "group": "Barracks",
         "name": "Champi Warrior",
         "unit": 2552,
         "icon": ("Unit", 2554),
@@ -153,6 +165,7 @@ TOPICS = [
     },
     {
         "id": "fire_lancer",
+        "group": "Barracks",
         "name": "Fire Lancer",
         "unit": 1901,
         "icon": ("Unit", 1903),
@@ -162,6 +175,7 @@ TOPICS = [
     },
     {
         "id": "hussar",
+        "group": "Stable",
         "name": "Hussar / Winged Hussar",
         "unit": 546,
         "icon": ("Unit", 441),
@@ -171,6 +185,7 @@ TOPICS = [
     },
     {
         "id": "paladin",
+        "group": "Stable",
         "name": "Paladin / Savar",
         "unit": 38,
         "icon": ("Unit", 569),
@@ -181,6 +196,7 @@ TOPICS = [
     },
     {
         "id": "camel",
+        "group": "Stable",
         "name": "Camel Rider",
         "unit": 329,
         "icon": ("Unit", 330),
@@ -189,6 +205,7 @@ TOPICS = [
     },
     {
         "id": "battle_elephant",
+        "group": "Stable",
         "name": "Battle Elephant",
         "unit": 1132,
         "icon": ("Unit", 1134),
@@ -198,6 +215,7 @@ TOPICS = [
     },
     {
         "id": "steppe_lancer",
+        "group": "Stable",
         "name": "Steppe Lancer",
         "unit": 1370,
         "icon": ("Unit", 1372),
@@ -206,6 +224,7 @@ TOPICS = [
     },
     {
         "id": "monk",
+        "group": "Monastery",
         "name": "Monk",
         "unit": 125,
         "upgrades": [316, 230, 252, 438, 319, 233, 231],
@@ -435,6 +454,7 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
     return {
         "id": spec["id"],
         "name": spec["name"],
+        "group": spec["group"],
         "icon": icon_part["img"],
         "unit": gate_ids[0] if gate_ids else None,
         "gate": gate_ids,

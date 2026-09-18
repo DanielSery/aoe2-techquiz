@@ -222,6 +222,7 @@ window.QUIZ_DATA = {
   {
    "id": "hand_cannoneer",
    "name": "Hand Cannoneer",
+   "group": "Archery Range",
    "icon": "img/topics/unit-5.png",
    "unit": "unit-5",
    "gate": [
@@ -805,6 +806,7 @@ window.QUIZ_DATA = {
   {
    "id": "siege_ram",
    "name": "Siege Ram / Siege Elephant",
+   "group": "Siege",
    "icon": "img/topics/unit-548.png",
    "unit": null,
    "gate": [],
@@ -1445,6 +1447,7 @@ window.QUIZ_DATA = {
   {
    "id": "bombard_cannon",
    "name": "Bombard Cannon / Traction Trebuchet",
+   "group": "Siege",
    "icon": "img/topics/unit-36.png",
    "unit": "unit-36",
    "gate": [
@@ -2070,6 +2073,7 @@ window.QUIZ_DATA = {
   {
    "id": "scorpion",
    "name": "Scorpion",
+   "group": "Siege",
    "icon": "img/topics/unit-542.png",
    "unit": "unit-279",
    "gate": [
@@ -2775,6 +2779,7 @@ window.QUIZ_DATA = {
   {
    "id": "onager",
    "name": "Onager",
+   "group": "Siege",
    "icon": "img/topics/unit-588.png",
    "unit": "unit-550",
    "gate": [
@@ -3479,6 +3484,7 @@ window.QUIZ_DATA = {
   {
    "id": "arbalester",
    "name": "Arbalester",
+   "group": "Archery Range",
    "icon": "img/topics/unit-492.png",
    "unit": "unit-24",
    "gate": [
@@ -4318,6 +4324,7 @@ window.QUIZ_DATA = {
   {
    "id": "skirmisher",
    "name": "Skirmisher",
+   "group": "Archery Range",
    "icon": "img/topics/unit-6.png",
    "unit": "unit-7",
    "gate": [
@@ -5165,6 +5172,7 @@ window.QUIZ_DATA = {
   {
    "id": "cavalry_archer",
    "name": "Cavalry Archer",
+   "group": "Archery Range",
    "icon": "img/topics/unit-474.png",
    "unit": "unit-39",
    "gate": [
@@ -6185,6 +6193,7 @@ window.QUIZ_DATA = {
   {
    "id": "halberdier",
    "name": "Halberdier",
+   "group": "Barracks",
    "icon": "img/topics/unit-359.png",
    "unit": "unit-358",
    "gate": [
@@ -7032,6 +7041,7 @@ window.QUIZ_DATA = {
   {
    "id": "champion",
    "name": "Champion",
+   "group": "Barracks",
    "icon": "img/topics/unit-567.png",
    "unit": "unit-77",
    "gate": [
@@ -7952,6 +7962,7 @@ window.QUIZ_DATA = {
   {
    "id": "eagle",
    "name": "Eagle Warrior",
+   "group": "Barracks",
    "icon": "img/topics/unit-752.png",
    "unit": "unit-751",
    "gate": [
@@ -8064,6 +8075,7 @@ window.QUIZ_DATA = {
   {
    "id": "champi",
    "name": "Champi Warrior",
+   "group": "Barracks",
    "icon": "img/topics/unit-2554.png",
    "unit": "unit-2552",
    "gate": [
@@ -8210,6 +8222,7 @@ window.QUIZ_DATA = {
   {
    "id": "fire_lancer",
    "name": "Fire Lancer",
+   "group": "Barracks",
    "icon": "img/topics/unit-1903.png",
    "unit": "unit-1901",
    "gate": [
@@ -8386,6 +8399,7 @@ window.QUIZ_DATA = {
   {
    "id": "hussar",
    "name": "Hussar / Winged Hussar",
+   "group": "Stable",
    "icon": "img/topics/unit-441.png",
    "unit": "unit-546",
    "gate": [
@@ -9297,6 +9311,7 @@ window.QUIZ_DATA = {
   {
    "id": "paladin",
    "name": "Paladin / Savar",
+   "group": "Stable",
    "icon": "img/topics/unit-569.png",
    "unit": "unit-38",
    "gate": [
@@ -10212,6 +10227,7 @@ window.QUIZ_DATA = {
   {
    "id": "camel",
    "name": "Camel Rider",
+   "group": "Stable",
    "icon": "img/topics/unit-330.png",
    "unit": "unit-329",
    "gate": [
@@ -11063,6 +11079,7 @@ window.QUIZ_DATA = {
   {
    "id": "battle_elephant",
    "name": "Battle Elephant",
+   "group": "Stable",
    "icon": "img/topics/unit-1134.png",
    "unit": "unit-1132",
    "gate": [
@@ -11255,6 +11272,7 @@ window.QUIZ_DATA = {
   {
    "id": "steppe_lancer",
    "name": "Steppe Lancer",
+   "group": "Stable",
    "icon": "img/topics/unit-1372.png",
    "unit": "unit-1370",
    "gate": [
@@ -11424,6 +11442,7 @@ window.QUIZ_DATA = {
   {
    "id": "monk",
    "name": "Monk",
+   "group": "Monastery",
    "icon": "img/topics/unit-125.png",
    "unit": "unit-125",
    "gate": [

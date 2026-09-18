@@ -150,15 +150,30 @@ function renderMenu() {
   const grid = el("topic-grid");
   grid.innerHTML = "";
 
+  // one section per building, in the order the topics are declared
+  const groups = [];
   for (const topic of state.data.topics) {
-    const tile = document.createElement("button");
-    tile.className = "topic";
-    tile.type = "button";
-    tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
-    tile.innerHTML = `<img src="${topic.icon}" alt=""><span>${topic.name}</span>
-      <small>${Object.keys(topic.civs).length}</small>`;
-    tile.addEventListener("click", () => chooseTopic(topic.id));
-    grid.append(tile);
+    const group = groups.find((g) => g.name === topic.group);
+    if (group) group.topics.push(topic);
+    else groups.push({ name: topic.group, topics: [topic] });
+  }
+
+  for (const group of groups) {
+    const section = document.createElement("section");
+    section.className = "group";
+    section.innerHTML = `<h2>${group.name}</h2><div class="tiles"></div>`;
+    const tiles = section.querySelector(".tiles");
+    for (const topic of group.topics) {
+      const tile = document.createElement("button");
+      tile.className = "topic";
+      tile.type = "button";
+      tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
+      tile.title = `${topic.name} — ${Object.keys(topic.civs).length} civilisations`;
+      tile.innerHTML = `<img src="${topic.icon}" alt=""><span>${topic.name}</span>`;
+      tile.addEventListener("click", () => chooseTopic(topic.id));
+      tiles.append(tile);
+    }
+    grid.append(section);
   }
 
   for (const button of el("modes").querySelectorAll(".mode")) {
