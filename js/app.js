@@ -338,16 +338,25 @@ function renderBoardCard(card) {
   const { topic, civ, answer: fact } = truth(state.data, card);
   const node = document.createElement("div");
   node.className = "card";
-  const band = `<div class="topic-band">${tileHtml(topic)}<span>${topic.name}</span></div>`;
+  // Defense and Economy are their own section, so the kicker would say the name
+  // back to itself
+  const band = `${tileHtml(topic)}
+    <span class="names">
+      ${topic.group === topic.name ? "" : `<span class="topic-where">${topic.group}</span>`}
+      <span class="topic-what">${topic.name}</span>
+    </span>`;
   node.innerHTML = `
     <div class="card-inner">
       <div class="face front">
-        ${band}
-        <div class="plate"><img class="emblem" src="${civ.img}" alt="${civ.name}"></div>
+        <div class="topic-band">${band}</div>
+        <div class="plate">
+          <img class="emblem" src="${civ.img}" alt="${civ.name}">
+          <span class="subject">${tileHtml(topic)}</span>
+        </div>
         <div class="civ-name">${civ.name}</div>
       </div>
       <div class="face back">
-        <div class="topic-band">${tileHtml(topic)}<span>${topic.name}</span>
+        <div class="topic-band">${band}
           <b class="card-delta"></b>
         </div>
         <div class="judge-badge"></div>
@@ -458,14 +467,14 @@ function openBoard(card) {
 
   const pad = el("pad");
   pad.className = "pad claiming";
-  const cannot = cannotHave(topic);
   // every civ's name is a plural or a collective, so "do the Franks" and "do
   // the Shu" both read
   pad.innerHTML = `
     <p class="ask-words">which upgrades do the <b>${civ.name}</b> have?</p>
     <div class="board">
-      <button class="act rail" data-claim="${NO_UNIT_ID}" title="${cannot.long}">
-        <svg><use href="#mark-none"/></svg><span>${cannot.short}</span><b class="verdict"></b>
+      <button class="act rail" data-claim="${NO_UNIT_ID}" title="${cannotTitle(topic)}">
+        <span class="rail-art struck">${tileHtml(topic)}<svg><use href="#mark-none"/></svg></span>
+        <span>no</span><b class="verdict"></b>
       </button>
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
         ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
@@ -477,7 +486,8 @@ function openBoard(card) {
           .join("")}
       </div>
       <button id="claim-all" class="act rail" title="every upgrade is there">
-        <svg><use href="#mark-full"/></svg><span>all</span>
+        <span class="rail-art lit">${fullHtml(topic)}<svg><use href="#mark-full"/></svg></span>
+        <span>full</span>
       </button>
     </div>
     <div class="claim-actions">
@@ -501,15 +511,24 @@ function columnsFor(tiles) {
   return tiles <= 4 ? tiles : Math.min(4, Math.ceil(tiles / 2));
 }
 
-/* What the left rail claims depends on what the topic is gated on. A unit is
-   one a civ may not be able to build at all; Defense and Economy are upgrades
-   and nothing else, where the same claim is simply that it has none of them. */
-function cannotHave(topic) {
+/* "Full" is the top of the line, so it wears the unit the line ends at -- the
+   Arbalester where the topic is gated on the Crossbowman, and every unit that
+   can fill that slot, as everywhere else. Three topics end in a tech (Hand
+   Cannoneer, Bombard Cannon, Monk) and two are techs throughout (Defense,
+   Economy); there the rail keeps the topic's own icon. */
+function fullHtml(topic) {
+  const top = [...topic.upgrades].reverse().find((id) => id.startsWith("unit-"));
+  if (!top) return tileHtml(topic);
+  return splitHtml(slotImages(topic, top), slotName(topic, topic.parts.find((p) => p.id === top)));
+}
+
+/* The rail says "no" and the crossed-out unit says what of, so only the tooltip
+   has to tell the two apart: a unit a civ may not be able to build at all, and
+   Defense and Economy, which are upgrades with no unit behind them. */
+function cannotTitle(topic) {
   const gates = topic.parts.filter((part) => !topic.upgrades.includes(part.id));
   const unit = gates.length > 0 && gates.every((part) => part.id.startsWith("unit-"));
-  return unit
-    ? { short: "can't build", long: "it cannot build this unit at all" }
-    : { short: "has none", long: "it has none of these" };
+  return unit ? "it cannot build this unit at all" : "it has none of these";
 }
 
 /* The board itself is the upgrades. The bonus is a claim too, but it is not an

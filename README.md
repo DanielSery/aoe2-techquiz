@@ -13,11 +13,10 @@ asked on. The two ends are the answers that need no tiles, and they are rails
 the full height of the tiles, so the board is one block whatever the topic:
 
 ```
- ┌───────┬─────────────────────┬─────┐
- │   ✗   │  ▣ ▣ ▣ ▣            │  ✓  │
- │ CAN'T │  ▣ ▣ ▣   upgrades   │ ALL │
- │ BUILD │                     │     │
- └───────┴─────────────────────┴─────┘
+ ┌──────┬─────────────────────┬──────┐
+ │  ▨✗  │  ▣ ▣ ▣ ▣            │  ▣✓  │
+ │  NO  │  ▣ ▣ ▣   upgrades   │ FULL │
+ └──────┴─────────────────────┴──────┘
             ★ BONUS    ✔ DONE
 ```
 
@@ -26,14 +25,21 @@ answer of its own and a position is something you can learn instead of the
 upgrade. The reveal on the back keeps the topic's own order, because there the
 row is being read rather than answered.
 
-The left rail says what it means for the topic in hand: **can't build** where the
-topic is gated on a unit, **has none** on Defense and Economy, which are
-upgrades and nothing else and have no unit to be unable to build (`cannotHave`).
+**Both rails are the unit**, so each says what it claims about the thing on the
+card rather than in the abstract: the unit the topic starts from, greyed under a
+red ✗, cannot be built at all; **the unit the line ends at**, lit under a green
+✓, is the whole of it — the Crossbowman on the left, the Arbalester on the right
+(`fullHtml`). Three topics end in a tech (Hand Cannoneer, Bombard Cannon, Monk)
+and two are techs throughout (Defense, Economy); there the right rail keeps the
+topic's own icon. The picture carries the claim, so the words under them are
+only **no** and **full**; what "no" means for the topic in hand is left to the
+tooltip (`cannotTitle`) — it cannot build this unit at all, or, on Defense and
+Economy, which have no unit behind them, it has none of these.
 
 | | Means | |
 |---|---|---|
-| ✗ **can't build**, left rail | it cannot build this unit at all | ±10, **and that is the answer** |
-| ✓ **all**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
+| ✗ **no**, left rail | it cannot build this unit at all | ±10, **and that is the answer** |
+| ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
 | ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |
 
@@ -63,9 +69,19 @@ answered with a ✗ and the techs it owns anyway, is exactly the fact worth
 knowing.
 
 **The card says who is being asked and about what, and nothing else** — the
-emblem, the name, and a band across the top naming the unit. The question itself
-is the same of every civilisation, so it lives over the board it is answered on
-rather than being read and re-read on the card.
+emblem, the name, and a band across the top naming the topic. A round of All
+deals nineteen topics from seven sections, and an icon 34px wide does not say
+which of them you are looking at, so the band names both: the section as a
+kicker — ARCHERY RANGE — over the topic's own name in gold, wrapping to two
+lines where it covers four units and dropping the kicker on Defense and Economy,
+which are their own section and would otherwise say their name twice. The
+question itself is the same of every civilisation, so it lives over the board it
+is answered on rather than being read and re-read on the card.
+
+**The unit sits on the emblem**, a tile a quarter of the card wide overlapping
+its bottom-right corner. A card is a civilisation *and* a unit, and with the
+unit a 30px thumbnail in the band against an emblem filling half the card, you
+could read "Poles" and never take in "Crossbowman".
 
 The card turns over the moment you are done: green, amber or red for the whole card,
 what the civ actually has icon by icon, your picks ringed in green, red or amber,
