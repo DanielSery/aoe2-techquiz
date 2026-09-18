@@ -22,14 +22,14 @@ REPO = "SiegeEngineers/aoe2techtree"
 API = f"https://api.github.com/repos/{REPO}"
 ROOT = Path(__file__).resolve().parent.parent
 
-# A topic is one unit and the upgrades that complete it, at most seven so they
-# fit the picker. Every topic answers the same three ways: the civ has no unit,
+# A topic is one unit and the upgrades that complete it, at most eight: the
+# picker is a compass, one upgrade per direction. Every topic answers the same three ways: the civ has no unit,
 # has it with something missing, or has all of it.
 #
 # Only the *last* step of an upgrade line belongs here. A civ that has Bracer
 # necessarily has Fletching and Bodkin Arrow, so listing those adds icons that
 # can never be missing -- they could only ever cost points in the picker.
-MAX_UPGRADES = 7
+MAX_UPGRADES = 8
 
 TOPICS = [
     {"id": "hand_cannoneer", "name": "Hand Cannoneer", "unit": 5, "upgrades": [219]},

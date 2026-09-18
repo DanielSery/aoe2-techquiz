@@ -3,6 +3,12 @@ const { buildDeck, truth, shuffle, attachSwipe, directionFor } = window.Quiz;
 const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
 const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
 const STORE_KEY = "aoe2-techquiz.topics";
+const CUSTOM_KEY = "aoe2-techquiz.custom";
+
+// Where the upgrades sit in the picker, and so which arrows reach them: the
+// four sides first, then the corners, which take two arrows at once.
+const SLOTS = ["left", "up", "right", "down", "up-left", "up-right", "down-right", "down-left"];
+const DIAGONAL_WAIT = 90; // ms to see whether a second arrow is on its way
 
 // An upgrade you leave alone and the civ has is worth nothing: only a claim
 // scores, or doing nothing would be the safe way to play.
@@ -23,6 +29,10 @@ const state = {
   phase: "answer",
   score: 0,
   picked: {},
+  custom: false,
+  held: new Set(),
+  heldTimer: 0,
+  heldSpent: false,
   timer: 0,
 };
 
@@ -60,7 +70,9 @@ function start() {
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
   });
+  el("custom").addEventListener("click", toggleCustom);
   document.addEventListener("keydown", onKey);
+  document.addEventListener("keyup", onKeyUp);
 }
 
 /* ---------- menu ---------- */
@@ -69,20 +81,43 @@ function restoreSelection() {
   let saved = [];
   try {
     saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+    state.custom = localStorage.getItem(CUSTOM_KEY) === "1";
   } catch (ignored) {
     saved = [];
   }
   const known = state.data.topics.map((t) => t.id);
   const wanted = Array.isArray(saved) ? saved.filter((id) => known.includes(id)) : [];
   state.selected = new Set(wanted.length ? wanted : known.slice(0, 1));
+  if (!state.custom && state.selected.size > 1) state.selected = new Set([[...state.selected][0]]);
 }
 
 function rememberSelection() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
+    localStorage.setItem(CUSTOM_KEY, state.custom ? "1" : "0");
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
+}
+
+/* One topic unless you ask for more: picking a tile replaces the selection,
+   and Custom makes the tiles toggle instead. */
+function chooseTopic(id) {
+  if (!state.custom) state.selected = new Set([id]);
+  else if (!state.selected.has(id)) state.selected.add(id);
+  else if (state.selected.size > 1) state.selected.delete(id);
+  else return;
+  rememberSelection();
+  renderMenu();
+}
+
+function toggleCustom() {
+  state.custom = !state.custom;
+  if (!state.custom && state.selected.size > 1) {
+    state.selected = new Set([[...state.selected][0]]);
+  }
+  rememberSelection();
+  renderMenu();
 }
 
 function renderMenu() {
@@ -96,29 +131,23 @@ function renderMenu() {
     tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
     tile.innerHTML = `<img src="${topic.icon}" alt=""><span>${topic.name}</span>
       <small>${Object.keys(topic.civs).length}</small>`;
-    tile.addEventListener("click", () => {
-      if (!state.selected.has(topic.id)) state.selected.add(topic.id);
-      else if (state.selected.size > 1) state.selected.delete(topic.id);
-      else return; // turning the last one off would leave nothing to play
-      rememberSelection();
-      renderMenu();
-    });
+    tile.addEventListener("click", () => chooseTopic(topic.id));
     grid.append(tile);
   }
 
   if (state.data.topics.length > 1) {
+    const every = state.data.topics.map((t) => t.id);
     const all = document.createElement("button");
     all.className = "topic";
     all.type = "button";
-    all.setAttribute("aria-pressed", String(state.selected.size === state.data.topics.length));
+    all.setAttribute("aria-pressed", String(state.selected.size === every.length));
     const mosaic = state.data.topics
       .slice(0, 4)
       .map((topic) => `<img src="${topic.icon}" alt="">`)
       .join("");
     all.innerHTML = `<span class="mosaic">${mosaic}</span><span>Everything</span>
-      <small>${state.data.topics.length}</small>`;
+      <small>${every.length}</small>`;
     all.addEventListener("click", () => {
-      const every = state.data.topics.map((t) => t.id);
       state.selected = new Set(state.selected.size === every.length ? every.slice(0, 1) : every);
       rememberSelection();
       renderMenu();
@@ -126,6 +155,7 @@ function renderMenu() {
     grid.append(all);
   }
 
+  el("custom").setAttribute("aria-pressed", String(state.custom));
   const size = buildDeck(state.data, [...state.selected]).length;
   el("start").disabled = size === 0;
   el("start-count").textContent = size ? `${size}` : "";
@@ -240,7 +270,6 @@ function renderPad(topic) {
         (tier, index) => `<button class="answer is-${tier.mark}" data-dir="${tier.dir}"
           title="${padTitle(topic, index)}">
           <svg class="arrow"><use href="#arrow-${tier.dir}"/></svg>
-          <span class="mark is-${tier.mark}"><svg><use href="#mark-${tier.mark}"/></svg></span>
           <span class="mini">${miniHtml(topic, index)}</span>
         </button>`
       )
@@ -371,18 +400,29 @@ function openPicker() {
   const { topic, civ } = truth(state.data, state.deck[state.index]);
   state.phase = "picking";
   state.picked = {};
+  state.held.clear();
+  state.heldSpent = false;
+  clearTimeout(state.heldTimer);
 
   el("picker-civ").src = civ.img;
   el("picker-topic").src = topic.icon;
-  el("picker-grid").innerHTML = topic.upgrades
-    .map((id) => {
-      const part = topic.parts.find((p) => p.id === id);
-      return `<button class="upgrade" data-id="${id}" title="${part.name}">
-        <img src="${part.img}" alt="${part.name}">
-        <b class="verdict"></b>
-      </button>`;
-    })
-    .join("");
+  for (const old of el("picker-grid").querySelectorAll(".upgrade")) old.remove();
+
+  topic.upgrades.forEach((id, index) => {
+    const part = topic.parts.find((p) => p.id === id);
+    const slot = SLOTS[index];
+    const button = document.createElement("button");
+    button.className = "upgrade";
+    button.dataset.id = id;
+    button.dataset.slot = slot;
+    button.style.gridArea = slot;
+    button.title = part.name;
+    button.innerHTML = `<img src="${part.img}" alt="${part.name}">
+      <svg class="dir dir-${slot}"><use href="#arrow-up"/></svg>
+      <b class="verdict"></b>`;
+    el("picker-grid").append(button);
+  });
+
   el("picker").classList.add("is-open");
   el("pad").classList.add("dim");
 }
@@ -390,6 +430,22 @@ function openPicker() {
 function closePicker() {
   el("picker").classList.remove("is-open");
   el("pad").classList.remove("dim");
+}
+
+function slotDirection(held) {
+  const up = held.has("up");
+  const down = held.has("down");
+  const left = held.has("left");
+  const right = held.has("right");
+  const vertical = up ? "up" : down ? "down" : "";
+  const horizontal = left ? "left" : right ? "right" : "";
+  if (vertical && horizontal) return `${vertical}-${horizontal}`;
+  return vertical || horizontal || null;
+}
+
+function pickAt(slot) {
+  const button = el("picker-grid").querySelector(`.upgrade[data-slot="${slot}"]`);
+  if (button) pick(button.dataset.id);
 }
 
 /* Naming an upgrade is a claim, answered on the spot and not taken back. */
@@ -526,16 +582,23 @@ function onKey(event) {
   if (event.key === "Escape") return show("menu");
 
   if (state.phase === "picking") {
-    const slot = Number(event.key);
-    const upgrades = truth(state.data, state.deck[state.index]).topic.upgrades;
-    if (slot >= 1 && slot <= upgrades.length) {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      return pick(upgrades[slot - 1]);
+      return finishPicks();
     }
-    if (event.key === "Enter" || event.key === " " || event.key === "ArrowRight") {
-      event.preventDefault();
-      finishPicks();
-    }
+    const direction = KEYS[event.key];
+    if (!direction) return;
+    event.preventDefault();
+    if (event.repeat || state.heldSpent) return;
+
+    // a corner is two arrows at once, so wait a moment for the second
+    state.held.add(direction);
+    clearTimeout(state.heldTimer);
+    state.heldTimer = setTimeout(() => {
+      const slot = slotDirection(state.held);
+      state.heldSpent = true;
+      if (slot) pickAt(slot);
+    }, DIAGONAL_WAIT);
     return;
   }
 
@@ -550,5 +613,17 @@ function onKey(event) {
   if (direction) {
     event.preventDefault();
     answer(direction);
+  }
+}
+
+// the arrows for a corner are released one at a time; only a clean release
+// arms the next pick
+function onKeyUp(event) {
+  const direction = KEYS[event.key];
+  if (!direction) return;
+  state.held.delete(direction);
+  if (!state.held.size) {
+    clearTimeout(state.heldTimer);
+    state.heldSpent = false;
   }
 }

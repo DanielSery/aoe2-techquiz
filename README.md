@@ -11,18 +11,19 @@ swipe, or with the arrow keys:
 | ✓ | right | `→` | the unit and all of its upgrades |
 
 Answering scores at once: **+1** right, **−1** wrong, shown on the counter in the
-corner. You never have to remember which way is which — the answers sit on a pad
-below the card, each in the direction you swipe for it, showing the topic's own
-icons lit or dimmed for what that answer claims, and the one you are about to
-pick lights up while you drag.
+corner. You never have to remember which way is which — the answers sit on a pad below
+the card, each in the direction you swipe for it, showing the topic's own icons
+lit or dimmed for what that answer claims, and the one you are about to pick
+lights up while you drag.
 
 Say **◐** on a topic with more than one upgrade and it asks the follow-up: the
-upgrades as icons, and you name the ones you think that civ is missing. Each
-click is answered on the spot and cannot be taken back — green border and tick
-if it really is missing (**+1**), red border and cross if the civ has it after
-all (**−1**). Press done when you think you have found them all; each one you
-never named costs **−1**. Leaving an upgrade alone that the civ really has is
-worth nothing, so marking nothing is not the safe play.
+upgrades laid out as a compass, up to eight of them, reached by an arrow key —
+or two at once for the corners — or by clicking. Each pick is answered on the
+spot and cannot be taken back: green border and tick if it really is missing
+(**+1**), red border and cross if the civ has it after all (**−1**). Done sits
+in the middle; press it (or `Enter`) when you think you have found them all, and
+each one you never named costs **−1**. Leaving an upgrade alone that the civ
+really has is worth nothing, so marking nothing is not the safe play.
 
 Where a topic has only one upgrade — Siege Engineers for the siege units, Ring
 Archer Armor for the Hand Cannoneer — there is no follow-up: **◐** already means
@@ -36,8 +37,12 @@ one.
 Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
 Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
 Arrow as well, since a civ with Bracer necessarily has those.
+The menu plays one topic at a time: picking a tile replaces the selection.
+**Custom** turns that into a multiple choice, for a set mixed from several
+topics, and **Everything** is the shortcut for all of them.
+
 At the end of a set you can repeat only the ones you got wrong, repeat the whole
-set, or go back and pick a different mix of topics.
+set, or go back and pick a different topic.
 
 ## Playing it
 

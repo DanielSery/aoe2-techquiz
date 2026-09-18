@@ -24,6 +24,7 @@
   <symbol id="icon-replay" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
+  <symbol id="icon-custom" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
 </svg>
 
 <main>
@@ -32,7 +33,12 @@
     <h1><img src="img/topics/unit-5.png" alt=""><span>Tech Quiz</span></h1>
     <p class="lede">Pick your topics, then say what each civilisation gets.</p>
     <div id="topic-grid" class="topic-grid"></div>
-    <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
+    <div class="menu-actions">
+      <button id="custom" class="ghost" aria-pressed="false">
+        <svg><use href="#icon-custom"/></svg><span>Custom</span>
+      </button>
+      <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
+    </div>
   </section>
 
   <section id="game" class="screen">
@@ -51,10 +57,11 @@
           <span class="mark is-partial"><svg><use href="#mark-partial"/></svg></span>
           <img id="picker-topic" src="" alt="">
         </div>
-        <div id="picker-grid" class="picker-grid"></div>
-        <button id="picker-done" class="primary">
-          <svg><use href="#mark-right"/></svg><span id="picker-count"></span>
-        </button>
+        <div id="picker-grid" class="picker-grid">
+          <button id="picker-done" class="done" title="that is all of them">
+            <svg><use href="#mark-right"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 

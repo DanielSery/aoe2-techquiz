@@ -147,6 +147,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .topic small { font-size: 11px; color: #8a7a64; }
 
+.menu-actions { display: flex; gap: 10px; align-items: center; }
+
+#custom span { font-size: 13px; }
+#custom[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+
 .topic[aria-pressed="true"] {
   border-color: var(--gold);
   background: var(--panel-2);
@@ -481,10 +486,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .picker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 58px);
-  gap: 10px;
-  max-width: 262px;
-  justify-content: center;
+  grid-template-areas:
+    "up-left up up-right"
+    "left done right"
+    "down-left down down-right";
+  gap: 8px;
 }
 
 .upgrade {
@@ -498,6 +504,26 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 }
 
 .upgrade img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* which arrows reach it; the diagonals are two at once */
+.upgrade .dir {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 15px;
+  height: 15px;
+  opacity: .8;
+  filter: drop-shadow(0 0 2px #000);
+}
+
+.dir-up { transform: rotate(0deg); }
+.dir-up-right { transform: rotate(45deg); }
+.dir-right { transform: rotate(90deg); }
+.dir-down-right { transform: rotate(135deg); }
+.dir-down { transform: rotate(180deg); }
+.dir-down-left { transform: rotate(225deg); }
+.dir-left { transform: rotate(270deg); }
+.dir-up-left { transform: rotate(315deg); }
 
 .upgrade .verdict {
   position: absolute;
@@ -521,7 +547,18 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .upgrade.spotted img { filter: grayscale(1) brightness(.4); }
 .upgrade.falsely { border-color: var(--none); color: var(--none); }
 
-#picker-done { min-width: 96px; }
+#picker-done {
+  grid-area: done;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: linear-gradient(#a9833c, #8a6729);
+  color: #1c150c;
+}
+
+#picker-done svg { width: 30px; height: 30px; }
 
 /* Each answer sits where its swipe goes: the pad is the legend. */
 .pad {
@@ -566,8 +603,6 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .answer[data-dir="down"] { grid-area: down; }
 
 .answer .arrow { width: 18px; height: 18px; opacity: .85; }
-.answer .mark { width: 26px; height: 26px; border: 0; }
-.answer .mark svg { width: 24px; height: 24px; }
 
 .answer.armed {
   background: #ffffff14;
