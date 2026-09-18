@@ -16,12 +16,17 @@ below the card, each in the direction you swipe for it, showing the topic's own
 icons lit or dimmed for what that answer claims, and the one you are about to
 pick lights up while you drag.
 
-Say **◐** and it asks the follow-up: up to seven upgrade icons, and you mark the
-ones you think that civ is missing, then press done. **+1** for each one you
-correctly call missing, **−1** for each one you accuse wrongly, **−1** for each
-one you miss — leaving an upgrade alone that the civ really has is worth nothing,
-so playing it safe does not pay. A topic with only one upgrade skips the
-follow-up: saying ◐ has already named it.
+Say **◐** on a topic with more than one upgrade and it asks the follow-up: the
+upgrades as icons, and you name the ones you think that civ is missing. Each
+click is answered on the spot and cannot be taken back — green border and tick
+if it really is missing (**+1**), red border and cross if the civ has it after
+all (**−1**). Press done when you think you have found them all; each one you
+never named costs **−1**. Leaving an upgrade alone that the civ really has is
+worth nothing, so marking nothing is not the safe play.
+
+Where a topic has only one upgrade — Siege Engineers for the siege units, Ring
+Archer Armor for the Hand Cannoneer — there is no follow-up: **◐** already means
+"has the unit, without that upgrade".
 
 The card turns over the moment you are done: green or red for the whole card,
 what the civ actually has icon by icon, your picks ringed in green, red or amber,
@@ -29,6 +34,8 @@ and what the card was worth. It then waits — any key, tap or click deals the n
 one.
 
 Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
+Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
+Arrow as well, since a civ with Bracer necessarily has those.
 At the end of a set you can repeat only the ones you got wrong, repeat the whole
 set, or go back and pick a different mix of topics.
 
@@ -64,9 +71,9 @@ A topic is one unit and the upgrades that complete it, at most seven so they fit
 the picker. Adding one is a line in `TOPICS` at the top of `tools/build_data.py`
 — a unit id and the tech ids, as
 [aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) numbers them — and
-a re-run, which fetches the icons too. The run prints how many civs lack each
-upgrade: an upgrade every civ has (Fletching, Bodkin Arrow, Padded Archer Armor)
-can never be a right answer in the picker, only a wrong one.
+a re-run, which fetches the icons too. List only the last step of each
+upgrade line: the run prints how many civs lack each one, and an upgrade no civ
+lacks can never be a right answer in the follow-up, only a wrong one.
 
 ## Layout
 

@@ -22,7 +22,7 @@ const state = {
   results: [],
   phase: "answer",
   score: 0,
-  picks: new Set(),
+  picked: {},
   timer: 0,
 };
 
@@ -53,9 +53,9 @@ function start() {
   });
   el("picker-grid").addEventListener("click", (event) => {
     const button = event.target.closest(".upgrade");
-    if (button) togglePick(button.dataset.id);
+    if (button) pick(button.dataset.id);
   });
-  el("picker-done").addEventListener("click", submitPicks);
+  el("picker-done").addEventListener("click", finishPicks);
   // a revealed card waits for you: anything but the hud moves it on
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
@@ -293,7 +293,7 @@ function partsHtml(topic, answer, picks) {
   return topic.parts
     .map((part) => {
       const on = answer.has.includes(part.id);
-      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(topic, part, on, picks)}"
+      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(part, picks)}"
         title="${part.name}">
         <img src="${part.img}" alt="${part.name}">
         <b><svg><use href="#mark-${on ? "right" : "wrong"}"/></svg></b>
@@ -302,11 +302,8 @@ function partsHtml(topic, answer, picks) {
     .join("");
 }
 
-function pickOutcome(topic, part, civHasIt, picks) {
-  if (!picks || !topic.upgrades.includes(part.id)) return "";
-  const marked = picks.includes(part.id);
-  if (marked) return civHasIt ? "falsely" : "spotted";
-  return civHasIt ? "" : "missed";
+function pickOutcome(part, picks) {
+  return picks ? picks[part.id] || "" : "";
 }
 
 function markRow(topic, truthId, wrongId) {
@@ -373,7 +370,7 @@ function answer(direction) {
 function openPicker() {
   const { topic, civ } = truth(state.data, state.deck[state.index]);
   state.phase = "picking";
-  state.picks = new Set();
+  state.picked = {};
 
   el("picker-civ").src = civ.img;
   el("picker-topic").src = topic.icon;
@@ -382,13 +379,12 @@ function openPicker() {
       const part = topic.parts.find((p) => p.id === id);
       return `<button class="upgrade" data-id="${id}" title="${part.name}">
         <img src="${part.img}" alt="${part.name}">
-        <span class="cross"><svg><use href="#mark-none"/></svg></span>
+        <b class="verdict"></b>
       </button>`;
     })
     .join("");
   el("picker").classList.add("is-open");
   el("pad").classList.add("dim");
-  renderPickCount();
 }
 
 function closePicker() {
@@ -396,34 +392,42 @@ function closePicker() {
   el("pad").classList.remove("dim");
 }
 
-function togglePick(id) {
-  if (state.phase !== "picking") return;
-  state.picks.has(id) ? state.picks.delete(id) : state.picks.add(id);
+/* Naming an upgrade is a claim, answered on the spot and not taken back. */
+function pick(id) {
+  if (state.phase !== "picking" || state.picked[id]) return;
+  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
+
+  const missing = fact.missing.includes(id);
+  const outcome = missing ? "spotted" : "falsely";
+  state.picked[id] = outcome;
+  state.results[state.index].delta += missing ? POINTS.spotted : POINTS.falsely;
+  bumpScore(missing ? POINTS.spotted : POINTS.falsely);
+
   const button = el("picker-grid").querySelector(`[data-id="${id}"]`);
-  button.classList.toggle("marked", state.picks.has(id));
-  renderPickCount();
+  button.classList.add(outcome, "done");
+  button.querySelector(".verdict").innerHTML = `<svg><use href="#mark-${
+    missing ? "right" : "wrong"
+  }"/></svg>`;
+
+  if (topic.upgrades.every((upgrade) => state.picked[upgrade])) finishPicks();
 }
 
-function renderPickCount() {
-  el("picker-count").textContent = state.picks.size ? `${state.picks.size}` : "";
-}
-
-function submitPicks() {
+// what you never named: the ones you missed
+function finishPicks() {
   if (state.phase !== "picking") return;
   const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
 
   let delta = 0;
-  for (const id of topic.upgrades) {
-    const marked = state.picks.has(id);
-    const missing = fact.missing.includes(id);
-    if (marked) delta += missing ? POINTS.spotted : POINTS.falsely;
-    else if (missing) delta += POINTS.missed;
+  for (const id of fact.missing) {
+    if (state.picked[id]) continue;
+    state.picked[id] = "missed";
+    delta += POINTS.missed;
   }
 
   const result = state.results[state.index];
-  result.picks = [...state.picks];
+  result.picks = state.picked;
   result.delta += delta;
-  bumpScore(delta);
+  if (delta) bumpScore(delta);
   closePicker();
   reveal();
 }
@@ -526,11 +530,11 @@ function onKey(event) {
     const upgrades = truth(state.data, state.deck[state.index]).topic.upgrades;
     if (slot >= 1 && slot <= upgrades.length) {
       event.preventDefault();
-      return togglePick(upgrades[slot - 1]);
+      return pick(upgrades[slot - 1]);
     }
     if (event.key === "Enter" || event.key === " " || event.key === "ArrowRight") {
       event.preventDefault();
-      submitPicks();
+      finishPicks();
     }
     return;
   }

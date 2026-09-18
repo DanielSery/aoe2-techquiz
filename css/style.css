@@ -465,7 +465,7 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   justify-content: center;
   gap: 14px;
   padding: 10px;
-  background: #15110de6;
+  background: #15110df5;
 }
 
 .picker.is-open { display: flex; }
@@ -499,20 +499,27 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .upgrade img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.upgrade .cross {
+.upgrade .verdict {
   position: absolute;
-  inset: 0;
-  display: none;
+  right: 0;
+  bottom: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: #15110dcc;
-  color: var(--none);
+  width: 22px;
+  height: 22px;
+  border-radius: 7px 0 0 0;
+  background: #15110dd9;
 }
 
-.upgrade .cross svg { width: 34px; height: 34px; }
+.upgrade .verdict svg { width: 15px; height: 15px; }
 
-.upgrade.marked { border-color: var(--none); }
-.upgrade.marked .cross { display: flex; }
+/* answered on the spot: the border is whether you were right, the icon going
+   grey is the civ not having it */
+.upgrade.done { cursor: default; }
+.upgrade.spotted { border-color: var(--full); color: var(--full); }
+.upgrade.spotted img { filter: grayscale(1) brightness(.4); }
+.upgrade.falsely { border-color: var(--none); color: var(--none); }
 
 #picker-done { min-width: 96px; }
 

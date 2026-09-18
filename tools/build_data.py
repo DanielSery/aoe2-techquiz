@@ -25,18 +25,17 @@ ROOT = Path(__file__).resolve().parent.parent
 # A topic is one unit and the upgrades that complete it, at most seven so they
 # fit the picker. Every topic answers the same three ways: the civ has no unit,
 # has it with something missing, or has all of it.
+#
+# Only the *last* step of an upgrade line belongs here. A civ that has Bracer
+# necessarily has Fletching and Bodkin Arrow, so listing those adds icons that
+# can never be missing -- they could only ever cost points in the picker.
 MAX_UPGRADES = 7
 
 TOPICS = [
-    {"id": "hand_cannoneer", "name": "Hand Cannoneer", "unit": 5, "upgrades": [211, 212, 219]},
+    {"id": "hand_cannoneer", "name": "Hand Cannoneer", "unit": 5, "upgrades": [219]},
     {"id": "siege_ram", "name": "Siege Ram", "unit": 548, "upgrades": [377]},
     {"id": "bombard_cannon", "name": "Bombard Cannon", "unit": 36, "upgrades": [377]},
-    {
-        "id": "arbalester",
-        "name": "Arbalester",
-        "unit": 492,
-        "upgrades": [199, 200, 201, 211, 212, 219, 437],
-    },
+    {"id": "arbalester", "name": "Arbalester", "unit": 492, "upgrades": [201, 219, 437]},
 ]
 
 def tiers_for(unit_id: str, upgrade_ids: list) -> list:
