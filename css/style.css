@@ -889,16 +889,19 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .rail[data-claim="no-unit"] { color: var(--none); border-color: #5e332c; background: #2a1714; }
 #claim-all.rail { color: var(--full); border-color: #2f5233; background: #172a1a; }
 
+/* The two under the board are pressed with a thumb and there is width going
+   spare beside them, so they take it: the tiles are the crowded row, not this. */
 .claim-actions .act {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  width: calc(var(--cell) * 1.5);
-  height: calc(var(--cell) * .68);
+  gap: 8px;
+  width: calc(var(--cell) * 2.05);
+  height: calc(var(--cell) * .88);
 }
 
-.claim-actions .act svg { width: calc(var(--cell) * .3); height: calc(var(--cell) * .3); }
+.claim-actions .act svg { width: calc(var(--cell) * .38); height: calc(var(--cell) * .38); }
+.claim-actions .act span { font-size: min(12px, calc(var(--cell) * .22)); opacity: 1; }
 .claim-actions .act.star { color: var(--bonus); border-color: #4a3a5e; background: #2a1f38; }
 
 /* answered on the tap, and it outranks whatever the button wears at rest */
@@ -918,6 +921,23 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .upgrade img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* An upgrade you have not claimed is drawn as one the civ does not have -- grey
+   and dim, the same way the reveal draws what it lacks -- so the board starts
+   as "none of these" and claiming one turns it on. Direct children only: a
+   split is filtered as a mosaic, or its cells are filtered twice. */
+.upgrade > img,
+.upgrade > .split {
+  /* dark enough to read as off, light enough to still tell a tech by its icon */
+  filter: grayscale(1) brightness(.64);
+  transition: filter .18s ease-out;
+}
+
+/* the two that say the civ has it: yours, and the one you left */
+.upgrade.spotted > img,
+.upgrade.spotted > .split,
+.upgrade.missed > img,
+.upgrade.missed > .split { filter: none; }
 
 .upgrade .verdict {
   position: absolute;

@@ -25,6 +25,11 @@ answer of its own and a position is something you can learn instead of the
 upgrade. The reveal on the back keeps the topic's own order, because there the
 row is being read rather than answered.
 
+**A tile you have not claimed is drawn as one the civ does not have** — grey and
+dim, the same way the reveal draws what it lacks — so the board starts as
+"none of these" and claiming one turns it on. Grey, not invisible: you still
+have to tell a tech by its icon.
+
 **Both rails are the unit**, so each says what it claims about the thing on the
 card rather than in the abstract: the unit the topic starts from, greyed under a
 red ✗, cannot be built at all; **the unit the line ends at**, lit under a green
