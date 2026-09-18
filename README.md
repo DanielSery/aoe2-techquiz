@@ -48,6 +48,11 @@ one.
 Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
 Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
 Arrow as well, since a civ with Bracer necessarily has those.
+
+A topic is gated on the unit that says the line exists at all, which is not
+always the unit it is named after: Arbalester is gated on the **Crossbowman**,
+so a civ that stops at crossbows is ◐ with the Arbalest as one of the upgrades
+it is missing, and only the two civilisations with no crossbow at all are ✗.
 **Single / Custom / All** under the tiles says how many topics a set draws from:
 Single replaces the selection as you pick, Custom lets the tiles toggle for a
 mixed set, All takes every topic. Picking a tile outside Custom drops back to

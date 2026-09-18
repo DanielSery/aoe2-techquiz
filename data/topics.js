@@ -2026,13 +2026,20 @@ window.QUIZ_DATA = {
    "id": "arbalester",
    "name": "Arbalester",
    "icon": "img/topics/unit-492.png",
-   "unit": "unit-492",
+   "unit": "unit-24",
    "upgrades": [
+    "unit-492",
     "tech-201",
     "tech-219",
     "tech-437"
    ],
    "parts": [
+    {
+     "id": "unit-24",
+     "name": "Crossbowman",
+     "img": "img/topics/unit-24.png",
+     "icon_index": 18
+    },
     {
      "id": "unit-492",
      "name": "Arbalester",
@@ -2070,7 +2077,7 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-492"
+      "unit-24"
      ]
     },
     {
@@ -2078,6 +2085,7 @@ window.QUIZ_DATA = {
      "dir": "right",
      "mark": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2089,6 +2097,7 @@ window.QUIZ_DATA = {
     "armenians": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2102,6 +2111,7 @@ window.QUIZ_DATA = {
     "aztecs": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201"
      ],
@@ -2115,6 +2125,7 @@ window.QUIZ_DATA = {
     "bengalis": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2126,19 +2137,23 @@ window.QUIZ_DATA = {
      "why": []
     },
     "berbers": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "bohemians": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2152,6 +2167,7 @@ window.QUIZ_DATA = {
     "britons": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2173,17 +2189,20 @@ window.QUIZ_DATA = {
       "tech-437"
      ],
      "missing": [
+      "unit-492",
       "tech-219"
      ],
      "bonus": false,
      "why": []
     },
     "burgundians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201"
      ],
      "missing": [
+      "unit-492",
       "tech-219",
       "tech-437"
      ],
@@ -2191,11 +2210,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "burmese": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201"
      ],
      "missing": [
+      "unit-492",
       "tech-219",
       "tech-437"
      ],
@@ -2205,6 +2226,7 @@ window.QUIZ_DATA = {
     "byzantines": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2215,11 +2237,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "celts": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-437"
      ],
@@ -2229,6 +2253,7 @@ window.QUIZ_DATA = {
     "chinese": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2239,12 +2264,14 @@ window.QUIZ_DATA = {
      "why": []
     },
     "cumans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219",
       "tech-437"
      ],
      "missing": [
+      "unit-492",
       "tech-201"
      ],
      "bonus": true,
@@ -2255,6 +2282,7 @@ window.QUIZ_DATA = {
     "dravidians": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2267,6 +2295,7 @@ window.QUIZ_DATA = {
     "ethiopians": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2279,9 +2308,12 @@ window.QUIZ_DATA = {
      ]
     },
     "franks": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-24"
+     ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-219",
       "tech-437"
@@ -2290,11 +2322,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "georgians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201"
      ],
      "missing": [
+      "unit-492",
       "tech-219",
       "tech-437"
      ],
@@ -2302,47 +2336,56 @@ window.QUIZ_DATA = {
      "why": []
     },
     "goths": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-437"
      ],
      "bonus": false,
      "why": []
     },
     "gurjaras": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-437"
      ],
      "missing": [
+      "unit-492",
       "tech-219"
      ],
      "bonus": false,
      "why": []
     },
     "hindustanis": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "huns": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-437"
      ],
      "missing": [
+      "unit-492",
       "tech-219"
      ],
      "bonus": false,
@@ -2351,6 +2394,7 @@ window.QUIZ_DATA = {
     "incas": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2363,6 +2407,7 @@ window.QUIZ_DATA = {
     "italians": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2377,6 +2422,7 @@ window.QUIZ_DATA = {
     "japanese": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2387,31 +2433,37 @@ window.QUIZ_DATA = {
      "why": []
     },
     "jurchens": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-437"
      ],
      "bonus": false,
      "why": []
     },
     "khitans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "khmer": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2425,6 +2477,7 @@ window.QUIZ_DATA = {
     "koreans": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2437,19 +2490,23 @@ window.QUIZ_DATA = {
      ]
     },
     "lithuanians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "magyars": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2462,6 +2519,7 @@ window.QUIZ_DATA = {
     "malay": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2474,6 +2532,7 @@ window.QUIZ_DATA = {
     "malians": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-219",
       "tech-437"
@@ -2485,11 +2544,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "mapuche": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-437"
      ],
@@ -2499,6 +2560,7 @@ window.QUIZ_DATA = {
     "mayans": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2513,6 +2575,7 @@ window.QUIZ_DATA = {
     "mongols": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-437"
@@ -2526,6 +2589,7 @@ window.QUIZ_DATA = {
     "muisca": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-437"
@@ -2540,12 +2604,14 @@ window.QUIZ_DATA = {
      ]
     },
     "persians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219",
       "tech-437"
      ],
      "missing": [
+      "unit-492",
       "tech-201"
      ],
      "bonus": true,
@@ -2556,6 +2622,7 @@ window.QUIZ_DATA = {
     "poles": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-437"
@@ -2569,6 +2636,7 @@ window.QUIZ_DATA = {
     "portuguese": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2579,11 +2647,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "romans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-437"
      ],
@@ -2593,6 +2663,7 @@ window.QUIZ_DATA = {
     "saracens": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2607,6 +2678,7 @@ window.QUIZ_DATA = {
     "shu": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2623,6 +2695,7 @@ window.QUIZ_DATA = {
     "sicilians": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201"
      ],
@@ -2634,11 +2707,13 @@ window.QUIZ_DATA = {
      "why": []
     },
     "slavs": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-437"
      ],
@@ -2652,27 +2727,34 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "tatars": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "teutons": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-219"
      ],
      "missing": [
+      "unit-492",
       "tech-201",
       "tech-437"
      ],
@@ -2682,6 +2764,7 @@ window.QUIZ_DATA = {
     "tupi": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2696,19 +2779,23 @@ window.QUIZ_DATA = {
      ]
     },
     "turks": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "vietnamese": {
      "tier": "full",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219",
@@ -2723,6 +2810,7 @@ window.QUIZ_DATA = {
     "vikings": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201",
       "tech-219"
@@ -2736,19 +2824,23 @@ window.QUIZ_DATA = {
      ]
     },
     "wei": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-24",
       "tech-201",
       "tech-219",
       "tech-437"
      ],
-     "missing": [],
+     "missing": [
+      "unit-492"
+     ],
      "bonus": false,
      "why": []
     },
     "wu": {
      "tier": "partial",
      "has": [
+      "unit-24",
       "unit-492",
       "tech-201"
      ],

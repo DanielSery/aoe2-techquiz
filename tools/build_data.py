@@ -65,10 +65,14 @@ TOPICS = [
         "words": [r"gunpowder", r"bombard cannons?", r"siege workshops?", r"siege weapons?"],
     },
     {
+        # Gated on the Crossbowman, so a civ that stops at crossbows is partial
+        # rather than "has nothing": the Arbalest is then one of the upgrades it
+        # is missing. Only the Bulgarians and the Spanish have no crossbow at all.
         "id": "arbalester",
         "name": "Arbalester",
-        "unit": 492,
-        "upgrades": [201, 219, 437],
+        "unit": 24,
+        "icon": ("Unit", 492),
+        "upgrades": [("Unit", 492), 201, 219, 437],
         "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?"],
         "veto": [
             r"cavalry archer",
@@ -127,7 +131,7 @@ DAT_ALIASES = {
 # the Hand Cannoneer (unit 5) is enabled by tech 85, and an upgraded unit by the
 # upgrade itself. Only needed for the --civdata cross-check, and only for units
 # a topic names.
-UNIT_ENABLER = {5: 85, 36: 188, 422: 96, 492: 237, 548: 255}
+UNIT_ENABLER = {5: 85, 24: 100, 36: 188, 422: 96, 492: 237, 548: 255}
 
 
 def fetch(url: str) -> bytes:
@@ -235,6 +239,8 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         )
 
     unit_id = part_id("Unit", spec["unit"]) if spec.get("unit") else None
+    wanted_icon = part_id(*spec["icon"]) if spec.get("icon") else parts[0]["id"]
+    icon_part = next(part for part in parts if part["id"] == wanted_icon)
     upgrade_ids = [part_id(kind, item) for kind, item in upgrade_nodes(spec)]
 
     civs = {}
@@ -257,7 +263,7 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
     return {
         "id": spec["id"],
         "name": spec["name"],
-        "icon": parts[0]["img"],
+        "icon": icon_part["img"],
         "unit": unit_id,
         "upgrades": upgrade_ids,
         "parts": parts,
