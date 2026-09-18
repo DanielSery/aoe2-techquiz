@@ -2,7 +2,6 @@ const { buildDeck, truth, shuffle, attachSwipe, directionFor } = window.Quiz;
 
 const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
 const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
-const PAUSE = { right: 850, wrong: 2400 };
 const STORE_KEY = "aoe2-techquiz.topics";
 
 const el = (id) => document.getElementById(id);
@@ -45,6 +44,10 @@ function start() {
   el("pad").addEventListener("click", (event) => {
     const button = event.target.closest(".answer");
     if (button) answer(button.dataset.dir);
+  });
+  // a revealed card waits for you: anything but the hud moves it on
+  screens.game.addEventListener("pointerdown", (event) => {
+    if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
   });
   document.addEventListener("keydown", onKey);
 }
@@ -156,10 +159,13 @@ function renderCard() {
         <div class="civ-name">${civ.name}</div>
       </div>
       <div class="face back">
-        <img class="emblem" src="${civ.img}" alt="">
         <div class="judge-badge"></div>
+        <img class="emblem" src="${civ.img}" alt="">
         <div class="options"></div>
         <div class="parts">${partsHtml(topic, fact)}</div>
+        <div class="next-hint">
+          <svg><use href="#icon-play"/></svg><svg><use href="#icon-play"/></svg>
+        </div>
       </div>
     </div>`;
   stack.append(node);
@@ -182,7 +188,6 @@ function renderCard() {
   });
 
   renderProgress();
-  renderPrompt(topic);
   renderPad(topic);
 }
 
@@ -267,12 +272,6 @@ function markRow(topic, truthId, wrongId) {
     .join("");
 }
 
-function renderPrompt(topic) {
-  el("prompt").innerHTML = topic.parts
-    .map((part) => `<img src="${part.img}" alt="${part.name}" title="${part.name}">`)
-    .join('<span class="plus">+</span>');
-}
-
 function renderProgress() {
   const bar = el("progress");
   bar.innerHTML = "";
@@ -319,11 +318,9 @@ function answer(direction) {
   arm(null);
 
   renderProgress();
-  state.timer = setTimeout(advance, PAUSE[right ? "right" : "wrong"]);
 }
 
 function advance() {
-  clearTimeout(state.timer);
   if (state.phase !== "reveal") return;
 
   const node = el("stack").querySelector(".card:not(.under)");
@@ -334,7 +331,7 @@ function advance() {
 
   state.index += 1;
   state.phase = "between";
-  setTimeout(() => {
+  state.timer = setTimeout(() => {
     if (state.index >= state.deck.length) showResults();
     else renderCard();
   }, 180);
@@ -355,7 +352,8 @@ function showResults() {
       const yours = result.right
         ? ""
         : `<span class="mark yours struck is-${yourMark}"><svg><use href="#mark-${yourMark}"/></svg></span>`;
-      return `<div class="row ${result.right ? "" : "wrong"}">
+      return `<div class="row ${result.right ? "right" : "wrong"}">
+        <span class="judge"><svg><use href="#mark-${result.right ? "right" : "wrong"}"/></svg></span>
         <img src="${civ.img}" alt="${civ.name}">
         <div class="pair">${yours}<span class="mark is-${shown}"><svg><use href="#mark-${shown}"/></svg></span></div>
         <em>${civ.name}</em>
@@ -388,10 +386,9 @@ function onKey(event) {
   if (event.key === "Escape") return show("menu");
 
   if (state.phase === "reveal") {
-    if (event.key === " " || event.key === "Enter" || event.key in KEYS) {
-      event.preventDefault();
-      advance();
-    }
+    if (["Shift", "Control", "Alt", "Meta", "Tab"].includes(event.key)) return;
+    event.preventDefault();
+    advance();
     return;
   }
 

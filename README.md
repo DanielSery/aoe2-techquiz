@@ -20,9 +20,12 @@ the note on `TOPICS` in `tools/build_data.py`. Hand Cannoneer uses three,
 because the fourth rung would be empty: no civilisation has the unit while
 missing more than Ring Archer Armor.
 
-The card turns over the moment you answer and shows what the civ actually has,
-icon by icon. At the end of a set you can repeat only the ones you got wrong,
-repeat the whole set, or go back and pick a different mix of topics.
+The card turns over the moment you answer: green or red for the whole card, and
+under it what that civ actually has, icon by icon. It then waits — any key, tap
+or click deals the next one, so nothing moves on before you have read it.
+
+At the end of a set you can repeat only the ones you got wrong, repeat the whole
+set, or go back and pick a different mix of topics.
 
 ## Playing it
 
