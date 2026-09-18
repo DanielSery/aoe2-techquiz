@@ -43,6 +43,49 @@ TOPICS = [
         "unit": 5,
         "techs": [211, 212, 219],
     },
+    {
+        # A rung lists everything it has, not only what it adds, because the pad
+        # draws a rung's icons: say only "Siege Ram" and the Capped Ram it was
+        # upgraded from would be drawn as missing.
+        "id": "siege_ram",
+        "name": "Siege Ram",
+        "ladder": [
+            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
+            {"id": "bare", "dir": "down", "mark": "bare", "units": [422], "techs": [377]},
+            {"id": "partial", "dir": "up", "mark": "partial", "units": [422, 548], "techs": []},
+            {"id": "full", "dir": "right", "mark": "full", "units": [422, 548], "techs": [377]},
+        ],
+    },
+    {
+        "id": "bombard_cannon",
+        "name": "Bombard Cannon",
+        "ladder": [
+            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
+            {"id": "partial", "dir": "up", "mark": "partial", "units": [36], "techs": []},
+            {"id": "full", "dir": "right", "mark": "full", "units": [36], "techs": [377]},
+        ],
+    },
+    {
+        "id": "arbalester",
+        "name": "Arbalester",
+        "ladder": [
+            {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
+            {
+                "id": "partial",
+                "dir": "up",
+                "mark": "partial",
+                "units": [492],
+                "techs": [201, 219],
+            },
+            {
+                "id": "full",
+                "dir": "right",
+                "mark": "full",
+                "units": [492],
+                "techs": [201, 219, 437],
+            },
+        ],
+    },
 ]
 
 
@@ -69,9 +112,10 @@ DAT_ALIASES = {
 }
 
 # In the .dat a unit is gated by an enabling tech whose id is not the unit's --
-# the Hand Cannoneer (unit 5) is enabled by tech 85. Only needed for the
-# --civdata cross-check, and only for units a topic names.
-UNIT_ENABLER = {5: 85}
+# the Hand Cannoneer (unit 5) is enabled by tech 85, and an upgraded unit by the
+# upgrade itself. Only needed for the --civdata cross-check, and only for units
+# a topic names.
+UNIT_ENABLER = {5: 85, 36: 188, 422: 96, 492: 237, 548: 255}
 
 
 def fetch(url: str) -> bytes:
@@ -121,11 +165,11 @@ def ladder_of(spec: dict) -> list:
 
 
 def nodes_of(spec: dict) -> list:
-    """Every (kind, id) the topic mentions, worst rung first, deduplicated."""
+    """Every (kind, id) the topic mentions: units first, then techs, in rung order."""
     seen = []
-    for rung in ladder_of(spec):
-        for kind, ids in (("Unit", rung["units"]), ("Tech", rung["techs"])):
-            for item in ids:
+    for kind in ("Unit", "Tech"):
+        for rung in ladder_of(spec):
+            for item in rung["units" if kind == "Unit" else "techs"]:
                 if (kind, item) not in seen:
                     seen.append((kind, item))
     return seen

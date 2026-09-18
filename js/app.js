@@ -100,7 +100,11 @@ function renderMenu() {
     all.className = "topic";
     all.type = "button";
     all.setAttribute("aria-pressed", String(state.selected.size === state.data.topics.length));
-    all.innerHTML = `<img src="${state.data.topics[0].icon}" alt=""><span>Everything</span>
+    const mosaic = state.data.topics
+      .slice(0, 4)
+      .map((topic) => `<img src="${topic.icon}" alt="">`)
+      .join("");
+    all.innerHTML = `<span class="mosaic">${mosaic}</span><span>Everything</span>
       <small>${state.data.topics.length}</small>`;
     all.addEventListener("click", () => {
       const every = state.data.topics.map((t) => t.id);
@@ -217,13 +221,17 @@ function renderPad(topic) {
       .join("") + `<span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
 }
 
-// a rung is "at least this much, and not all of the next one"
+// A rung is "at least this much, and not all of the next one". One part short
+// of the next rung is a definite gap; two or more is only "not all of these",
+// and the bottom rung is a catch-all, so it claims nothing.
 function rungParts(topic, index) {
   const has = topic.tiers[index].has;
   const next = topic.tiers[index + 1] ? topic.tiers[index + 1].has : [];
+  const missing = next.filter((id) => !has.includes(id));
+  const vague = has.length > 0 && missing.length > 1;
   return topic.parts.map((part) => ({
     part,
-    state: has.includes(part.id) ? "on" : next.includes(part.id) ? "some" : "off",
+    state: has.includes(part.id) ? "on" : vague && missing.includes(part.id) ? "some" : "off",
   }));
 }
 
@@ -238,10 +246,20 @@ function miniHtml(topic, index) {
 
 function padTitle(topic, index) {
   const rows = rungParts(topic, index);
-  const on = rows.filter((r) => r.state === "on").map((r) => r.part.name);
-  const some = rows.filter((r) => r.state === "some").map((r) => r.part.name);
-  if (!on.length) return `no ${some.join(", ") || topic.name}`;
-  return some.length ? `${on.join(", ")} — but not all of: ${some.join(", ")}` : on.join(", ");
+  const named = (state) => rows.filter((r) => r.state === state).map((r) => r.part.name);
+  const on = named("on");
+
+  if (!on.length) {
+    const next = topic.tiers[index + 1];
+    const wanted = next
+      ? topic.parts.filter((p) => next.has.includes(p.id)).map((p) => p.name)
+      : [topic.name];
+    return `not even ${wanted.join(" + ")}`;
+  }
+  const some = named("some");
+  if (some.length) return `${on.join(", ")} — but not all of: ${some.join(", ")}`;
+  const off = named("off");
+  return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
 }
 
 function partsHtml(topic, answer) {
