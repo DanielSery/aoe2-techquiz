@@ -20,7 +20,8 @@ the card, each in the direction you swipe for it, showing the topic's own icons
 lit or dimmed for what that answer claims, and the one you are about to pick
 lights up while you drag.
 
-Say **◐** on a topic with more than one upgrade and it asks the follow-up: the
+Say **◐** *correctly* on a topic with more than one upgrade and it asks the
+follow-up: the
 upgrades take over the pad, in the same place the three answers were, laid out
 as a compass — up to seven of them, reached by an arrow key, or two at once for
 the corners. Each pick is answered on the spot and cannot be taken back: green
@@ -45,14 +46,19 @@ what the civ actually has icon by icon, your picks ringed in green, red or amber
 and what the card was worth. It then waits — any key, tap or click deals the next
 one.
 
-Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
+Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon / Traction
+Trebuchet, and Arbalester.
 Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
 Arrow as well, since a civ with Bracer necessarily has those.
 
 A topic is gated on the unit that says the line exists at all, which is not
 always the unit it is named after: Arbalester is gated on the **Crossbowman**,
 so a civ that stops at crossbows is ◐ with the Arbalest as one of the upgrades
-it is missing, and only the two civilisations with no crossbow at all are ✗.
+it is missing, and only the two civilisations with no crossbow at all are ✗. A
+gate can also be a choice of units — Shu, Wei and Wu field the **Traction
+Trebuchet** where everyone else has a **Bombard Cannon**, and either counts, so
+the reveal shows whichever one the civ actually fields rather than marking the
+other as missing.
 **Single / Custom / All** under the tiles says how many topics a set draws from:
 Single replaces the selection as you pick, Custom lets the tiles toggle for a
 mixed set, All takes every topic. Picking a tile outside Custom drops back to

@@ -58,9 +58,11 @@ TOPICS = [
         "words": [r"rams?", r"siege workshops?", r"siege weapons?"],
     },
     {
+        # Shu, Wei and Wu field the Traction Trebuchet where everyone else has a
+        # Bombard Cannon, so either of them is "has the unit".
         "id": "bombard_cannon",
-        "name": "Bombard Cannon",
-        "unit": 36,
+        "name": "Bombard Cannon / Traction Trebuchet",
+        "unit": [36, 1942],
         "upgrades": [377],
         "words": [r"gunpowder", r"bombard cannons?", r"siege workshops?", r"siege weapons?"],
     },
@@ -109,9 +111,9 @@ def upgrade_nodes(spec: dict) -> list:
     return [item if isinstance(item, tuple) else ("Tech", item) for item in spec["upgrades"]]
 
 
-def tiers_for(unit_id, upgrade_ids: list) -> list:
+def tiers_for(gate_ids: list, upgrade_ids: list) -> list:
     """The same three answers for every topic; `has` is what each one claims."""
-    partial = [unit_id] if unit_id else []
+    partial = list(gate_ids)
     return [
         {"id": "none", "dir": "left", "mark": "none", "has": []},
         {"id": "partial", "dir": "up", "mark": "partial", "has": partial},
@@ -130,8 +132,10 @@ DAT_ALIASES = {
 # In the .dat a unit is gated by an enabling tech whose id is not the unit's --
 # the Hand Cannoneer (unit 5) is enabled by tech 85, and an upgraded unit by the
 # upgrade itself. Only needed for the --civdata cross-check, and only for units
-# a topic names.
-UNIT_ENABLER = {5: 85, 24: 100, 36: 188, 422: 96, 492: 237, 548: 255}
+# a topic names. None means the .dat cannot settle it: the Traction Trebuchet's
+# tech auto-researches in Imperial for civ -1, so reading the enable side there
+# hands it to all 53, and only aoe2techtree knows it is the Three Kingdoms' own.
+UNIT_ENABLER = {5: 85, 24: 100, 36: 188, 422: 96, 492: 237, 548: 255, 1942: None}
 
 
 def fetch(url: str) -> bytes:
@@ -215,10 +219,17 @@ def bonus_claims(spec: dict, claims: list) -> list:
     return found
 
 
+def gate_units(spec: dict) -> list:
+    """The units that mean the civ has the thing at all -- any one of them does."""
+    unit = spec.get("unit")
+    if unit is None:
+        return []
+    return [unit] if isinstance(unit, int) else list(unit)
+
+
 def nodes_of(spec: dict) -> list:
-    """Every (kind, id) the topic names: the unit first, if it has one."""
-    gate = [("Unit", spec["unit"])] if spec.get("unit") else []
-    return gate + upgrade_nodes(spec)
+    """Every (kind, id) the topic names: the gate units first, then the upgrades."""
+    return [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec)
 
 
 def part_id(kind: str, item: int) -> str:
@@ -238,7 +249,7 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
             }
         )
 
-    unit_id = part_id("Unit", spec["unit"]) if spec.get("unit") else None
+    gate_ids = [part_id("Unit", u) for u in gate_units(spec)]
     wanted_icon = part_id(*spec["icon"]) if spec.get("icon") else parts[0]["id"]
     icon_part = next(part for part in parts if part["id"] == wanted_icon)
     upgrade_ids = [part_id(kind, item) for kind, item in upgrade_nodes(spec)]
@@ -248,7 +259,11 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
         missing = [u for u in upgrade_ids if u not in has]
         # without a gate unit, having none of the upgrades is what "none" means
-        nothing = unit_id not in has if unit_id else len(missing) == len(upgrade_ids)
+        nothing = (
+            not any(gate in has for gate in gate_ids)
+            if gate_ids
+            else len(missing) == len(upgrade_ids)
+        )
         tier = "none" if nothing else "partial" if missing else "full"
         found = bonus_claims(spec, descriptions[name])
         fixed = spec.get("bonus_fix", {}).get(name)
@@ -264,10 +279,11 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         "id": spec["id"],
         "name": spec["name"],
         "icon": icon_part["img"],
-        "unit": unit_id,
+        "unit": gate_ids[0] if gate_ids else None,
+        "gate": gate_ids,
         "upgrades": upgrade_ids,
         "parts": parts,
-        "tiers": tiers_for(unit_id, upgrade_ids),
+        "tiers": tiers_for(gate_ids, upgrade_ids),
         "civs": civs,
     }
 
@@ -280,8 +296,10 @@ def cross_check(techtree: dict, civdata_path: Path) -> int:
         for kind, item in nodes_of(spec):
             if kind == "Tech":
                 checked.append((kind, item, item))
-            elif item in UNIT_ENABLER:
+            elif UNIT_ENABLER.get(item):
                 checked.append((kind, item, UNIT_ENABLER[item]))
+            elif item in UNIT_ENABLER:
+                print(f"cross-check: {kind} {item} cannot be settled by the .dat", file=sys.stderr)
             else:
                 print(f"cross-check: no enabling tech known for unit {item}", file=sys.stderr)
                 problems += 1

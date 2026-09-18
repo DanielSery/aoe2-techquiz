@@ -224,6 +224,9 @@ window.QUIZ_DATA = {
    "name": "Hand Cannoneer",
    "icon": "img/topics/unit-5.png",
    "unit": "unit-5",
+   "gate": [
+    "unit-5"
+   ],
    "upgrades": [
     "tech-219"
    ],
@@ -799,6 +802,7 @@ window.QUIZ_DATA = {
    "name": "Siege Ram",
    "icon": "img/topics/unit-548.png",
    "unit": null,
+   "gate": [],
    "upgrades": [
     "unit-548",
     "tech-377"
@@ -1422,9 +1426,13 @@ window.QUIZ_DATA = {
   },
   {
    "id": "bombard_cannon",
-   "name": "Bombard Cannon",
+   "name": "Bombard Cannon / Traction Trebuchet",
    "icon": "img/topics/unit-36.png",
    "unit": "unit-36",
+   "gate": [
+    "unit-36",
+    "unit-1942"
+   ],
    "upgrades": [
     "tech-377"
    ],
@@ -1434,6 +1442,12 @@ window.QUIZ_DATA = {
      "name": "Bombard Cannon",
      "img": "img/topics/unit-36.png",
      "icon_index": 30
+    },
+    {
+     "id": "unit-1942",
+     "name": "Traction Trebuchet",
+     "img": "img/topics/unit-1942.png",
+     "icon_index": 428
     },
     {
      "id": "tech-377",
@@ -1454,7 +1468,8 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-36"
+      "unit-36",
+      "unit-1942"
      ]
     },
     {
@@ -1463,6 +1478,7 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-36",
+      "unit-1942",
       "tech-377"
      ]
     }
@@ -1894,8 +1910,9 @@ window.QUIZ_DATA = {
      "why": []
     },
     "shu": {
-     "tier": "none",
+     "tier": "full",
      "has": [
+      "unit-1942",
       "tech-377"
      ],
      "missing": [],
@@ -2003,8 +2020,10 @@ window.QUIZ_DATA = {
      "why": []
     },
     "wei": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1942"
+     ],
      "missing": [
       "tech-377"
      ],
@@ -2012,8 +2031,10 @@ window.QUIZ_DATA = {
      "why": []
     },
     "wu": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1942"
+     ],
      "missing": [
       "tech-377"
      ],
@@ -2027,6 +2048,9 @@ window.QUIZ_DATA = {
    "name": "Arbalester",
    "icon": "img/topics/unit-492.png",
    "unit": "unit-24",
+   "gate": [
+    "unit-24"
+   ],
    "upgrades": [
     "unit-492",
     "tech-201",

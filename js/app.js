@@ -179,6 +179,7 @@ function beginRound(cards, isFullSet) {
   state.results = [];
   state.score = 0;
   el("score-now").textContent = "0";
+  clearScoreEffects();
   show("game");
   renderCard();
 }
@@ -188,6 +189,14 @@ function show(name) {
   closePicker();
   for (const [key, node] of Object.entries(screens)) node.classList.toggle("is-active", key === name);
   if (name === "menu") renderMenu();
+}
+
+function clearScoreEffects() {
+  el("delta").className = "delta";
+  el("delta").textContent = "";
+  el("burst").className = "burst";
+  el("burst").textContent = "";
+  el("score-now").classList.remove("bumped");
 }
 
 function bumpScore(delta) {
@@ -362,9 +371,14 @@ function padTitle(topic, index) {
   return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
 }
 
-/* The civ's own row, ringed with how your picks did when the picker ran. */
+/* The civ's own row, ringed with how your picks did when the picker ran. Where
+   two units both count, the one the civ does not field is left out rather than
+   drawn as missing -- it is an alternative, not a gap. */
 function partsHtml(topic, answer, picks) {
+  const gate = topic.gate || [];
+  const fielded = gate.some((id) => answer.has.includes(id));
   return topic.parts
+    .filter((part) => !(fielded && gate.length > 1 && gate.includes(part.id) && !answer.has.includes(part.id)))
     .map((part) => {
       const on = answer.has.includes(part.id);
       return `<span class="part ${on ? "on" : "off"} ${pickOutcome(part, picks)}"
@@ -435,8 +449,8 @@ function answer(direction) {
   bumpScore(right ? POINTS.tier : POINTS.tierWrong);
   renderProgress();
 
-  // saying "partial" is only half an answer: which upgrades are missing?
-  if (guess.id === "partial" && topic.upgrades.length > 1) openPicker();
+  // saying "partial" is only half an answer -- but only when it was the answer
+  if (right && guess.id === "partial" && topic.upgrades.length > 1) openPicker();
   else reveal();
 }
 
