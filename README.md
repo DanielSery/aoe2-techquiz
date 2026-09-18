@@ -89,6 +89,26 @@ The scripts and stylesheet are loaded with a `?v=` marker; bump it in
 `index.html` when you change them, or a plain reload can keep serving the old
 copy.
 
+### Fitting a phone
+
+The page never scrolls, so everything is sized off the viewport that is actually
+on screen — `svh`, the height with the browser's toolbars *out*.
+
+- **The card is sized height-first.** `.stack` takes a height and lets
+  `aspect-ratio` compute the width, and the cap is applied to the height in the
+  width's own units. Give it a definite width *and* a definite height and
+  `aspect-ratio` is ignored altogether, which is how a 3:4 card came out 254×231
+  on a phone.
+- **The pad shrinks before the card does.** `--cell` is one pad button, clamped
+  between 54px and 78px, and everything on the pad is derived from it — so the
+  pad is never wider than the screen and never crowds the card out.
+- **The card's contents scale with the card**, in `cq` units against `.stack`, so
+  a 161px card is the same card and not a clipped one. Under 205px it drops the
+  "next" hint and holds the parts to one row, which is what was pushing the
+  verdict badge off the top.
+- Held sideways with under 540px of height, the pad moves beside the card instead
+  of under it.
+
 ## The data
 
 `data/topics.js` is generated, not written by hand. Its source is

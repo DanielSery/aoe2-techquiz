@@ -13,8 +13,20 @@
   --full: #62a765;
   --bonus: #a274d8;
 
-  --card-w: min(78vw, 46vh, 380px);
+  --max-card: min(80vw, 380px);
+  --cell: 78px;
+  --mini: 17px;
   --radius: 14px;
+}
+
+/* The pad is the floor the card stands on, so it shrinks before the card does;
+   svh is the viewport with the phone's toolbars *out*, which is the only height
+   guaranteed to be on screen. */
+@supports (height: 100svh) {
+  :root {
+    --cell: clamp(54px, min(19vw, 8.6svh), 78px);
+    --mini: clamp(11px, calc(var(--cell) * .218), 17px);
+  }
 }
 
 * { box-sizing: border-box; }
@@ -24,11 +36,16 @@ html, body {
   height: 100%;
 }
 
+@supports (height: 100svh) {
+  html, body { height: 100svh; }
+}
+
 body {
   background:
     radial-gradient(120% 90% at 50% 0%, #2a2118 0%, var(--bg) 70%);
   color: var(--ink);
   font: 16px/1.4 "Segoe UI", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -156,7 +173,12 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .topic small { font-size: 11px; color: #8a7a64; }
 
-.menu-actions { display: flex; gap: 10px; align-items: center; }
+.menu-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+}
 
 /* single / custom / all, one of them always on */
 .modes {
@@ -260,9 +282,12 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .tally b { font-size: 18px; color: var(--gold); }
 
+/* to the left of the score: the score is already hard against the right edge,
+   so anything after it is off the screen on a phone */
 .delta {
   position: absolute;
-  left: 100%;
+  right: 100%;
+  margin-right: 5px;
   font-size: 14px;
   font-weight: 700;
   opacity: 0;
@@ -279,7 +304,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   right: 4px;
   z-index: 3;
   transform: translate(0, -50%);
-  font-size: 46px;
+  font-size: clamp(30px, 11vw, 46px);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: -.02em;
@@ -323,11 +348,17 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   justify-content: center;
 }
 
+/* Height is the definite side and the width follows it, so the card never
+   squashes: give it both and `aspect-ratio` is ignored, which is how a 3:4 card
+   ended up 254x231 on a phone. The cap is applied to the height, in the width's
+   own units, so the ratio survives it. */
 .stack {
   position: relative;
-  width: var(--card-w);
+  flex: none;
+  height: min(100%, calc(var(--max-card) * 4 / 3));
+  width: auto;
   aspect-ratio: 3 / 4;
-  max-height: 100%;
+  container-type: size;
 }
 
 .card {
@@ -369,15 +400,16 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 16px;
+  gap: clamp(5px, 3cqh, 12px);
+  padding: clamp(8px, 4cqw, 16px);
+  overflow: hidden;
   background: linear-gradient(160deg, var(--panel-2), var(--panel));
   border: 2px solid var(--edge);
   border-radius: var(--radius);
   box-shadow: 0 10px 24px #0008;
 }
 
-.face.back { transform: rotateY(180deg); gap: 8px; }
+.face.back { transform: rotateY(180deg); gap: clamp(3px, 2cqh, 8px); }
 
 /* right or wrong is the whole card, not a badge on it */
 .face.back.right {
@@ -400,7 +432,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .civ-name {
-  font-size: 19px;
+  font-size: clamp(13px, 6cqw, 19px);
   letter-spacing: .03em;
   color: var(--gold);
   text-align: center;
@@ -415,7 +447,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   gap: 4px;
 }
 
-.topic-chip img { width: 28px; height: 28px; border-radius: 5px; }
+.topic-chip img { width: clamp(20px, 9cqw, 28px); height: clamp(20px, 9cqw, 28px); border-radius: 5px; }
 
 .face.back .emblem { width: 21%; }
 
@@ -423,14 +455,15 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  flex: none;
+  width: clamp(38px, 20cqw, 64px);
+  height: clamp(38px, 20cqw, 64px);
   border-radius: 50%;
   color: #17120b;
   animation: pop .28s ease-out;
 }
 
-.judge-badge svg { width: 44px; height: 44px; }
+.judge-badge svg { width: 68%; height: 68%; }
 .judge-badge.right { background: var(--full); box-shadow: 0 0 22px #62a76566; }
 .judge-badge.wrong { background: var(--none); box-shadow: 0 0 22px #cf534066; }
 
@@ -457,13 +490,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .options { display: flex; gap: 12px; }
 
 .options .mark {
-  width: 36px;
-  height: 36px;
+  width: clamp(26px, 11cqw, 36px);
+  height: clamp(26px, 11cqw, 36px);
   opacity: .28;
   transition: opacity .2s, transform .2s;
 }
 
-.options .mark svg { width: 24px; height: 24px; }
+.options .mark svg { width: 66%; height: 66%; }
 
 .options .mark.truth {
   opacity: 1;
@@ -476,15 +509,15 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .parts {
   display: flex;
-  gap: 8px;
+  gap: clamp(4px, 2.5cqw, 8px);
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .part {
   position: relative;
-  width: 46px;
-  height: 46px;
+  width: clamp(30px, 14cqw, 46px);
+  height: clamp(30px, 14cqw, 46px);
   border-radius: 8px;
   border: 1px solid var(--edge);
   overflow: hidden;
@@ -502,7 +535,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   position: absolute;
   top: 10px;
   right: 12px;
-  font-size: 20px;
+  font-size: clamp(14px, 6cqw, 20px);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -518,12 +551,12 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   border-radius: 9px;
   background: #a274d82e;
   color: #e6d6ff;
-  font-size: 12px;
+  font-size: clamp(10px, 3.9cqw, 12px);
   line-height: 1.3;
   text-align: left;
 }
 
-.bonus-note svg { width: 18px; height: 18px; flex: none; color: var(--bonus); }
+.bonus-note svg { width: clamp(13px, 5.5cqw, 18px); height: clamp(13px, 5.5cqw, 18px); flex: none; color: var(--bonus); }
 .bonus-note .said { flex: none; }
 .bonus-note .said.right { color: var(--full); }
 .bonus-note .said.wrong { color: var(--none); }
@@ -549,13 +582,25 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .part.on b { color: var(--full); }
 .part.off b { color: var(--none); }
 
+/* On a small screen, or a phone held sideways, the back face has more to say
+   than the card has room for. The parts row has to stay one row — wrapping it
+   is what pushes the verdict badge off the top — and the hint is the one thing
+   the card can do without. Sizes the .part clamp above, so it comes after it. */
+@container (max-width: 205px) {
+  .part { width: 24px; height: 24px; }
+  .part b { width: 13px; height: 13px; }
+  .part b svg { width: 9px; height: 9px; }
+  .next-hint { display: none; }
+  .bonus-note { padding: 4px 6px; }
+}
+
 /* which upgrades is it missing? the pad turns into a compass, and the corners
    take two arrows at once */
 .upgrade {
   position: relative;
   padding: 0;
-  width: 78px;
-  height: 78px;
+  width: var(--cell);
+  height: var(--cell);
   border: 2px solid var(--edge);
   border-radius: 10px;
   overflow: hidden;
@@ -568,8 +613,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 17px;
-  height: 17px;
+  width: calc(var(--cell) * .22);
+  height: calc(var(--cell) * .22);
   opacity: .85;
   filter: drop-shadow(0 0 2px #000);
 }
@@ -590,13 +635,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: calc(var(--cell) * .33);
+  height: calc(var(--cell) * .33);
   border-radius: 8px 0 0 0;
   background: #15110dd9;
 }
 
-.upgrade .verdict svg { width: 18px; height: 18px; }
+.upgrade .verdict svg { width: 70%; height: 70%; }
 
 /* answered on the spot: the border is whether you were right, the icon going
    grey is the civ not having it */
@@ -612,8 +657,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   align-items: center;
   justify-content: center;
   gap: 3px;
-  width: 78px;
-  height: 78px;
+  width: var(--cell);
+  height: var(--cell);
   padding: 0;
   border: 2px solid var(--gold);
   border-radius: 10px;
@@ -621,22 +666,23 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   color: #1c150c;
 }
 
-#picker-done .arrow { width: 18px; height: 18px; opacity: .8; }
-#picker-done svg:last-child { width: 30px; height: 30px; }
+#picker-done .arrow { width: calc(var(--cell) * .23); height: calc(var(--cell) * .23); opacity: .8; }
+#picker-done svg:last-child { width: calc(var(--cell) * .38); height: calc(var(--cell) * .38); }
 
 /* Each answer sits where its swipe goes: the pad is the legend. */
 .pad {
   display: grid;
   grid-template-areas: "up-left up up-right" "left topic right" "down-left down down-right";
-  grid-template-columns: repeat(3, 78px);
-  grid-template-rows: repeat(3, 78px);
+  grid-template-columns: repeat(3, var(--cell));
+  grid-template-rows: repeat(3, var(--cell));
   gap: 6px;
   align-items: center;
   justify-items: center;
-  padding-bottom: 6px;
+  flex: none;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
 }
 
-.answer.is-bonus svg:last-child { width: 26px; height: 26px; }
+.answer.is-bonus svg:last-child { width: calc(var(--cell) * .33); height: calc(var(--cell) * .33); }
 .answer.spotted { border-color: var(--full); color: var(--full); }
 .answer.falsely { border-color: var(--none); color: var(--none); }
 
@@ -647,11 +693,11 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: calc(var(--cell) * .56);
+  height: calc(var(--cell) * .56);
 }
 
-.pad-topic img { width: 34px; height: 34px; border-radius: 6px; opacity: .8; }
+.pad-topic img { width: calc(var(--cell) * .44); height: calc(var(--cell) * .44); border-radius: 6px; opacity: .8; }
 
 .answer {
   display: flex;
@@ -660,8 +706,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   justify-content: center;
   gap: 3px;
   padding: 4px;
-  width: 78px;
-  height: 78px;
+  width: var(--cell);
+  height: var(--cell);
   border-width: 2px;
   border-color: currentColor;
   background: var(--panel);
@@ -672,7 +718,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .answer[data-dir="right"] { grid-area: right; }
 .answer[data-dir="down"] { grid-area: down; }
 
-.answer .arrow { width: 18px; height: 18px; opacity: .85; }
+.answer .arrow { width: calc(var(--cell) * .23); height: calc(var(--cell) * .23); opacity: .85; }
 
 .answer.armed {
   background: #ffffff14;
@@ -683,14 +729,14 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
    push the pad off the sides of the screen */
 .mini {
   display: grid;
-  grid-template-columns: repeat(3, 17px);
+  grid-template-columns: repeat(3, var(--mini));
   gap: 2px;
   justify-content: center;
 }
 
 .mini span {
-  width: 17px;
-  height: 17px;
+  width: var(--mini);
+  height: var(--mini);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -769,9 +815,35 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .actions {
   display: flex;
   gap: 10px;
-  padding-bottom: 6px;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* Held sideways there is no height to stack in, so the pad moves beside the
+   card instead of under it — a column layout leaves a card 105px tall. */
+@media (orientation: landscape) and (max-height: 540px) {
+  #game.is-active {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "hud hud" "arena pad";
+    align-items: stretch;
+    column-gap: 14px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+  }
+  .hud { grid-area: hud; align-self: center; }
+  /* stretch, not centre: the card's height is a percentage of this row, and a
+     centred grid item is only as tall as its contents */
+  .arena { grid-area: arena; min-height: 0; }
+  .pad { grid-area: pad; align-self: center; padding-right: env(safe-area-inset-right); }
+}
+
+@media (max-width: 380px) {
+  .screen { padding: 10px 10px 0; }
+  .mode { padding: 8px 10px; }
+  .mode span { font-size: 12px; }
+  h1 { font-size: 19px; }
 }
 
 /* the topic list is the menu; everything else gives way to it */
