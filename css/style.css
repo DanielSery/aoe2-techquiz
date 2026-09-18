@@ -11,6 +11,7 @@
   --bare: #d4763a;
   --partial: #dfa338;
   --full: #62a765;
+  --bonus: #a274d8;
 
   --card-w: min(78vw, 46vh, 380px);
   --radius: 14px;
@@ -188,6 +189,7 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .is-bare { color: var(--bare); }
 .is-partial { color: var(--partial); }
 .is-full { color: var(--full); }
+.is-bonus { color: var(--bonus); }
 
 /* ---------- game ---------- */
 
@@ -438,6 +440,26 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   font-variant-numeric: tabular-nums;
 }
 
+/* what the civ's bonus turned out to be, and whether you called it */
+.bonus-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 92%;
+  padding: 4px 8px;
+  border: 1px solid var(--bonus);
+  border-radius: 8px;
+  color: var(--bonus);
+  font-size: 10px;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.bonus-note svg { width: 14px; height: 14px; flex: none; }
+.bonus-note .said { flex: none; }
+.bonus-note .said.right { color: var(--full); }
+.bonus-note .said.wrong { color: var(--none); }
+
 .card-delta.up { color: var(--full); }
 .card-delta.down { color: var(--none); }
 
@@ -570,7 +592,9 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   padding-bottom: 6px;
 }
 
-.pad.no-down { grid-template-areas: ". up ." "left topic right"; }
+.answer.is-bonus svg:last-child { width: 20px; height: 20px; }
+.answer.spotted { border-color: var(--full); color: var(--full); }
+.answer.falsely { border-color: var(--none); color: var(--none); }
 
 .pad.dim { opacity: .3; pointer-events: none; }
 

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -31,19 +32,86 @@ ROOT = Path(__file__).resolve().parent.parent
 # can never be missing -- they could only ever cost points in the picker.
 MAX_UPGRADES = 8
 
+# An upgrade is a tech id, or ("Unit", id) where the upgrade is a unit of its
+# own. `unit` may be left out: then the topic is the upgrades alone, and left
+# means the civ has none of them rather than "no unit".
+#
+# `bonus` decides the down answer: does the civ have a civ bonus, team bonus or
+# unique tech about this unit? That is not in the tech tree, so it is read out
+# of the game's own civilisation descriptions -- `words` are the phrases that
+# mean "this claim is about this unit", `veto` throws out a claim that only
+# matches through a different unit (Cavalry Archers are not Arbalesters), and
+# `bonus_fix` forces a civ either way when the words get it wrong. Every build
+# prints what it matched, so the reading stays reviewable.
 TOPICS = [
-    {"id": "hand_cannoneer", "name": "Hand Cannoneer", "unit": 5, "upgrades": [219]},
-    {"id": "siege_ram", "name": "Siege Ram", "unit": 548, "upgrades": [377]},
-    {"id": "bombard_cannon", "name": "Bombard Cannon", "unit": 36, "upgrades": [377]},
-    {"id": "arbalester", "name": "Arbalester", "unit": 492, "upgrades": [201, 219, 437]},
+    {
+        "id": "hand_cannoneer",
+        "name": "Hand Cannoneer",
+        "unit": 5,
+        "upgrades": [219],
+        "words": [r"gunpowder", r"hand cannon\w*"],
+    },
+    {
+        "id": "siege_ram",
+        "name": "Siege Ram",
+        "upgrades": [("Unit", 548), 377],
+        "words": [r"rams?", r"siege workshops?", r"siege weapons?"],
+    },
+    {
+        "id": "bombard_cannon",
+        "name": "Bombard Cannon",
+        "unit": 36,
+        "upgrades": [377],
+        "words": [r"gunpowder", r"bombard cannons?", r"siege workshops?", r"siege weapons?"],
+    },
+    {
+        "id": "arbalester",
+        "name": "Arbalester",
+        "unit": 492,
+        "upgrades": [201, 219, 437],
+        "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?"],
+        "veto": [
+            r"cavalry archer",
+            r"mounted archer",
+            r"elephant archer",
+            r"camel archer",
+            r"fire archer",
+            r"genitour",
+            r"ballista",
+            r"scorpion",
+            r"chu ko nu",
+        ],
+    },
 ]
 
-def tiers_for(unit_id: str, upgrade_ids: list) -> list:
+# The civilisation description is string 120150 + civ id - 1. Checked against
+# the .dat's own civ ids and spot-checked by unique unit across the range.
+HELP_STRING_BASE = 120150
+CIV_ID = {
+    "Britons": 1, "Franks": 2, "Goths": 3, "Teutons": 4, "Japanese": 5, "Chinese": 6,
+    "Byzantines": 7, "Persians": 8, "Saracens": 9, "Turks": 10, "Vikings": 11,
+    "Mongols": 12, "Celts": 13, "Spanish": 14, "Aztecs": 15, "Mayans": 16, "Huns": 17,
+    "Koreans": 18, "Italians": 19, "Hindustanis": 20, "Incas": 21, "Magyars": 22,
+    "Slavs": 23, "Portuguese": 24, "Ethiopians": 25, "Malians": 26, "Berbers": 27,
+    "Khmer": 28, "Malay": 29, "Burmese": 30, "Vietnamese": 31, "Bulgarians": 32,
+    "Tatars": 33, "Cumans": 34, "Lithuanians": 35, "Burgundians": 36, "Sicilians": 37,
+    "Poles": 38, "Bohemians": 39, "Dravidians": 40, "Bengalis": 41, "Gurjaras": 42,
+    "Romans": 43, "Armenians": 44, "Georgians": 45, "Shu": 49, "Wu": 50, "Wei": 51,
+    "Jurchens": 52, "Khitans": 53, "Muisca": 57, "Mapuche": 58, "Tupi": 59,
+}
+
+
+def upgrade_nodes(spec: dict) -> list:
+    return [item if isinstance(item, tuple) else ("Tech", item) for item in spec["upgrades"]]
+
+
+def tiers_for(unit_id, upgrade_ids: list) -> list:
     """The same three answers for every topic; `has` is what each one claims."""
+    partial = [unit_id] if unit_id else []
     return [
         {"id": "none", "dir": "left", "mark": "none", "has": []},
-        {"id": "partial", "dir": "up", "mark": "partial", "has": [unit_id]},
-        {"id": "full", "dir": "right", "mark": "full", "has": [unit_id] + upgrade_ids},
+        {"id": "partial", "dir": "up", "mark": "partial", "has": partial},
+        {"id": "full", "dir": "right", "mark": "full", "has": partial + upgrade_ids},
     ]
 
 # aoe2techtree's civ keys map to img/Civs/<lowercase>.png; Aoe2Planner's
@@ -104,16 +172,56 @@ def walk(node):
             yield from walk(value)
 
 
+def civ_claims(description: str) -> list:
+    """The civ's bonuses, unique techs and team bonus, one claim per line.
+
+    The unique *units* are dropped: naming a unit is not a bonus about it, and
+    a Chakram Thrower would otherwise read as a bonus about rams.
+    """
+    lines, skip_next = [], False
+    for raw in re.sub(r"<br>", "\n", description).split("\n"):
+        line = " ".join(re.sub(r"<[^>]+>", "|", raw).replace("•", "").split())
+        claim = line.strip("| ")
+        if not claim or claim.endswith("civilization"):
+            continue
+        if "Unique Unit" in line:
+            skip_next = True
+            continue
+        if skip_next:
+            skip_next = False
+            continue
+        lines.append(claim)
+    return lines
+
+
+def bonus_claims(spec: dict, claims: list) -> list:
+    words = spec.get("words", [])
+    veto = spec.get("veto", [])
+    found = []
+    for claim in claims:
+        low = claim.lower()
+        if any(re.search(r"\b" + pattern, low) for pattern in veto):
+            continue
+        for pattern in words:
+            hit = re.search(r"\b" + pattern + r"\b", low)
+            # "+3 vs. Rams" is a bonus against them, not one about your own
+            if hit and "vs." not in low[max(0, hit.start() - 8) : hit.start()]:
+                found.append(claim)
+                break
+    return found
+
+
 def nodes_of(spec: dict) -> list:
-    """Every (kind, id) the topic names: the unit first, then its upgrades."""
-    return [("Unit", spec["unit"])] + [("Tech", t) for t in spec["upgrades"]]
+    """Every (kind, id) the topic names: the unit first, if it has one."""
+    gate = [("Unit", spec["unit"])] if spec.get("unit") else []
+    return gate + upgrade_nodes(spec)
 
 
 def part_id(kind: str, item: int) -> str:
     return f"{kind.lower()}-{item}"
 
 
-def build_topic(spec: dict, techtree: dict, icons: dict) -> dict:
+def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> dict:
     parts = []
     for kind, item in nodes_of(spec):
         index, name = icons[(kind, item)]
@@ -126,18 +234,25 @@ def build_topic(spec: dict, techtree: dict, icons: dict) -> dict:
             }
         )
 
-    unit_id = part_id("Unit", spec["unit"])
-    upgrade_ids = [part_id("Tech", t) for t in spec["upgrades"]]
+    unit_id = part_id("Unit", spec["unit"]) if spec.get("unit") else None
+    upgrade_ids = [part_id(kind, item) for kind, item in upgrade_nodes(spec)]
 
     civs = {}
     for name, tree in sorted(techtree["civs"].items()):
         has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
         missing = [u for u in upgrade_ids if u not in has]
-        if unit_id not in has:
-            tier = "none"
-        else:
-            tier = "partial" if missing else "full"
-        civs[name.lower()] = {"tier": tier, "has": has, "missing": missing}
+        # without a gate unit, having none of the upgrades is what "none" means
+        nothing = unit_id not in has if unit_id else len(missing) == len(upgrade_ids)
+        tier = "none" if nothing else "partial" if missing else "full"
+        found = bonus_claims(spec, descriptions[name])
+        fixed = spec.get("bonus_fix", {}).get(name)
+        civs[name.lower()] = {
+            "tier": tier,
+            "has": has,
+            "missing": missing,
+            "bonus": bool(found) if fixed is None else fixed,
+            "why": found,
+        }
 
     return {
         "id": spec["id"],
@@ -222,6 +337,18 @@ def main() -> int:
     wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
     icons = icon_indices(commit, techtree, wanted_nodes)
 
+    strings = json.loads(
+        fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/locales/en/strings.json")
+    )
+    unknown = [name for name in techtree["civs"] if name not in CIV_ID]
+    if unknown:
+        print(f"no civ id for {unknown} -- add them to CIV_ID", file=sys.stderr)
+        return 1
+    descriptions = {
+        name: civ_claims(strings[str(HELP_STRING_BASE + CIV_ID[name] - 1)])
+        for name in techtree["civs"]
+    }
+
     data = {
         "source": {
             "repo": REPO,
@@ -232,7 +359,7 @@ def main() -> int:
             name.lower(): {"name": name, "img": f"img/civs/{name.lower()}.png"}
             for name in sorted(techtree["civs"])
         },
-        "topics": [build_topic(spec, techtree, icons) for spec in TOPICS],
+        "topics": [build_topic(spec, techtree, icons, descriptions) for spec in TOPICS],
     }
 
     # a .js assignment rather than .json, so the page also works opened straight
@@ -254,6 +381,11 @@ def main() -> int:
             lacking = sum(1 for civ in topic["civs"].values() if upgrade in civ["missing"])
             name = next(p["name"] for p in topic["parts"] if p["id"] == upgrade)
             print(f"    {name}: lacked by {lacking}")
+        with_bonus = {c: v for c, v in topic["civs"].items() if v["bonus"]}
+        print(f"    bonus: {len(with_bonus)} civs")
+        for civ, value in sorted(with_bonus.items()):
+            for why in value["why"] or ["(forced)"]:
+                print(f"      {civ:14} {why}")
     return 0
 
 

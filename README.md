@@ -9,6 +9,7 @@ swipe, or with the arrow keys:
 | ✗ | left | `←` | the civ does not have the unit |
 | ◐ | up | `↑` | it has the unit, but not every upgrade |
 | ✓ | right | `→` | the unit and all of its upgrades |
+| ★ | down | `↓` | a side bet: this civ has a bonus about it |
 
 Answering scores at once: **+1** right, **−1** wrong, shown on the counter in the
 corner. You never have to remember which way is which — the answers sit on a pad below
@@ -24,6 +25,12 @@ spot and cannot be taken back: green border and tick if it really is missing
 in the middle; press it (or `Enter`) when you think you have found them all, and
 each one you never named costs **−1**. Leaving an upgrade alone that the civ
 really has is worth nothing, so marking nothing is not the safe play.
+
+The purple **★** is not one of the three: it claims that the civ has a civ
+bonus, a team bonus or a unique tech about this unit. It scores on the spot,
+**+1** or **−1**, and leaves the card where it is, so you still have to answer.
+Claiming nothing costs nothing — it is there to be taken when you are sure. The
+reveal then names the bonus, whether you called it or not.
 
 Where a topic has only one upgrade — Siege Engineers for the siege units, Ring
 Archer Armor for the Hand Cannoneer — there is no follow-up: **◐** already means
@@ -79,6 +86,15 @@ the picker. Adding one is a line in `TOPICS` at the top of `tools/build_data.py`
 a re-run, which fetches the icons too. List only the last step of each
 upgrade line: the run prints how many civs lack each one, and an upgrade no civ
 lacks can never be a right answer in the follow-up, only a wrong one.
+
+Whether a civ has a **bonus** about the unit is not in the tech tree at all, so
+it is read out of the game's own civilisation descriptions (string 120150 + civ
+id, the same text the civ panel shows). A topic's `words` are the phrases that
+mean "this claim is about this unit"; `veto` throws out a claim that only
+matches through a different unit — Cavalry Archers are not Arbalesters — and a
+bonus *against* the unit ("+3 vs. Rams") does not count. Where the words still
+get it wrong, `bonus_fix` forces one civ either way. Every run prints every
+matched sentence, so the reading can be checked rather than trusted.
 
 ## Layout
 

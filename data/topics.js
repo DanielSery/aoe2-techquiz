@@ -272,21 +272,27 @@ window.QUIZ_DATA = {
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "aztecs": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "bengalis": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "berbers": {
      "tier": "full",
@@ -294,7 +300,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bohemians": {
      "tier": "full",
@@ -302,21 +310,30 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Chemistry and Hand Cannoneer available in Castle Age",
+      "Wagenburg Tactics (Gunpowder Units move +15% faster)"
+     ]
     },
     "britons": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bulgarians": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "burgundians": {
      "tier": "partial",
@@ -325,6 +342,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
+     ],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +25% attack"
      ]
     },
     "burmese": {
@@ -332,7 +353,9 @@ window.QUIZ_DATA = {
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "byzantines": {
      "tier": "full",
@@ -340,28 +363,36 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "celts": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "chinese": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "cumans": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "dravidians": {
      "tier": "full",
@@ -369,14 +400,18 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "ethiopians": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "franks": {
      "tier": "partial",
@@ -385,7 +420,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "georgians": {
      "tier": "partial",
@@ -394,7 +431,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "goths": {
      "tier": "full",
@@ -402,7 +441,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "gurjaras": {
      "tier": "partial",
@@ -411,7 +452,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "hindustanis": {
      "tier": "full",
@@ -419,21 +462,30 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +1 melee/+1 pierce armor",
+      "Shatagni (Hand Cannoneers +2 range)"
+     ]
     },
     "huns": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "incas": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "italians": {
      "tier": "full",
@@ -441,7 +493,12 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units cost -20%",
+      "Pirotechnia (Hand Cannoneers deal +15% pass through damage and are more accurate)"
+     ]
     },
     "japanese": {
      "tier": "full",
@@ -449,21 +506,29 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "jurchens": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +2 line of sight"
+     ]
     },
     "khitans": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "khmer": {
      "tier": "full",
@@ -471,7 +536,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "koreans": {
      "tier": "full",
@@ -479,7 +546,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "lithuanians": {
      "tier": "full",
@@ -487,21 +556,27 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "magyars": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malay": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malians": {
      "tier": "full",
@@ -509,35 +584,45 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "mapuche": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "mayans": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "mongols": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "muisca": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "persians": {
      "tier": "full",
@@ -545,14 +630,18 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "poles": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "portuguese": {
      "tier": "full",
@@ -560,14 +649,20 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Arquebus (Gunpowder Units fire more accurately at moving targets)"
+     ]
     },
     "romans": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "saracens": {
      "tier": "full",
@@ -575,28 +670,36 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "shu": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "sicilians": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "slavs": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "spanish": {
      "tier": "full",
@@ -604,7 +707,11 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units attack +18% faster"
+     ]
     },
     "tatars": {
      "tier": "full",
@@ -612,7 +719,9 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "teutons": {
      "tier": "full",
@@ -620,14 +729,18 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "tupi": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "turks": {
      "tier": "full",
@@ -635,35 +748,49 @@ window.QUIZ_DATA = {
       "unit-5",
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Chemistry free; Gunpowder technologies costs -50%",
+      "Gunpowder Units +25% HP",
+      "Gunpowder Units train +25% faster"
+     ]
     },
     "vietnamese": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "vikings": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "wei": {
      "tier": "none",
      "has": [
       "tech-219"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "wu": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     }
    }
   },
@@ -671,8 +798,9 @@ window.QUIZ_DATA = {
    "id": "siege_ram",
    "name": "Siege Ram",
    "icon": "img/topics/unit-548.png",
-   "unit": "unit-548",
+   "unit": null,
    "upgrades": [
+    "unit-548",
     "tech-377"
    ],
    "parts": [
@@ -700,9 +828,7 @@ window.QUIZ_DATA = {
      "id": "partial",
      "dir": "up",
      "mark": "partial",
-     "has": [
-      "unit-548"
-     ]
+     "has": []
     },
     {
      "id": "full",
@@ -722,7 +848,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "aztecs": {
      "tier": "full",
@@ -730,35 +858,53 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bengalis": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "berbers": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "bohemians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "britons": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "bulgarians": {
      "tier": "full",
@@ -766,21 +912,32 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Blacksmith and Siege Workshop technologies cost -50% food"
+     ]
     },
     "burgundians": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "burmese": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "byzantines": {
      "tier": "partial",
@@ -789,7 +946,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "celts": {
      "tier": "full",
@@ -797,7 +956,13 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Weapons attack +25% faster",
+      "Furor Celtica (Siege Weapons +40% HP)",
+      "Siege Workshops work +20% faster"
+     ]
     },
     "chinese": {
      "tier": "partial",
@@ -806,7 +971,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "cumans": {
      "tier": "partial",
@@ -815,13 +982,22 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
      ]
     },
     "dravidians": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Siege Weapons cost -33% wood"
      ]
     },
     "ethiopians": {
@@ -830,14 +1006,22 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Torsion Engines (Siege Workshop Units' blast radius increased)"
+     ]
     },
     "franks": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "georgians": {
      "tier": "full",
@@ -845,28 +1029,40 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "goths": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "gurjaras": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "hindustanis": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "huns": {
      "tier": "partial",
@@ -875,7 +1071,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "incas": {
      "tier": "full",
@@ -883,21 +1081,30 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "italians": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "japanese": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "jurchens": {
      "tier": "full",
@@ -905,7 +1112,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "khitans": {
      "tier": "full",
@@ -913,7 +1122,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "khmer": {
      "tier": "full",
@@ -921,49 +1132,73 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "koreans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "lithuanians": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "magyars": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "malay": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "malians": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mapuche": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "mayans": {
      "tier": "partial",
@@ -972,7 +1207,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mongols": {
      "tier": "full",
@@ -980,14 +1217,22 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Drill (Siege Workshop Units move +50% faster)"
+     ]
     },
     "muisca": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "persians": {
      "tier": "partial",
@@ -996,7 +1241,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "poles": {
      "tier": "full",
@@ -1004,14 +1251,20 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "portuguese": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "romans": {
      "tier": "full",
@@ -1019,7 +1272,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "saracens": {
      "tier": "full",
@@ -1027,7 +1282,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "shu": {
      "tier": "full",
@@ -1035,7 +1292,11 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Weapons and Siege Warships move +10/15% faster in Castle/Imperial Age"
+     ]
     },
     "sicilians": {
      "tier": "full",
@@ -1043,7 +1304,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "slavs": {
      "tier": "full",
@@ -1051,7 +1314,11 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Workshop Units cost -15%"
+     ]
     },
     "spanish": {
      "tier": "partial",
@@ -1060,7 +1327,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "tatars": {
      "tier": "full",
@@ -1068,14 +1337,22 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "teutons": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": true,
+     "why": [
+      "Ironclad (Siege Weapons +4 melee armor)"
+     ]
     },
     "tupi": {
      "tier": "partial",
@@ -1084,7 +1361,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "turks": {
      "tier": "partial",
@@ -1093,14 +1372,20 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [
+      "unit-548"
+     ],
+     "bonus": false,
+     "why": []
     },
     "vikings": {
      "tier": "full",
@@ -1108,7 +1393,9 @@ window.QUIZ_DATA = {
       "unit-548",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "wei": {
      "tier": "partial",
@@ -1117,14 +1404,19 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "wu": {
      "tier": "none",
      "has": [],
      "missing": [
+      "unit-548",
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     }
    }
   },
@@ -1181,21 +1473,27 @@ window.QUIZ_DATA = {
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "aztecs": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bengalis": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "berbers": {
      "tier": "full",
@@ -1203,7 +1501,9 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bohemians": {
      "tier": "full",
@@ -1211,21 +1511,31 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Wagenburg Tactics (Gunpowder Units move +15% faster)"
+     ]
     },
     "britons": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bulgarians": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Blacksmith and Siege Workshop technologies cost -50% food"
+     ]
     },
     "burgundians": {
      "tier": "partial",
@@ -1234,6 +1544,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +25% attack"
      ]
     },
     "burmese": {
@@ -1242,7 +1556,9 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "byzantines": {
      "tier": "partial",
@@ -1251,27 +1567,41 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "celts": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Weapons attack +25% faster",
+      "Furor Celtica (Siege Weapons +40% HP)",
+      "Siege Workshops work +20% faster"
+     ]
     },
     "chinese": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "cumans": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
      ]
     },
     "dravidians": {
@@ -1281,6 +1611,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Siege Weapons cost -33% wood"
      ]
     },
     "ethiopians": {
@@ -1289,7 +1623,11 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Torsion Engines (Siege Workshop Units' blast radius increased)"
+     ]
     },
     "franks": {
      "tier": "full",
@@ -1297,14 +1635,18 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "georgians": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "goths": {
      "tier": "partial",
@@ -1313,7 +1655,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "gurjaras": {
      "tier": "partial",
@@ -1322,7 +1666,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "hindustanis": {
      "tier": "full",
@@ -1330,21 +1676,29 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +1 melee/+1 pierce armor"
+     ]
     },
     "huns": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "incas": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "italians": {
      "tier": "partial",
@@ -1353,6 +1707,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units cost -20%"
      ]
     },
     "japanese": {
@@ -1360,7 +1718,9 @@ window.QUIZ_DATA = {
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "jurchens": {
      "tier": "full",
@@ -1368,21 +1728,29 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units +2 line of sight"
+     ]
     },
     "khitans": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "khmer": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "koreans": {
      "tier": "full",
@@ -1390,7 +1758,9 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "lithuanians": {
      "tier": "partial",
@@ -1399,14 +1769,18 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "magyars": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malay": {
      "tier": "full",
@@ -1414,7 +1788,9 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malians": {
      "tier": "partial",
@@ -1423,35 +1799,47 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mapuche": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "mayans": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mongols": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Drill (Siege Workshop Units move +50% faster)"
+     ]
     },
     "muisca": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "persians": {
      "tier": "partial",
@@ -1460,7 +1848,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "poles": {
      "tier": "full",
@@ -1468,7 +1858,9 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "portuguese": {
      "tier": "full",
@@ -1476,14 +1868,20 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Arquebus (Gunpowder Units fire more accurately at moving targets)"
+     ]
     },
     "romans": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "saracens": {
      "tier": "full",
@@ -1491,28 +1889,40 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "shu": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Weapons and Siege Warships move +10/15% faster in Castle/Imperial Age"
+     ]
     },
     "sicilians": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "slavs": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Siege Workshop Units cost -15%"
+     ]
     },
     "spanish": {
      "tier": "partial",
@@ -1521,6 +1931,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Gunpowder Units attack +18% faster"
      ]
     },
     "tatars": {
@@ -1528,7 +1942,9 @@ window.QUIZ_DATA = {
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "teutons": {
      "tier": "full",
@@ -1536,14 +1952,20 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Ironclad (Siege Weapons +4 melee armor)"
+     ]
     },
     "tupi": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "turks": {
      "tier": "partial",
@@ -1552,6 +1974,13 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-377"
+     ],
+     "bonus": true,
+     "why": [
+      "Chemistry free; Gunpowder technologies costs -50%",
+      "Gunpowder Units +25% HP",
+      "Artillery (Bombard Towers, Bombard Cannons, Cannon Galleons +2 range)",
+      "Gunpowder Units train +25% faster"
      ]
     },
     "vietnamese": {
@@ -1560,28 +1989,36 @@ window.QUIZ_DATA = {
       "unit-36",
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "vikings": {
      "tier": "none",
      "has": [
       "tech-377"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "wei": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "wu": {
      "tier": "none",
      "has": [],
      "missing": [
       "tech-377"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     }
    }
   },
@@ -1658,7 +2095,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "aztecs": {
      "tier": "partial",
@@ -1669,7 +2108,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "bengalis": {
      "tier": "partial",
@@ -1680,7 +2121,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "berbers": {
      "tier": "none",
@@ -1689,7 +2132,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "bohemians": {
      "tier": "partial",
@@ -1700,7 +2145,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "britons": {
      "tier": "partial",
@@ -1711,6 +2158,12 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
+     ],
+     "bonus": true,
+     "why": [
+      "Foot Archers +1/+2 range in Castle/Imperial Age",
+      "Yeomen (Foot Archers and Skirmisher-line +1 range; Watch Tower-line +2 attack)",
+      "Archery Ranges work +10% faster"
      ]
     },
     "bulgarians": {
@@ -1721,7 +2174,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "burgundians": {
      "tier": "none",
@@ -1731,7 +2186,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "burmese": {
      "tier": "none",
@@ -1741,7 +2198,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "byzantines": {
      "tier": "full",
@@ -1751,7 +2210,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "celts": {
      "tier": "none",
@@ -1761,7 +2222,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "chinese": {
      "tier": "full",
@@ -1771,7 +2234,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "cumans": {
      "tier": "none",
@@ -1781,6 +2246,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-201"
+     ],
+     "bonus": true,
+     "why": [
+      "Archery Ranges and Stables cost -75 wood"
      ]
     },
     "dravidians": {
@@ -1791,7 +2260,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "ethiopians": {
      "tier": "full",
@@ -1801,7 +2272,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Foot Archers attack +18% faster"
+     ]
     },
     "franks": {
      "tier": "none",
@@ -1810,7 +2285,9 @@ window.QUIZ_DATA = {
       "tech-201",
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "georgians": {
      "tier": "none",
@@ -1820,7 +2297,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "goths": {
      "tier": "none",
@@ -1830,7 +2309,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "gurjaras": {
      "tier": "none",
@@ -1840,7 +2321,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "hindustanis": {
      "tier": "none",
@@ -1849,7 +2332,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "huns": {
      "tier": "none",
@@ -1859,7 +2344,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "incas": {
      "tier": "full",
@@ -1869,7 +2356,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "italians": {
      "tier": "full",
@@ -1879,7 +2368,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Foot Archers and Condottieri +1 melee/+1 pierce armor"
+     ]
     },
     "japanese": {
      "tier": "full",
@@ -1889,7 +2382,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "jurchens": {
      "tier": "none",
@@ -1899,7 +2394,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "khitans": {
      "tier": "none",
@@ -1908,7 +2405,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "khmer": {
      "tier": "partial",
@@ -1919,7 +2418,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "koreans": {
      "tier": "full",
@@ -1929,7 +2430,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
+     ]
     },
     "lithuanians": {
      "tier": "none",
@@ -1938,7 +2443,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "magyars": {
      "tier": "full",
@@ -1948,7 +2455,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malay": {
      "tier": "full",
@@ -1958,7 +2467,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "malians": {
      "tier": "partial",
@@ -1969,7 +2480,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-201"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mapuche": {
      "tier": "none",
@@ -1979,7 +2492,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "mayans": {
      "tier": "full",
@@ -1989,7 +2504,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Foot Archers cost -10/20/30% in Feudal/Castle/Imperial Age"
+     ]
     },
     "mongols": {
      "tier": "partial",
@@ -2000,7 +2519,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "muisca": {
      "tier": "partial",
@@ -2011,6 +2532,11 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
+     ],
+     "bonus": true,
+     "why": [
+      "Champi Warriors and Archery Range Units +1/2/3 melee armor in Feudal/Castle/Imperial Age",
+      "Herbalism (Archer-line and Champi Warriors move +15% faster)"
      ]
     },
     "persians": {
@@ -2021,6 +2547,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-201"
+     ],
+     "bonus": true,
+     "why": [
+      "Kamandaran (Archer-line gold cost replaced by additional wood cost)"
      ]
     },
     "poles": {
@@ -2032,7 +2562,9 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-219"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "portuguese": {
      "tier": "full",
@@ -2042,7 +2574,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "romans": {
      "tier": "none",
@@ -2052,7 +2586,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "saracens": {
      "tier": "full",
@@ -2062,7 +2598,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Foot Archers and Skirmishers +2 attack vs. buildings"
+     ]
     },
     "shu": {
      "tier": "full",
@@ -2072,7 +2612,13 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Archery Unit technologies at the Archery Range and Blacksmith cost -25%",
+      "Bolt Magazine (Archer-line, War Chariots and Lou Chuans fire additional projectiles)",
+      "Foot Archers +2 line of sight"
+     ]
     },
     "sicilians": {
      "tier": "partial",
@@ -2083,7 +2629,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "slavs": {
      "tier": "none",
@@ -2093,7 +2641,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "spanish": {
      "tier": "none",
@@ -2102,7 +2652,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "tatars": {
      "tier": "none",
@@ -2111,7 +2663,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "teutons": {
      "tier": "none",
@@ -2121,7 +2675,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     },
     "tupi": {
      "tier": "partial",
@@ -2132,6 +2688,11 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
+     ],
+     "bonus": true,
+     "why": [
+      "Archery Range and Barracks upgrades cost -50% food",
+      "Curare (Foot Archers and Fortifications deal poison damage)"
      ]
     },
     "turks": {
@@ -2141,7 +2702,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
      "tier": "full",
@@ -2151,7 +2714,11 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Archery Range units and Fire Lancers +20% HP"
+     ]
     },
     "vikings": {
      "tier": "partial",
@@ -2162,6 +2729,10 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-437"
+     ],
+     "bonus": true,
+     "why": [
+      "Bogsveigar (Archer-line and Longboats +1 attack)"
      ]
     },
     "wei": {
@@ -2171,7 +2742,9 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "missing": []
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "wu": {
      "tier": "partial",
@@ -2182,7 +2755,9 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-219",
       "tech-437"
-     ]
+     ],
+     "bonus": false,
+     "why": []
     }
    }
   }

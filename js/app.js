@@ -12,7 +12,7 @@ const DIAGONAL_WAIT = 90; // ms to see whether a second arrow is on its way
 
 // An upgrade you leave alone and the civ has is worth nothing: only a claim
 // scores, or doing nothing would be the safe way to play.
-const POINTS = { tier: 1, spotted: 1, falsely: -1, missed: -1 };
+const POINTS = { tier: 1, spotted: 1, falsely: -1, missed: -1, bonus: 1 };
 
 const el = (id) => document.getElementById(id);
 const screens = { menu: el("menu"), game: el("game"), results: el("results") };
@@ -29,6 +29,7 @@ const state = {
   phase: "answer",
   score: 0,
   picked: {},
+  bonus: null,
   custom: false,
   held: new Set(),
   heldTimer: 0,
@@ -59,7 +60,9 @@ function start() {
   );
   el("pad").addEventListener("click", (event) => {
     const button = event.target.closest(".answer");
-    if (button) answer(button.dataset.dir);
+    if (!button) return;
+    if (button.dataset.bonus) claimBonus();
+    else answer(button.dataset.dir);
   });
   el("picker-grid").addEventListener("click", (event) => {
     const button = event.target.closest(".upgrade");
@@ -198,6 +201,7 @@ function renderCard() {
   const card = state.deck[state.index];
   const { topic, civ, answer: fact } = truth(state.data, card);
   state.phase = "answer";
+  state.bonus = null;
 
   stack.innerHTML = "";
   if (state.index + 1 < state.deck.length) {
@@ -223,6 +227,7 @@ function renderCard() {
         <img class="emblem" src="${civ.img}" alt="">
         <div class="options"></div>
         <div class="parts">${partsHtml(topic, fact, null)}</div>
+        <div class="bonus-slot"></div>
         <div class="next-hint">
           <svg><use href="#icon-play"/></svg><svg><use href="#icon-play"/></svg>
         </div>
@@ -242,6 +247,7 @@ function renderCard() {
       const direction = directionFor(dx, dy);
       arm(null);
       if (direction && tierAt(topic, direction)) return answer(direction);
+      if (direction === "down") claimBonus();
       node.classList.add("settle");
       node.style.transform = "";
     },
@@ -263,7 +269,7 @@ function tierById(topic, id) {
    per topic: the arrow, the mark, and the parts that direction claims. */
 function renderPad(topic) {
   const pad = el("pad");
-  pad.className = `pad${tierAt(topic, "down") ? "" : " no-down"}`;
+  pad.className = "pad";
   pad.innerHTML =
     topic.tiers
       .map(
@@ -273,7 +279,27 @@ function renderPad(topic) {
           <span class="mini">${miniHtml(topic, index)}</span>
         </button>`
       )
-      .join("") + `<span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
+      .join("") +
+    `<button class="answer is-bonus" data-dir="down" data-bonus="1"
+       title="a civ bonus, team bonus or unique tech about this unit">
+      <svg class="arrow"><use href="#arrow-down"/></svg>
+      <svg><use href="#icon-star"/></svg>
+    </button>
+    <span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
+}
+
+/* The bonus is a side bet: it scores at once and leaves the card where it is. */
+function claimBonus() {
+  if (state.phase !== "answer" || state.bonus) return;
+  const { answer: fact } = truth(state.data, state.deck[state.index]);
+  const right = Boolean(fact.bonus);
+  state.bonus = { right, delta: right ? POINTS.bonus : -POINTS.bonus };
+  bumpScore(state.bonus.delta);
+
+  const button = el("pad").querySelector(".answer.is-bonus");
+  button.classList.add(right ? "spotted" : "falsely");
+  button.querySelector("svg:last-child").innerHTML =
+    `<use href="#mark-${right ? "right" : "wrong"}"/>`;
 }
 
 // A rung is "at least this much, and not all of the next one". One part short
@@ -283,7 +309,7 @@ function rungParts(topic, index) {
   const has = topic.tiers[index].has;
   const next = topic.tiers[index + 1] ? topic.tiers[index + 1].has : [];
   const missing = next.filter((id) => !has.includes(id));
-  const vague = has.length > 0 && missing.length > 1;
+  const vague = index > 0 && missing.length > 1;
   return topic.parts.map((part) => ({
     part,
     state: has.includes(part.id) ? "on" : vague && missing.includes(part.id) ? "some" : "off",
@@ -303,17 +329,20 @@ function padTitle(topic, index) {
   const rows = rungParts(topic, index);
   const named = (state) => rows.filter((r) => r.state === state).map((r) => r.part.name);
   const on = named("on");
+  const some = named("some");
+  const off = named("off");
 
-  if (!on.length) {
-    const next = topic.tiers[index + 1];
-    const wanted = next
-      ? topic.parts.filter((p) => next.has.includes(p.id)).map((p) => p.name)
-      : [topic.name];
+  if (index === 0) {
+    // the bottom rung is "not even the one above"; with no gate unit that is
+    // every part the topic names
+    const above = topic.tiers[1].has;
+    const wanted = topic.parts
+      .filter((part) => !above.length || above.includes(part.id))
+      .map((part) => part.name);
     return `not even ${wanted.join(" + ")}`;
   }
-  const some = named("some");
+  if (!on.length) return `some of: ${some.join(", ")}`;
   if (some.length) return `${on.join(", ")} — but not all of: ${some.join(", ")}`;
-  const off = named("off");
   return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
 }
 
@@ -382,8 +411,9 @@ function answer(direction) {
     guess: guess.id,
     tier: fact.tier,
     right,
-    delta: right ? POINTS.tier : -POINTS.tier,
+    delta: (right ? POINTS.tier : -POINTS.tier) + (state.bonus ? state.bonus.delta : 0),
     picks: null,
+    bonus: state.bonus,
   };
   arm(null);
   bumpScore(right ? POINTS.tier : -POINTS.tier);
@@ -488,6 +518,18 @@ function finishPicks() {
   reveal();
 }
 
+/* the civ's bonus, and whether the side bet came off */
+function bonusHtml(fact, claimed) {
+  if (!fact.bonus && !claimed) return "";
+  const said = claimed
+    ? `<svg class="said ${claimed.right ? "right" : "wrong"}"><use href="#mark-${
+        claimed.right ? "right" : "wrong"
+      }"/></svg>`
+    : "";
+  const why = fact.bonus ? (fact.why || []).join(" • ") : "no bonus for this one";
+  return `<div class="bonus-note"><svg><use href="#icon-star"/></svg>${said}<span>${why}</span></div>`;
+}
+
 function reveal() {
   const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
   const result = state.results[state.index];
@@ -508,6 +550,7 @@ function reveal() {
     result.right ? null : result.guess
   );
   back.querySelector(".parts").innerHTML = partsHtml(topic, fact, result.picks);
+  back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact, result.bonus);
   const delta = back.querySelector(".card-delta");
   delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
   delta.textContent = result.delta > 0 ? `+${result.delta}` : `${result.delta}`;
@@ -612,7 +655,8 @@ function onKey(event) {
   const direction = KEYS[event.key];
   if (direction) {
     event.preventDefault();
-    answer(direction);
+    if (direction === "down") claimBonus();
+    else answer(direction);
   }
 }
 
