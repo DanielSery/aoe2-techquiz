@@ -11,8 +11,11 @@ swipe, or with the arrow keys:
 | ✓ | right | `→` | the unit and all of its upgrades |
 | ★ | down | `↓` | a side bet: this civ has a bonus about it |
 
-Answering scores at once: **+1** right, **−1** wrong, shown on the counter in the
-corner. You never have to remember which way is which — the answers sit on a pad below
+Naming the direction is the question, so it is worth the most; the rest are
+side bets you take when you are sure.
+
+Answering scores at once: **+100** right, **−20** wrong, thrown across the card
+and counted in the corner. You never have to remember which way is which — the answers sit on a pad below
 the card, each in the direction you swipe for it, showing the topic's own icons
 lit or dimmed for what that answer claims, and the one you are about to pick
 lights up while you drag.
@@ -21,15 +24,15 @@ Say **◐** on a topic with more than one upgrade and it asks the follow-up: the
 upgrades take over the pad, in the same place the three answers were, laid out
 as a compass — up to seven of them, reached by an arrow key, or two at once for
 the corners. Each pick is answered on the spot and cannot be taken back: green
-border and tick if it really is missing (**+1**), red border and cross if the
-civ has it after all (**−1**). **`→` is done**, which is why right is not one of
+border and tick if it really is missing (**+10**), red border and cross if the
+civ has it after all (**−10**). **`→` is done**, which is why right is not one of
 the seven; press it when you think you have found them all, and each one you
-never named costs **−1**. Leaving an upgrade alone that the civ
+never named costs **−10**. Leaving an upgrade alone that the civ
 really has is worth nothing, so marking nothing is not the safe play.
 
 The purple **★** is not one of the three: it claims that the civ has a civ
 bonus, a team bonus or a unique tech about this unit. It scores on the spot,
-**+1** or **−1**, and leaves the card where it is, so you still have to answer.
+**+20** or **−20**, and leaves the card where it is, so you still have to answer.
 Claiming nothing costs nothing — it is there to be taken when you are sure. The
 reveal then names the bonus, whether you called it or not.
 

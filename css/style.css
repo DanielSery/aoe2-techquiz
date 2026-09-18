@@ -252,12 +252,12 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .delta.up { color: var(--full); }
 .delta.down { color: var(--none); }
-.delta.show { animation: float-up 1s ease-out; }
+.delta.show { animation: float-up 1.6s ease-out; }
 
 /* the arena's own scoreboard: big, brief, centred on the card */
 .burst {
   position: absolute;
-  top: 26%;
+  top: 52%;
   left: 50%;
   z-index: 3;
   transform: translate(-50%, -50%);
@@ -272,16 +272,17 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .burst.up { color: var(--full); }
 .burst.down { color: var(--none); }
-.burst.show { animation: burst .75s cubic-bezier(.2, .9, .3, 1); }
+.burst.show { animation: burst 1.9s cubic-bezier(.2, .9, .3, 1); }
 
 @keyframes burst {
-  0% { opacity: 0; transform: translate(-50%, -20%) scale(.4); }
-  25% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-  60% { opacity: 1; transform: translate(-50%, -55%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -110%) scale(.95); }
+  0% { opacity: 0; transform: translate(-50%, -30%) scale(.3); }
+  12% { opacity: 1; transform: translate(-50%, -52%) scale(1.25); }
+  22% { transform: translate(-50%, -50%) scale(1); }
+  70% { opacity: 1; transform: translate(-50%, -54%) scale(1.04); }
+  100% { opacity: 0; transform: translate(-50%, -96%) scale(1); }
 }
 
-.tally b.bumped { animation: bump .45s ease-out; }
+.tally b.bumped { animation: bump .7s ease-out; }
 
 @keyframes bump {
   0% { transform: scale(1); }
@@ -398,20 +399,20 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 .topic-chip img { width: 28px; height: 28px; border-radius: 5px; }
 
-.face.back .emblem { width: 26%; }
+.face.back .emblem { width: 21%; }
 
 .judge-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 76px;
-  height: 76px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   color: #17120b;
   animation: pop .28s ease-out;
 }
 
-.judge-badge svg { width: 52px; height: 52px; }
+.judge-badge svg { width: 44px; height: 44px; }
 .judge-badge.right { background: var(--full); box-shadow: 0 0 22px #62a76566; }
 .judge-badge.wrong { background: var(--none); box-shadow: 0 0 22px #cf534066; }
 
@@ -492,18 +493,19 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .bonus-note {
   display: flex;
   align-items: center;
-  gap: 6px;
-  max-width: 92%;
-  padding: 4px 8px;
+  gap: 7px;
+  width: 96%;
+  padding: 7px 9px;
   border: 1px solid var(--bonus);
-  border-radius: 8px;
-  color: var(--bonus);
-  font-size: 10px;
-  line-height: 1.25;
+  border-radius: 9px;
+  background: #a274d82e;
+  color: #e6d6ff;
+  font-size: 12px;
+  line-height: 1.3;
   text-align: left;
 }
 
-.bonus-note svg { width: 14px; height: 14px; flex: none; }
+.bonus-note svg { width: 18px; height: 18px; flex: none; color: var(--bonus); }
 .bonus-note .said { flex: none; }
 .bonus-note .said.right { color: var(--full); }
 .bonus-note .said.wrong { color: var(--none); }
@@ -531,13 +533,6 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 
 /* which upgrades is it missing? the pad turns into a compass, and the corners
    take two arrows at once */
-.pad.picking {
-  grid-template-areas:
-    "up-left up up-right"
-    "left topic right"
-    "down-left down down-right";
-}
-
 .upgrade {
   position: relative;
   padding: 0;
@@ -614,7 +609,9 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 /* Each answer sits where its swipe goes: the pad is the legend. */
 .pad {
   display: grid;
-  grid-template-areas: ". up ." "left topic right" ". down .";
+  grid-template-areas: "up-left up up-right" "left topic right" "down-left down down-right";
+  grid-template-columns: repeat(3, 78px);
+  grid-template-rows: repeat(3, 78px);
   gap: 6px;
   align-items: center;
   justify-items: center;

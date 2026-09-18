@@ -12,9 +12,18 @@ const MODES = ["single", "custom", "all"];
 const SLOTS = ["left", "up", "down", "up-left", "up-right", "down-left", "down-right"];
 const DIAGONAL_WAIT = 90; // ms to see whether a second arrow is on its way
 
-// An upgrade you leave alone and the civ has is worth nothing: only a claim
-// scores, or doing nothing would be the safe way to play.
-const POINTS = { tier: 1, spotted: 1, falsely: -1, missed: -1, bonus: 1 };
+// Naming the direction is the question; the rest are worth what they cost to
+// find out. An upgrade you leave alone and the civ has is worth nothing: only a
+// claim scores, or doing nothing would be the safe way to play.
+const POINTS = {
+  tier: 100,
+  tierWrong: -20,
+  spotted: 10,
+  falsely: -10,
+  missed: -10,
+  bonus: 20,
+  bonusWrong: -20,
+};
 
 const el = (id) => document.getElementById(id);
 const screens = { menu: el("menu"), game: el("game"), results: el("results") };
@@ -300,7 +309,7 @@ function claimBonus() {
   if (state.phase !== "answer" || state.bonus) return;
   const { answer: fact } = truth(state.data, state.deck[state.index]);
   const right = Boolean(fact.bonus);
-  state.bonus = { right, delta: right ? POINTS.bonus : -POINTS.bonus };
+  state.bonus = { right, delta: right ? POINTS.bonus : POINTS.bonusWrong };
   bumpScore(state.bonus.delta);
 
   const button = el("pad").querySelector(".answer.is-bonus");
@@ -418,12 +427,12 @@ function answer(direction) {
     guess: guess.id,
     tier: fact.tier,
     right,
-    delta: (right ? POINTS.tier : -POINTS.tier) + (state.bonus ? state.bonus.delta : 0),
+    delta: (right ? POINTS.tier : POINTS.tierWrong) + (state.bonus ? state.bonus.delta : 0),
     picks: null,
     bonus: state.bonus,
   };
   arm(null);
-  bumpScore(right ? POINTS.tier : -POINTS.tier);
+  bumpScore(right ? POINTS.tier : POINTS.tierWrong);
   renderProgress();
 
   // saying "partial" is only half an answer: which upgrades are missing?
