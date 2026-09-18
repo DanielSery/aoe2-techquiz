@@ -136,25 +136,23 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .group .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, 62px);
+  gap: 7px;
 }
 
 .topic {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 3px;
-  padding: 5px 3px;
+  justify-content: center;
+  padding: 4px;
   background: var(--panel);
   border: 2px solid var(--edge);
   border-radius: 10px;
 }
 
-.topic img { width: 34px; height: 34px; border-radius: 6px; }
+.topic img { width: 50px; height: 50px; border-radius: 7px; }
 
-.topic span { font-size: 10px; line-height: 1.12; text-align: center; }
+
 
 .topic small { font-size: 11px; color: #8a7a64; }
 
@@ -782,9 +780,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 @media (max-height: 820px) {
-  .group .tiles { grid-template-columns: repeat(auto-fill, minmax(66px, 1fr)); }
-  .topic img { width: 30px; height: 30px; }
-  .topic span { font-size: 9px; }
+  .group .tiles { grid-template-columns: repeat(auto-fill, 54px); }
+  .topic img { width: 42px; height: 42px; }
 }
 
 @media (max-height: 700px) {

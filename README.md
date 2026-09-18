@@ -48,7 +48,8 @@ one.
 
 Nineteen topics so far, and the menu sorts them by where the unit is trained:
 **Archery Range**, **Siege**, **Barracks**, **Stable**, **Monastery**. A topic's
-`group` in `tools/build_data.py` is what puts it in a section. Only the last step of an upgrade line
+`group` in `tools/build_data.py` is what puts it in a section. The tiles are
+the units' own icons, with the name on hover -- the whole menu is one screen. Only the last step of an upgrade line
 counts — Bracer, not Fletching and Bodkin Arrow as well, since a civ with Bracer
 necessarily has those.
 

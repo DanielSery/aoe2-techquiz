@@ -169,7 +169,8 @@ function renderMenu() {
       tile.type = "button";
       tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
       tile.title = `${topic.name} — ${Object.keys(topic.civs).length} civilisations`;
-      tile.innerHTML = `<img src="${topic.icon}" alt=""><span>${topic.name}</span>`;
+      tile.setAttribute("aria-label", topic.name);
+      tile.innerHTML = `<img src="${topic.icon}" alt="${topic.name}">`;
       tile.addEventListener("click", () => chooseTopic(topic.id));
       tiles.append(tile);
     }
