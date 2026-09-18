@@ -3,7 +3,8 @@ const { buildDeck, truth, shuffle, attachSwipe, directionFor } = window.Quiz;
 const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
 const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
 const STORE_KEY = "aoe2-techquiz.topics";
-const CUSTOM_KEY = "aoe2-techquiz.custom";
+const MODE_KEY = "aoe2-techquiz.mode";
+const MODES = ["single", "custom", "all"];
 
 // Where the upgrades sit in the picker, and so which arrows reach them: the
 // four sides first, then the corners, which take two arrows at once.
@@ -30,7 +31,7 @@ const state = {
   score: 0,
   picked: {},
   bonus: null,
-  custom: false,
+  mode: "single",
   held: new Set(),
   heldTimer: 0,
   heldSpent: false,
@@ -73,7 +74,10 @@ function start() {
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
   });
-  el("custom").addEventListener("click", toggleCustom);
+  el("modes").addEventListener("click", (event) => {
+    const button = event.target.closest(".mode");
+    if (button) setMode(button.dataset.mode);
+  });
   document.addEventListener("keydown", onKey);
   document.addEventListener("keyup", onKeyUp);
 }
@@ -84,40 +88,51 @@ function restoreSelection() {
   let saved = [];
   try {
     saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
-    state.custom = localStorage.getItem(CUSTOM_KEY) === "1";
+    const mode = localStorage.getItem(MODE_KEY);
+    if (MODES.includes(mode)) state.mode = mode;
   } catch (ignored) {
     saved = [];
   }
   const known = state.data.topics.map((t) => t.id);
   const wanted = Array.isArray(saved) ? saved.filter((id) => known.includes(id)) : [];
   state.selected = new Set(wanted.length ? wanted : known.slice(0, 1));
-  if (!state.custom && state.selected.size > 1) state.selected = new Set([[...state.selected][0]]);
+  applyMode();
 }
 
 function rememberSelection() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
-    localStorage.setItem(CUSTOM_KEY, state.custom ? "1" : "0");
+    localStorage.setItem(MODE_KEY, state.mode);
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
 }
 
-/* One topic unless you ask for more: picking a tile replaces the selection,
-   and Custom makes the tiles toggle instead. */
-function chooseTopic(id) {
-  if (!state.custom) state.selected = new Set([id]);
-  else if (!state.selected.has(id)) state.selected.add(id);
-  else if (state.selected.size > 1) state.selected.delete(id);
-  else return;
+// Single keeps one topic, All takes every one, Custom leaves the choice alone.
+function applyMode() {
+  if (state.mode === "all") state.selected = new Set(state.data.topics.map((t) => t.id));
+  else if (state.mode === "single" && state.selected.size > 1) {
+    state.selected = new Set([[...state.selected][0]]);
+  }
+}
+
+function setMode(mode) {
+  if (!MODES.includes(mode)) return;
+  state.mode = mode;
+  applyMode();
   rememberSelection();
   renderMenu();
 }
 
-function toggleCustom() {
-  state.custom = !state.custom;
-  if (!state.custom && state.selected.size > 1) {
-    state.selected = new Set([[...state.selected][0]]);
+/* A tile toggles only in Custom; anywhere else picking one is picking it alone. */
+function chooseTopic(id) {
+  if (state.mode === "custom") {
+    if (!state.selected.has(id)) state.selected.add(id);
+    else if (state.selected.size > 1) state.selected.delete(id);
+    else return;
+  } else {
+    state.mode = "single";
+    state.selected = new Set([id]);
   }
   rememberSelection();
   renderMenu();
@@ -138,27 +153,9 @@ function renderMenu() {
     grid.append(tile);
   }
 
-  if (state.data.topics.length > 1) {
-    const every = state.data.topics.map((t) => t.id);
-    const all = document.createElement("button");
-    all.className = "topic";
-    all.type = "button";
-    all.setAttribute("aria-pressed", String(state.selected.size === every.length));
-    const mosaic = state.data.topics
-      .slice(0, 4)
-      .map((topic) => `<img src="${topic.icon}" alt="">`)
-      .join("");
-    all.innerHTML = `<span class="mosaic">${mosaic}</span><span>Everything</span>
-      <small>${every.length}</small>`;
-    all.addEventListener("click", () => {
-      state.selected = new Set(state.selected.size === every.length ? every.slice(0, 1) : every);
-      rememberSelection();
-      renderMenu();
-    });
-    grid.append(all);
+  for (const button of el("modes").querySelectorAll(".mode")) {
+    button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
   }
-
-  el("custom").setAttribute("aria-pressed", String(state.custom));
   const size = buildDeck(state.data, [...state.selected]).length;
   el("start").disabled = size === 0;
   el("start-count").textContent = size ? `${size}` : "";

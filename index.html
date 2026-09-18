@@ -26,6 +26,8 @@
   <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.2 6.1L12 16.8 6.6 19.7l1.2-6.1L3.3 9.4l6.1-.8z" fill="currentColor"/></symbol>
   <symbol id="icon-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="icon-custom" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="icon-single" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="icon-all" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor"/></symbol>
 </svg>
 
 <main>
@@ -34,10 +36,19 @@
     <h1><img src="img/topics/unit-5.png" alt=""><span>Tech Quiz</span></h1>
     <p class="lede">Pick your topics, then say what each civilisation gets.</p>
     <div id="topic-grid" class="topic-grid"></div>
-    <div class="menu-actions">
-      <button id="custom" class="ghost" aria-pressed="false">
+    <div class="modes" id="modes">
+      <button class="mode" data-mode="single" aria-pressed="true">
+        <svg><use href="#icon-single"/></svg><span>Single</span>
+      </button>
+      <button class="mode" data-mode="custom" aria-pressed="false">
         <svg><use href="#icon-custom"/></svg><span>Custom</span>
       </button>
+      <button class="mode" data-mode="all" aria-pressed="false">
+        <svg><use href="#icon-all"/></svg><span>All</span>
+      </button>
+    </div>
+
+    <div class="menu-actions">
       <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
     </div>
   </section>

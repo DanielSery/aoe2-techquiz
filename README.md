@@ -44,9 +44,10 @@ one.
 Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon and Arbalester.
 Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
 Arrow as well, since a civ with Bracer necessarily has those.
-The menu plays one topic at a time: picking a tile replaces the selection.
-**Custom** turns that into a multiple choice, for a set mixed from several
-topics, and **Everything** is the shortcut for all of them.
+**Single / Custom / All** under the tiles says how many topics a set draws from:
+Single replaces the selection as you pick, Custom lets the tiles toggle for a
+mixed set, All takes every topic. Picking a tile outside Custom drops back to
+Single on that topic, and the choice is remembered between visits.
 
 At the end of a set you can repeat only the ones you got wrong, repeat the whole
 set, or go back and pick a different topic.
