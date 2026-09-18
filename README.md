@@ -18,12 +18,13 @@ lit or dimmed for what that answer claims, and the one you are about to pick
 lights up while you drag.
 
 Say **◐** on a topic with more than one upgrade and it asks the follow-up: the
-upgrades laid out as a compass, up to eight of them, reached by an arrow key —
-or two at once for the corners — or by clicking. Each pick is answered on the
-spot and cannot be taken back: green border and tick if it really is missing
-(**+1**), red border and cross if the civ has it after all (**−1**). Done sits
-in the middle; press it (or `Enter`) when you think you have found them all, and
-each one you never named costs **−1**. Leaving an upgrade alone that the civ
+upgrades take over the pad, in the same place the three answers were, laid out
+as a compass — up to seven of them, reached by an arrow key, or two at once for
+the corners. Each pick is answered on the spot and cannot be taken back: green
+border and tick if it really is missing (**+1**), red border and cross if the
+civ has it after all (**−1**). **`→` is done**, which is why right is not one of
+the seven; press it when you think you have found them all, and each one you
+never named costs **−1**. Leaving an upgrade alone that the civ
 really has is worth nothing, so marking nothing is not the safe play.
 
 The purple **★** is not one of the three: it claims that the civ has a civ

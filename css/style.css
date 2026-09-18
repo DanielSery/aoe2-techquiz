@@ -529,45 +529,20 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .part.on b { color: var(--full); }
 .part.off b { color: var(--none); }
 
-/* which upgrades is it missing? one tap each, then done */
-.picker {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 10px;
-  background: #15110df5;
-}
-
-.picker.is-open { display: flex; }
-
-.picker-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.picker-head img { width: 44px; height: 44px; object-fit: contain; }
-.picker-head #picker-topic { border-radius: 7px; }
-
-.picker-grid {
-  display: grid;
+/* which upgrades is it missing? the pad turns into a compass, and the corners
+   take two arrows at once */
+.pad.picking {
   grid-template-areas:
     "up-left up up-right"
-    "left done right"
+    "left topic right"
     "down-left down down-right";
-  gap: 8px;
 }
 
 .upgrade {
   position: relative;
   padding: 0;
-  width: 58px;
-  height: 58px;
+  width: 78px;
+  height: 78px;
   border: 2px solid var(--edge);
   border-radius: 10px;
   overflow: hidden;
@@ -578,11 +553,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 /* which arrows reach it; the diagonals are two at once */
 .upgrade .dir {
   position: absolute;
-  top: 1px;
-  left: 1px;
-  width: 15px;
-  height: 15px;
-  opacity: .8;
+  top: 2px;
+  left: 2px;
+  width: 17px;
+  height: 17px;
+  opacity: .85;
   filter: drop-shadow(0 0 2px #000);
 }
 
@@ -602,13 +577,13 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px 0 0 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px 0 0 0;
   background: #15110dd9;
 }
 
-.upgrade .verdict svg { width: 15px; height: 15px; }
+.upgrade .verdict svg { width: 18px; height: 18px; }
 
 /* answered on the spot: the border is whether you were right, the icon going
    grey is the civ not having it */
@@ -618,17 +593,23 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .upgrade.falsely { border-color: var(--none); color: var(--none); }
 
 #picker-done {
-  grid-area: done;
-  width: 58px;
-  height: 58px;
+  grid-area: right;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 78px;
+  height: 78px;
   padding: 0;
-  border-radius: 50%;
   border: 2px solid var(--gold);
+  border-radius: 10px;
   background: linear-gradient(#a9833c, #8a6729);
   color: #1c150c;
 }
 
-#picker-done svg { width: 30px; height: 30px; }
+#picker-done .arrow { width: 18px; height: 18px; opacity: .8; }
+#picker-done svg:last-child { width: 30px; height: 30px; }
 
 /* Each answer sits where its swipe goes: the pad is the legend. */
 .pad {

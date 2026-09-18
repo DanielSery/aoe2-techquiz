@@ -8,7 +8,8 @@ const MODES = ["single", "custom", "all"];
 
 // Where the upgrades sit in the picker, and so which arrows reach them: the
 // four sides first, then the corners, which take two arrows at once.
-const SLOTS = ["left", "up", "right", "down", "up-left", "up-right", "down-right", "down-left"];
+// Right is where done sits, so it is not an upgrade slot: seven are left.
+const SLOTS = ["left", "up", "down", "up-left", "up-right", "down-left", "down-right"];
 const DIAGONAL_WAIT = 90; // ms to see whether a second arrow is on its way
 
 // An upgrade you leave alone and the civ has is worth nothing: only a claim
@@ -60,16 +61,14 @@ function start() {
     beginRound(shuffle(state.results.filter((r) => !r.right).map((r) => r.card)), false)
   );
   el("pad").addEventListener("click", (event) => {
+    if (event.target.closest("#picker-done")) return finishPicks();
+    const upgrade = event.target.closest(".upgrade");
+    if (upgrade) return pick(upgrade.dataset.id);
     const button = event.target.closest(".answer");
     if (!button) return;
     if (button.dataset.bonus) claimBonus();
     else answer(button.dataset.dir);
   });
-  el("picker-grid").addEventListener("click", (event) => {
-    const button = event.target.closest(".upgrade");
-    if (button) pick(button.dataset.id);
-  });
-  el("picker-done").addEventListener("click", finishPicks);
   // a revealed card waits for you: anything but the hud moves it on
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
@@ -434,40 +433,44 @@ function answer(direction) {
 
 /* ---------- which upgrades is it missing? ---------- */
 
+/* The follow-up takes over the pad, so the answers and the upgrades are asked
+   in the same place, and done sits where "has it all" was. */
 function openPicker() {
-  const { topic, civ } = truth(state.data, state.deck[state.index]);
+  const { topic } = truth(state.data, state.deck[state.index]);
   state.phase = "picking";
   state.picked = {};
   state.held.clear();
   state.heldSpent = false;
   clearTimeout(state.heldTimer);
 
-  el("picker-civ").src = civ.img;
-  el("picker-topic").src = topic.icon;
-  for (const old of el("picker-grid").querySelectorAll(".upgrade")) old.remove();
-
-  topic.upgrades.forEach((id, index) => {
-    const part = topic.parts.find((p) => p.id === id);
-    const slot = SLOTS[index];
-    const button = document.createElement("button");
-    button.className = "upgrade";
-    button.dataset.id = id;
-    button.dataset.slot = slot;
-    button.style.gridArea = slot;
-    button.title = part.name;
-    button.innerHTML = `<img src="${part.img}" alt="${part.name}">
-      <svg class="dir dir-${slot}"><use href="#arrow-up"/></svg>
-      <b class="verdict"></b>`;
-    el("picker-grid").append(button);
-  });
-
-  el("picker").classList.add("is-open");
-  el("pad").classList.add("dim");
+  const pad = el("pad");
+  pad.className = "pad picking";
+  pad.innerHTML =
+    topic.upgrades
+      .map((id, index) => {
+        const part = topic.parts.find((p) => p.id === id);
+        const slot = SLOTS[index];
+        return `<button class="upgrade" data-id="${id}" data-slot="${slot}"
+          style="grid-area: ${slot}" title="${part.name}">
+          <img src="${part.img}" alt="${part.name}">
+          <svg class="dir dir-${slot}"><use href="#arrow-up"/></svg>
+          <b class="verdict"></b>
+        </button>`;
+      })
+      .join("") +
+    `<button id="picker-done" class="done" title="that is all of them">
+      <svg class="arrow"><use href="#arrow-right"/></svg>
+      <svg><use href="#mark-right"/></svg>
+    </button>
+    <span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
 }
 
 function closePicker() {
-  el("picker").classList.remove("is-open");
-  el("pad").classList.remove("dim");
+  const pad = el("pad");
+  if (!pad.classList.contains("picking")) return;
+  const card = state.deck[state.index];
+  if (card) renderPad(truth(state.data, card).topic);
+  else pad.className = "pad";
 }
 
 function slotDirection(held) {
@@ -482,7 +485,8 @@ function slotDirection(held) {
 }
 
 function pickAt(slot) {
-  const button = el("picker-grid").querySelector(`.upgrade[data-slot="${slot}"]`);
+  if (slot === "right") return finishPicks();
+  const button = el("pad").querySelector(`.upgrade[data-slot="${slot}"]`);
   if (button) pick(button.dataset.id);
 }
 
@@ -497,7 +501,7 @@ function pick(id) {
   state.results[state.index].delta += missing ? POINTS.spotted : POINTS.falsely;
   bumpScore(missing ? POINTS.spotted : POINTS.falsely);
 
-  const button = el("picker-grid").querySelector(`[data-id="${id}"]`);
+  const button = el("pad").querySelector(`.upgrade[data-id="${id}"]`);
   button.classList.add(outcome, "done");
   button.querySelector(".verdict").innerHTML = `<svg><use href="#mark-${
     missing ? "right" : "wrong"
