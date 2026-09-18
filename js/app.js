@@ -184,13 +184,24 @@ function show(name) {
 
 function bumpScore(delta) {
   state.score += delta;
-  el("score-now").textContent = `${state.score}`;
+  const counter = el("score-now");
+  counter.textContent = `${state.score}`;
 
+  const sign = delta > 0 ? `+${delta}` : `${delta}`;
   const flash = el("delta");
-  flash.textContent = delta > 0 ? `+${delta}` : `${delta}`;
+  flash.textContent = sign;
   flash.className = `delta ${delta >= 0 ? "up" : "down"}`;
-  void flash.offsetWidth; // restart the animation on a repeated delta
+
+  const burst = el("burst");
+  burst.textContent = sign;
+  burst.className = `burst ${delta >= 0 ? "up" : "down"}`;
+
+  // the classes have to leave the elements for the animations to run again
+  counter.classList.remove("bumped");
+  void counter.offsetWidth;
+  counter.classList.add("bumped");
   flash.classList.add("show");
+  burst.classList.add("show");
 }
 
 function renderCard() {

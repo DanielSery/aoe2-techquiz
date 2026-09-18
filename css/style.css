@@ -254,6 +254,41 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .delta.down { color: var(--none); }
 .delta.show { animation: float-up 1s ease-out; }
 
+/* the arena's own scoreboard: big, brief, centred on the card */
+.burst {
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  font-size: 68px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+  pointer-events: none;
+  opacity: 0;
+  text-shadow: 0 0 24px currentColor, 0 4px 14px #000a;
+}
+
+.burst.up { color: var(--full); }
+.burst.down { color: var(--none); }
+.burst.show { animation: burst .75s cubic-bezier(.2, .9, .3, 1); }
+
+@keyframes burst {
+  0% { opacity: 0; transform: translate(-50%, -20%) scale(.4); }
+  25% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  60% { opacity: 1; transform: translate(-50%, -55%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -110%) scale(.95); }
+}
+
+.tally b.bumped { animation: bump .45s ease-out; }
+
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); text-shadow: 0 0 14px currentColor; }
+  100% { transform: scale(1); }
+}
+
 @keyframes float-up {
   0% { opacity: 1; transform: translateY(6px); }
   100% { opacity: 0; transform: translateY(-14px); }
@@ -605,7 +640,7 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   padding-bottom: 6px;
 }
 
-.answer.is-bonus svg:last-child { width: 20px; height: 20px; }
+.answer.is-bonus svg:last-child { width: 26px; height: 26px; }
 .answer.spotted { border-color: var(--full); color: var(--full); }
 .answer.falsely { border-color: var(--none); color: var(--none); }
 
@@ -626,9 +661,11 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 5px 8px;
-  min-width: 78px;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px;
+  width: 78px;
+  height: 78px;
   border-width: 2px;
   border-color: currentColor;
   background: var(--panel);
@@ -650,14 +687,14 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
    push the pad off the sides of the screen */
 .mini {
   display: grid;
-  grid-template-columns: repeat(4, 18px);
+  grid-template-columns: repeat(3, 17px);
   gap: 2px;
   justify-content: center;
 }
 
 .mini span {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   border-radius: 3px;
   overflow: hidden;
 }

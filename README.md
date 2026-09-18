@@ -64,6 +64,10 @@ python -m http.server 8080
 
 On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(root)`**.
 
+The scripts and stylesheet are loaded with a `?v=` marker; bump it in
+`index.html` when you change them, or a plain reload can keep serving the old
+copy.
+
 ## The data
 
 `data/topics.js` is generated, not written by hand. Its source is
