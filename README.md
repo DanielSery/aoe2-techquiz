@@ -46,10 +46,14 @@ what the civ actually has icon by icon, your picks ringed in green, red or amber
 and what the card was worth. It then waits — any key, tap or click deals the next
 one.
 
-Four topics so far: Hand Cannoneer, Siege Ram, Bombard Cannon / Traction
-Trebuchet, and Arbalester.
-Only the last step of an upgrade line counts — Bracer, not Fletching and Bodkin
-Arrow as well, since a civ with Bracer necessarily has those.
+Nineteen topics so far, across the siege workshop, the archery range, the
+barracks, the stable and the monastery. Only the last step of an upgrade line
+counts — Bracer, not Fletching and Bodkin Arrow as well, since a civ with Bracer
+necessarily has those.
+
+Where only a handful of civilisations field a unit at all, the deck is only
+those civilisations: asking the other forty "do the Aztecs have a Steppe Lancer"
+teaches nothing. The threshold is `RARE` in `tools/build_data.py`.
 
 A topic is gated on the unit that says the line exists at all, which is not
 always the unit it is named after: Arbalester is gated on the **Crossbowman**,
@@ -96,14 +100,25 @@ python tools/build_data.py --civdata <path>/aoe2planner/gamedata/civdata.json
 
 The second form cross-checks every civ against a second, independent extraction
 of the same `.dat` and refuses to write anything if the two disagree — that
-disagreement would mean one of them is from a different patch. The current data
-passes for all 53 civilisations and all four topics.
+disagreement would mean one of them is from a different patch. Forty of the
+gates pass for all 53 civilisations.
+
+Sixteen do not, and all sixteen are *regional* units — the Savar, the Eagle, the
+Battle Elephant, the Steppe Lancer, the Champi, the Fire Lancer, the Winged
+Hussar, the Camel Rider, the Traction Trebuchet, the Siege Elephant and their
+elites. Their enabling techs sit in no civilisation's disabled list, so reading
+the `.dat`'s enable side hands each of them to all 53; each disagreed for 40 to
+52 civs, where every other gate agreed for all 53. Those are marked `None` in
+`UNIT_ENABLER` and rest on aoe2techtree alone. One genuine single-civ divergence
+is recorded in `KNOWN_DIVERGENCES`: the Mapuche's Fervor.
 
 A topic is one unit and the upgrades that complete it, at most seven so they fit
 the picker. Adding one is a line in `TOPICS` at the top of `tools/build_data.py`
 — a unit id and the tech ids, as
 [aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) numbers them — and
-a re-run, which fetches the icons too. List only the last step of each
+a re-run, which fetches the icons too. A `unit` may be a list, and so may one
+of the `upgrades`, when two units answer the same question. List only the last
+step of each
 upgrade line: the run prints how many civs lack each one, and an upgrade no civ
 lacks can never be a right answer in the follow-up, only a wrong one.
 

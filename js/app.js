@@ -371,17 +371,37 @@ function padTitle(topic, index) {
   return off.length ? `${on.join(", ")} — no ${off.join(", ")}` : on.join(", ");
 }
 
-/* The civ's own row, ringed with how your picks did when the picker ran. Where
-   two units both count, the one the civ does not field is left out rather than
-   drawn as missing -- it is an alternative, not a gap. */
+/* Which of a slot's alternatives this civ actually fields; the others are not
+   gaps, so the reveal leaves them out unless the civ has none of them. */
+function shownAlt(topic, key, answer) {
+  const group = (topic.alts || {})[key] || [key];
+  return group.find((id) => answer.has.includes(id)) || null;
+}
+
+function groupKey(topic, partId) {
+  const alts = topic.alts || {};
+  return Object.keys(alts).find((key) => alts[key].includes(partId)) || partId;
+}
+
+/* The civ's own row, ringed with how your picks did when the picker ran. */
 function partsHtml(topic, answer, picks) {
-  const gate = topic.gate || [];
-  const fielded = gate.some((id) => answer.has.includes(id));
+  const alts = topic.alts || {};
+  const fielded = new Set(
+    Object.keys(alts)
+      .map((key) => shownAlt(topic, key, answer))
+      .filter(Boolean)
+  );
+  const alternatives = new Set(Object.values(alts).flat());
   return topic.parts
-    .filter((part) => !(fielded && gate.length > 1 && gate.includes(part.id) && !answer.has.includes(part.id)))
+    .filter((part) => {
+      if (!alternatives.has(part.id)) return true;
+      const key = groupKey(topic, part.id);
+      const shown = shownAlt(topic, key, answer);
+      return shown ? fielded.has(part.id) : true;
+    })
     .map((part) => {
       const on = answer.has.includes(part.id);
-      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(part, picks)}"
+      return `<span class="part ${on ? "on" : "off"} ${pickOutcome(part, picks, topic)}"
         title="${part.name}">
         <img src="${part.img}" alt="${part.name}">
         <b><svg><use href="#mark-${on ? "right" : "wrong"}"/></svg></b>
@@ -390,8 +410,8 @@ function partsHtml(topic, answer, picks) {
     .join("");
 }
 
-function pickOutcome(part, picks) {
-  return picks ? picks[part.id] || "" : "";
+function pickOutcome(part, picks, topic) {
+  return picks ? picks[groupKey(topic, part.id)] || "" : "";
 }
 
 function markRow(topic, truthId, wrongId) {
@@ -471,7 +491,9 @@ function openPicker() {
   pad.innerHTML =
     topic.upgrades
       .map((id, index) => {
-        const part = topic.parts.find((p) => p.id === id);
+        const fact = truth(state.data, state.deck[state.index]).answer;
+        const shown = shownAlt(topic, id, fact) || id;
+        const part = topic.parts.find((p) => p.id === shown);
         const slot = SLOTS[index];
         return `<button class="upgrade" data-id="${id}" data-slot="${slot}"
           style="grid-area: ${slot}" title="${part.name}">

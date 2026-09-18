@@ -52,10 +52,12 @@ TOPICS = [
         "words": [r"gunpowder", r"hand cannon\w*"],
     },
     {
+        # Four civs field the Armored Elephant where everyone else has a ram,
+        # and the top of either line is the same question.
         "id": "siege_ram",
-        "name": "Siege Ram",
-        "upgrades": [("Unit", 548), 377],
-        "words": [r"rams?", r"siege workshops?", r"siege weapons?"],
+        "name": "Siege Ram / Siege Elephant",
+        "upgrades": [[("Unit", 548), ("Unit", 1746)], 377],
+        "words": [r"rams?", r"siege workshops?", r"siege weapons?", r"siege elephants?"],
     },
     {
         # Shu, Wei and Wu field the Traction Trebuchet where everyone else has a
@@ -67,6 +69,22 @@ TOPICS = [
         "words": [r"gunpowder", r"bombard cannons?", r"siege workshops?", r"siege weapons?"],
     },
     {
+        "id": "scorpion",
+        "name": "Scorpion",
+        "unit": 279,
+        "icon": ("Unit", 542),
+        "upgrades": [("Unit", 542), 377],
+        "words": [r"scorpions?", r"siege workshops?", r"siege weapons?"],
+    },
+    {
+        "id": "onager",
+        "name": "Onager",
+        "unit": 550,
+        "icon": ("Unit", 588),
+        "upgrades": [("Unit", 588), 377],
+        "words": [r"onagers?", r"mangonels?", r"siege workshops?", r"siege weapons?"],
+    },
+    {
         # Gated on the Crossbowman, so a civ that stops at crossbows is partial
         # rather than "has nothing": the Arbalest is then one of the upgrades it
         # is missing. Only the Bulgarians and the Spanish have no crossbow at all.
@@ -76,17 +94,122 @@ TOPICS = [
         "icon": ("Unit", 492),
         "upgrades": [("Unit", 492), 201, 219, 437],
         "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?"],
-        "veto": [
-            r"cavalry archer",
-            r"mounted archer",
-            r"elephant archer",
-            r"camel archer",
-            r"fire archer",
-            r"genitour",
-            r"ballista",
-            r"scorpion",
-            r"chu ko nu",
-        ],
+        "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer",
+                 r"fire archer", r"genitour", r"ballista", r"scorpion", r"chu ko nu"],
+    },
+    {
+        "id": "skirmisher",
+        "name": "Skirmisher",
+        "unit": 7,
+        "icon": ("Unit", 6),
+        "upgrades": [("Unit", 6), 201, 219, 437],
+        "words": [r"skirmishers?", r"skirmisher-line", r"foot archers?", r"archery ranges?"],
+        "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer"],
+    },
+    {
+        "id": "cavalry_archer",
+        "name": "Cavalry Archer",
+        "unit": 39,
+        "icon": ("Unit", 474),
+        "upgrades": [("Unit", 474), 201, 219, 437, 435, 39, 436],
+        "words": [r"cavalry archers?", r"mounted archers?", r"archery ranges?"],
+        "veto": [r"genitour", r"foot archers?"],
+    },
+    {
+        "id": "halberdier",
+        "name": "Halberdier",
+        "unit": 358,
+        "icon": ("Unit", 359),
+        "upgrades": [("Unit", 359), 77, 75, 215],
+        "words": [r"halberdiers?", r"pikemen", r"spearman-line", r"spearmen", r"infantry"],
+        "veto": [r"villagers?"],
+    },
+    {
+        "id": "champion",
+        "name": "Champion",
+        "unit": 77,
+        "icon": ("Unit", 567),
+        "upgrades": [("Unit", 567), 875, 215, 77, 75],
+        "words": [r"militia-line", r"champions?", r"swordsm\w*", r"infantry", r"barracks"],
+        "veto": [r"villagers?"],
+    },
+    {
+        "id": "eagle",
+        "name": "Eagle Warrior",
+        "unit": 751,
+        "icon": ("Unit", 752),
+        "upgrades": [("Unit", 752), 215, 77, 75],
+        "words": [r"eagles?", r"eagle warriors?", r"infantry"],
+        "veto": [r"villagers?"],
+    },
+    {
+        "id": "champi",
+        "name": "Champi Warrior",
+        "unit": 2552,
+        "icon": ("Unit", 2554),
+        "upgrades": [("Unit", 2554), 215, 77, 75],
+        "words": [r"champi\w*", r"infantry"],
+        "veto": [r"villagers?"],
+    },
+    {
+        "id": "fire_lancer",
+        "name": "Fire Lancer",
+        "unit": 1901,
+        "icon": ("Unit", 1903),
+        "upgrades": [("Unit", 1903), 875, 215, 77, 75],
+        "words": [r"fire lancers?", r"infantry"],
+        "veto": [r"villagers?"],
+    },
+    {
+        "id": "hussar",
+        "name": "Hussar / Winged Hussar",
+        "unit": 546,
+        "icon": ("Unit", 441),
+        "upgrades": [[("Unit", 441), ("Unit", 1707)], 435, 39, 80, 75],
+        "words": [r"hussars?", r"light cavalry", r"scout cavalry", r"cavalry", r"stables?"],
+        "veto": [r"cavalry archer", r"camel", r"elephant", r"hei guang", r"xianbei"],
+    },
+    {
+        "id": "paladin",
+        "name": "Paladin / Savar",
+        "unit": 38,
+        "icon": ("Unit", 569),
+        "upgrades": [[("Unit", 569), ("Unit", 1813)], 435, 39, 80, 75],
+        "words": [r"paladins?", r"knights?", r"knight-line", r"cavalry", r"stables?"],
+        "veto": [r"cavalry archer", r"camel", r"elephant", r"scout cavalry", r"light cavalry",
+                 r"hei guang", r"xianbei"],
+    },
+    {
+        "id": "camel",
+        "name": "Camel Rider",
+        "unit": 329,
+        "icon": ("Unit", 330),
+        "upgrades": [("Unit", 330), 435, 39, 80, 75],
+        "words": [r"camels?", r"camel riders?"],
+    },
+    {
+        "id": "battle_elephant",
+        "name": "Battle Elephant",
+        "unit": 1132,
+        "icon": ("Unit", 1134),
+        "upgrades": [("Unit", 1134), 435, 39, 80, 75],
+        "words": [r"battle elephants?", r"elephants?"],
+        "veto": [r"elephant archer", r"ballista elephant", r"armored elephant", r"siege elephant"],
+    },
+    {
+        "id": "steppe_lancer",
+        "name": "Steppe Lancer",
+        "unit": 1370,
+        "icon": ("Unit", 1372),
+        "upgrades": [("Unit", 1372), 435, 39, 80, 75],
+        "words": [r"steppe lancers?"],
+    },
+    {
+        "id": "monk",
+        "name": "Monk",
+        "unit": 125,
+        "upgrades": [316, 230, 252, 438, 319, 233, 231],
+        "words": [r"monks?", r"monasteries", r"monastery", r"relics?", r"missionar\w*"],
     },
 ]
 
@@ -107,8 +230,21 @@ CIV_ID = {
 }
 
 
+def as_node(item):
+    return item if isinstance(item, tuple) else ("Tech", item)
+
+
+def upgrade_groups(spec: dict) -> list:
+    """One group per upgrade slot. A group of several is satisfied by any of
+    them: a civ has the Paladin *or* the Savar, never both."""
+    groups = []
+    for item in spec["upgrades"]:
+        groups.append([as_node(alt) for alt in item] if isinstance(item, list) else [as_node(item)])
+    return groups
+
+
 def upgrade_nodes(spec: dict) -> list:
-    return [item if isinstance(item, tuple) else ("Tech", item) for item in spec["upgrades"]]
+    return [node for group in upgrade_groups(spec) for node in group]
 
 
 def tiers_for(gate_ids: list, upgrade_ids: list) -> list:
@@ -132,10 +268,27 @@ DAT_ALIASES = {
 # In the .dat a unit is gated by an enabling tech whose id is not the unit's --
 # the Hand Cannoneer (unit 5) is enabled by tech 85, and an upgraded unit by the
 # upgrade itself. Only needed for the --civdata cross-check, and only for units
-# a topic names. None means the .dat cannot settle it: the Traction Trebuchet's
-# tech auto-researches in Imperial for civ -1, so reading the enable side there
-# hands it to all 53, and only aoe2techtree knows it is the Three Kingdoms' own.
-UNIT_ENABLER = {5: 85, 24: 100, 36: 188, 422: 96, 492: 237, 548: 255, 1942: None}
+# a topic names.
+#
+# None means the .dat cannot settle it, and every one of those is a *regional*
+# unit: their enabling techs sit in no civ's disabled list, so reading the
+# enable side hands the Battle Elephant, the Eagle and the Savar to all 53. It
+# is the same blind spot for all of them, and measurable -- each disagreed for
+# 40 to 52 civs, where every other gate here agreed for all 53. Those rest on
+# aoe2techtree alone; the other 40 nodes are still double-sourced.
+UNIT_ENABLER = {
+    5: 85, 6: 98, 7: 99, 24: 100, 36: 188, 38: 166, 39: 192, 77: 207, 125: 157, 279: 94,
+    329: None, 330: None, 358: 197, 359: 429, 422: 96, 441: 428, 474: 218, 492: 237, 542: 239,
+    546: 254, 548: 255, 550: 257, 567: 264, 569: 265, 588: 320, 751: None, 752: None, 1132: None,
+    1134: None, 1258: 162, 1370: None, 1372: None, 1707: None, 1744: 837, 1746: None, 1813: None,
+    1901: None, 1903: None, 2552: None, 2554: None, 1942: None,
+}
+
+# The two sources disagree here and the .dat is the one that cannot be trusted:
+# nothing in the Mapuche's disabled list turns Fervor off, yet the tech tree
+# they are dealt does not carry it -- the same enable-side blind spot as the
+# Traction Trebuchet. Recorded rather than silently accepted.
+KNOWN_DIVERGENCES = {("Mapuche", "Tech", 252)}
 
 
 def fetch(url: str) -> bytes:
@@ -252,12 +405,16 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
     gate_ids = [part_id("Unit", u) for u in gate_units(spec)]
     wanted_icon = part_id(*spec["icon"]) if spec.get("icon") else parts[0]["id"]
     icon_part = next(part for part in parts if part["id"] == wanted_icon)
-    upgrade_ids = [part_id(kind, item) for kind, item in upgrade_nodes(spec)]
+    groups = [[part_id(kind, item) for kind, item in group] for group in upgrade_groups(spec)]
+    upgrade_ids = [group[0] for group in groups]          # a slot answers to its first
+    alts = {group[0]: group for group in groups if len(group) > 1}
+    if gate_ids:
+        alts[gate_ids[0]] = gate_ids
 
     civs = {}
     for name, tree in sorted(techtree["civs"].items()):
         has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
-        missing = [u for u in upgrade_ids if u not in has]
+        missing = [group[0] for group in groups if not any(alt in has for alt in group)]
         # without a gate unit, having none of the upgrades is what "none" means
         nothing = (
             not any(gate in has for gate in gate_ids)
@@ -281,11 +438,24 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         "icon": icon_part["img"],
         "unit": gate_ids[0] if gate_ids else None,
         "gate": gate_ids,
+        "alts": alts,
         "upgrades": upgrade_ids,
         "parts": parts,
-        "tiers": tiers_for(gate_ids, upgrade_ids),
-        "civs": civs,
+        "tiers": tiers_for(gate_ids, [part for group in groups for part in group]),
+        "civs": trim_to_owners(civs, gate_ids),
     }
+
+
+# A unit only a handful of civs field makes a duller question than "which of the
+# civs that have it have it fully": below this, the deck is only those civs.
+RARE = 10
+
+
+def trim_to_owners(civs: dict, gate_ids: list) -> dict:
+    if not gate_ids:
+        return civs
+    owners = {name: civ for name, civ in civs.items() if civ["tier"] != "none"}
+    return owners if len(owners) < RARE else civs
 
 
 def cross_check(techtree: dict, civdata_path: Path) -> int:
@@ -313,6 +483,9 @@ def cross_check(techtree: dict, civdata_path: Path) -> int:
         disabled = {int(x["d"]) for x in civdata[key]["tech_tree"]["availability"]}
         for kind, item, dat_id in checked:
             if (item in tree[kind]) != (dat_id not in disabled):
+                if (name, kind, item) in KNOWN_DIVERGENCES:
+                    print(f"cross-check: {name} {kind} {item} is a known divergence")
+                    continue
                 print(f"cross-check: {name} disagrees on {kind} {item}", file=sys.stderr)
                 problems += 1
     return problems
