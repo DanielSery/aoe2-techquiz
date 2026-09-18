@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AoE2 Tech Quiz</title>
+<meta name="description" content="Learn which Age of Empires II civilisations have which units and upgrades.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="img/topics/unit-5.png">
+</head>
+<body>
+
+<svg class="sprites" aria-hidden="true">
+  <symbol id="mark-full" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="mark-partial" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M12 3.5a8.5 8.5 0 000 17z" fill="currentColor"/></symbol>
+  <symbol id="mark-none" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></symbol>
+  <symbol id="mark-right" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="mark-wrong" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></symbol>
+  <symbol id="arrow-left" viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="arrow-up" viewBox="0 0 24 24"><path d="M4 15l8-8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="arrow-right" viewBox="0 0 24 24"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-replay" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
+</svg>
+
+<main>
+
+  <section id="menu" class="screen is-active">
+    <h1><img src="img/topics/unit-5.png" alt=""><span>Tech Quiz</span></h1>
+    <p class="lede">Pick your topics, then say what each civilisation gets.</p>
+    <div id="topic-grid" class="topic-grid"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="mark is-none"><svg><use href="#mark-none"/></svg></span><svg class="key"><use href="#arrow-left"/></svg></div>
+      <div class="legend-item"><span class="mark is-partial"><svg><use href="#mark-partial"/></svg></span><svg class="key"><use href="#arrow-up"/></svg></div>
+      <div class="legend-item"><span class="mark is-full"><svg><use href="#mark-full"/></svg></span><svg class="key"><use href="#arrow-right"/></svg></div>
+    </div>
+    <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
+  </section>
+
+  <section id="game" class="screen">
+    <div class="hud">
+      <button id="quit" class="ghost" title="Back to topics"><svg><use href="#icon-home"/></svg></button>
+      <div id="progress" class="progress"></div>
+      <div id="tally" class="tally"></div>
+    </div>
+
+    <div id="prompt" class="prompt"></div>
+
+    <div class="arena">
+      <div class="target is-none"><svg><use href="#mark-none"/></svg></div>
+      <div class="target is-partial"><svg><use href="#mark-partial"/></svg></div>
+      <div class="target is-full"><svg><use href="#mark-full"/></svg></div>
+      <div id="stack" class="stack"></div>
+    </div>
+
+    <div class="controls">
+      <button class="answer is-none" data-verdict="none" title="Does not have it (←)"><svg><use href="#mark-none"/></svg></button>
+      <button class="answer is-partial" data-verdict="partial" title="Has it, but not fully upgraded (↑)"><svg><use href="#mark-partial"/></svg></button>
+      <button class="answer is-full" data-verdict="full" title="Has it, fully upgraded (→)"><svg><use href="#mark-full"/></svg></button>
+    </div>
+  </section>
+
+  <section id="results" class="screen">
+    <div id="score" class="score"></div>
+    <div id="review" class="review"></div>
+    <div class="actions">
+      <button id="again-wrong" class="primary"><svg><use href="#icon-replay"/></svg><span id="wrong-count"></span></button>
+      <button id="again-all" class="ghost"><svg><use href="#icon-replay"/></svg><span id="all-count"></span></button>
+      <button id="to-menu" class="ghost"><svg><use href="#icon-home"/></svg></button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Game data from <a href="https://github.com/SiegeEngineers/aoe2techtree">aoe2techtree</a>.
+  Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
+</footer>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
