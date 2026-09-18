@@ -1,5 +1,4 @@
-import { loadData, buildDeck, truth, shuffle } from "./data.js";
-import { attachSwipe, verdictFor } from "./swipe.js";
+const { buildDeck, truth, shuffle, attachSwipe, verdictFor } = window.Quiz;
 
 const VERDICTS = { ArrowLeft: "none", ArrowUp: "partial", ArrowRight: "full" };
 const FLY = { none: [-1, 0], partial: [0, -1], full: [1, 0] };
@@ -24,8 +23,13 @@ const state = {
 
 start();
 
-async function start() {
-  state.data = await loadData();
+function start() {
+  state.data = window.QUIZ_DATA;
+  if (!state.data || !state.data.topics || !state.data.topics.length) {
+    el("topic-grid").innerHTML =
+      '<p class="lede">data/topics.js did not load. Run <code>python tools/build_data.py</code>.</p>';
+    return;
+  }
   restoreSelection();
   renderMenu();
 
@@ -47,10 +51,23 @@ async function start() {
 /* ---------- menu ---------- */
 
 function restoreSelection() {
-  const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+  let saved = [];
+  try {
+    saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+  } catch (ignored) {
+    saved = [];
+  }
   const known = state.data.topics.map((t) => t.id);
-  const wanted = saved.filter((id) => known.includes(id));
+  const wanted = Array.isArray(saved) ? saved.filter((id) => known.includes(id)) : [];
   state.selected = new Set(wanted.length ? wanted : known.slice(0, 1));
+}
+
+function rememberSelection() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
+  } catch (ignored) {
+    /* private mode, or opened off disk */
+  }
 }
 
 function renderMenu() {
@@ -65,8 +82,10 @@ function renderMenu() {
     tile.innerHTML = `<img src="${topic.icon}" alt=""><span>${topic.name}</span>
       <small>${Object.keys(topic.civs).length}</small>`;
     tile.addEventListener("click", () => {
-      state.selected.has(topic.id) ? state.selected.delete(topic.id) : state.selected.add(topic.id);
-      localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
+      if (!state.selected.has(topic.id)) state.selected.add(topic.id);
+      else if (state.selected.size > 1) state.selected.delete(topic.id);
+      else return; // turning the last one off would leave nothing to play
+      rememberSelection();
       renderMenu();
     });
     grid.append(tile);
@@ -82,7 +101,7 @@ function renderMenu() {
     all.addEventListener("click", () => {
       const every = state.data.topics.map((t) => t.id);
       state.selected = new Set(state.selected.size === every.length ? every.slice(0, 1) : every);
-      localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
+      rememberSelection();
       renderMenu();
     });
     grid.append(all);

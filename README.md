@@ -16,7 +16,8 @@ repeat the whole set, or go back and pick a different mix of topics.
 
 ## Playing it
 
-It is a static page — open `index.html` through any web server:
+It is a static page with no build step and no dependencies. Opening
+`index.html` straight off disk works, and so does any web server:
 
 ```powershell
 python -m http.server 8080
@@ -27,7 +28,7 @@ On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(ro
 
 ## The data
 
-`data/topics.json` is generated, not written by hand. Its source is
+`data/topics.js` is generated, not written by hand. Its source is
 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree),
 which extracts the tech tree from the game's own `.dat` file, pinned to a commit.
 
@@ -54,11 +55,13 @@ apart.
 |---|---|
 | `index.html` | the three screens and the SVG symbols |
 | `js/app.js` | screens, round state, rendering |
-| `js/data.js` | loading, deck building, shuffling |
+| `data/topics.js` | generated: every civ's answer for every topic |
+| `js/data.js` | deck building and shuffling |
 | `js/swipe.js` | pointer drag to a verdict |
-| `tools/build_data.py` | generates `data/topics.json` and downloads the icons |
+| `tools/build_data.py` | generates `data/topics.js` and downloads the icons |
 
-No build step and no dependencies.
+The data is a `.js` assignment rather than `.json` on purpose: a page opened
+from `file://` may not `fetch`, but it may load a script.
 
 ## Credit
 

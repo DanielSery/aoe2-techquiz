@@ -1,19 +1,17 @@
-export async function loadData() {
-  const response = await fetch("data/topics.json", { cache: "no-cache" });
-  if (!response.ok) throw new Error(`topics.json: ${response.status}`);
-  return response.json();
-}
+/* Classic script, not a module: index.html has to work opened straight off
+   disk, where module loading and fetch are both blocked. */
+window.Quiz = window.Quiz || {};
 
-export function shuffle(items) {
+window.Quiz.shuffle = function (items) {
   const out = items.slice();
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
-}
+};
 
-export function buildDeck(data, topicIds) {
+window.Quiz.buildDeck = function (data, topicIds) {
   const cards = [];
   for (const topic of data.topics) {
     if (!topicIds.includes(topic.id)) continue;
@@ -21,10 +19,10 @@ export function buildDeck(data, topicIds) {
       if (topic.civs[civId]) cards.push({ topicId: topic.id, civId });
     }
   }
-  return shuffle(cards);
-}
+  return window.Quiz.shuffle(cards);
+};
 
-export function truth(data, card) {
+window.Quiz.truth = function (data, card) {
   const topic = data.topics.find((t) => t.id === card.topicId);
   return { topic, civ: data.civs[card.civId], answer: topic.civs[card.civId] };
-}
+};

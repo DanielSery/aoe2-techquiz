@@ -1,4 +1,4 @@
-{
+window.QUIZ_DATA = {
  "source": {
   "repo": "SiegeEngineers/aoe2techtree",
   "commit": "b9d494df6921d4080df69b22f9dbb7a4d1dcd9f0",
@@ -690,4 +690,4 @@
    }
   }
  ]
-}
+};

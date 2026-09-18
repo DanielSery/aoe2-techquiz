@@ -1,4 +1,4 @@
-"""Generate data/topics.json and download the icons it points at.
+"""Generate data/topics.js and download the icons it points at.
 
 Source of truth is SiegeEngineers/aoe2techtree's data/data.json, pinned to a
 commit. Optionally cross-checked against an Aoe2Planner civdata.json, which is
@@ -205,9 +205,12 @@ def main() -> int:
         "topics": [build_topic(spec, techtree, icons) for spec in TOPICS],
     }
 
-    out = ROOT / "data" / "topics.json"
+    # a .js assignment rather than .json, so the page also works opened straight
+    # off disk: a file:// page may not fetch, but it may load a script
+    out = ROOT / "data" / "topics.js"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    body = json.dumps(data, indent=1, ensure_ascii=False)
+    out.write_text(f"window.QUIZ_DATA = {body};\n", encoding="utf-8")
     print(f"{out.relative_to(ROOT)}: {len(data['civs'])} civs, {len(data['topics'])} topics")
 
     download_images(commit, data)
