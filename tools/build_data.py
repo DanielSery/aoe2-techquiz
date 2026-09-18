@@ -22,10 +22,19 @@ REPO = "SiegeEngineers/aoe2techtree"
 API = f"https://api.github.com/repos/{REPO}"
 ROOT = Path(__file__).resolve().parent.parent
 
-# A topic is a unit and the techs that have to be researched for it to be
-# "complete". `key` is the one whose absence means the civ does not have the
-# topic at all. Techs that every civ has (Chemistry, Ballistics) are left out:
-# they cannot tell two civs apart, so they would be four more icons saying
+# A topic is a ladder of rungs, worst first, and a civ sits on the highest rung
+# it can reach. The short form below -- a unit and the techs that complete it --
+# expands to the three-rung ladder in `default_ladder`; write `ladder` out in
+# full for a topic that wants all four directions, e.g. the stable:
+#
+#   {"id": "knight_line", "name": "Knight line", "ladder": [
+#       {"id": "none",    "dir": "left",  "mark": "none",    "units": [], "techs": []},
+#       {"id": "bare",    "dir": "down",  "mark": "bare",    "units": [38], "techs": []},
+#       {"id": "partial", "dir": "up",    "mark": "partial", "units": [283], "techs": []},
+#       {"id": "full",    "dir": "right", "mark": "full",    "units": [569], "techs": []}]}
+#
+# Techs that every civ has (Chemistry, Ballistics) are left out of Hand
+# Cannoneer: they cannot tell two civs apart, so they would be icons saying
 # nothing.
 TOPICS = [
     {
@@ -36,6 +45,20 @@ TOPICS = [
     },
 ]
 
+
+def default_ladder(spec: dict) -> list:
+    return [
+        {"id": "none", "dir": "left", "mark": "none", "units": [], "techs": []},
+        {"id": "partial", "dir": "up", "mark": "partial", "units": [spec["unit"]], "techs": []},
+        {
+            "id": "full",
+            "dir": "right",
+            "mark": "full",
+            "units": [spec["unit"]],
+            "techs": spec["techs"],
+        },
+    ]
+
 # aoe2techtree's civ keys map to img/Civs/<lowercase>.png; Aoe2Planner's
 # extraction uses the .dat's internal names, which differ for four civs.
 DAT_ALIASES = {
@@ -44,6 +67,11 @@ DAT_ALIASES = {
     "Byzantines": "Byzantine",
     "Mayans": "Mayan",
 }
+
+# In the .dat a unit is gated by an enabling tech whose id is not the unit's --
+# the Hand Cannoneer (unit 5) is enabled by tech 85. Only needed for the
+# --civdata cross-check, and only for units a topic names.
+UNIT_ENABLER = {5: 85}
 
 
 def fetch(url: str) -> bytes:
@@ -88,52 +116,79 @@ def walk(node):
             yield from walk(value)
 
 
-def verdict(has_unit: bool, missing_techs: list) -> str:
-    if not has_unit:
-        return "none"
-    return "full" if not missing_techs else "partial"
+def ladder_of(spec: dict) -> list:
+    return spec.get("ladder") or default_ladder(spec)
+
+
+def nodes_of(spec: dict) -> list:
+    """Every (kind, id) the topic mentions, worst rung first, deduplicated."""
+    seen = []
+    for rung in ladder_of(spec):
+        for kind, ids in (("Unit", rung["units"]), ("Tech", rung["techs"])):
+            for item in ids:
+                if (kind, item) not in seen:
+                    seen.append((kind, item))
+    return seen
+
+
+def part_id(kind: str, item: int) -> str:
+    return f"{kind.lower()}-{item}"
 
 
 def build_topic(spec: dict, techtree: dict, icons: dict) -> dict:
     parts = []
-    for kind, item in [("Unit", spec["unit"])] + [("Tech", t) for t in spec["techs"]]:
+    for kind, item in nodes_of(spec):
         index, name = icons[(kind, item)]
         parts.append(
             {
-                "id": f"{kind.lower()}-{item}",
+                "id": part_id(kind, item),
                 "name": name,
-                "img": f"img/topics/{kind.lower()}-{item}.png",
+                "img": f"img/topics/{part_id(kind, item)}.png",
                 "icon_index": index,
-                "key": kind == "Unit",
             }
         )
 
+    ladder = ladder_of(spec)
+    tiers = [
+        {
+            "id": rung["id"],
+            "dir": rung["dir"],
+            "mark": rung["mark"],
+            "has": [part_id("Unit", u) for u in rung["units"]]
+            + [part_id("Tech", t) for t in rung["techs"]],
+        }
+        for rung in ladder
+    ]
+
     civs = {}
     for name, tree in sorted(techtree["civs"].items()):
-        has_unit = spec["unit"] in tree["Unit"]
-        has = [f"unit-{spec['unit']}"] if has_unit else []
-        has += [f"tech-{t}" for t in spec["techs"] if t in tree["Tech"]]
-        missing = [p["id"] for p in parts if p["id"] not in has]
-        civs[name.lower()] = {
-            "verdict": verdict(has_unit, [m for m in missing if m != parts[0]["id"]]),
-            "has": has,
-        }
+        has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
+        reached = [tier["id"] for tier in tiers if all(need in has for need in tier["has"])]
+        civs[name.lower()] = {"tier": reached[-1], "has": has}
 
     return {
         "id": spec["id"],
         "name": spec["name"],
         "icon": parts[0]["img"],
         "parts": parts,
+        "tiers": tiers,
         "civs": civs,
     }
 
 
 def cross_check(techtree: dict, civdata_path: Path) -> int:
     civdata = json.loads(civdata_path.read_text(encoding="utf-8"))["civs"]
-    # In the .dat a unit is gated by an enabling tech, and its id is not the
-    # unit's: the Hand Cannoneer unit (5) is enabled by tech 85.
-    unit_enabler = {5: 85}
     problems = 0
+    checked = []
+    for spec in TOPICS:
+        for kind, item in nodes_of(spec):
+            if kind == "Tech":
+                checked.append((kind, item, item))
+            elif item in UNIT_ENABLER:
+                checked.append((kind, item, UNIT_ENABLER[item]))
+            else:
+                print(f"cross-check: no enabling tech known for unit {item}", file=sys.stderr)
+                problems += 1
 
     for name, tree in techtree["civs"].items():
         key = DAT_ALIASES.get(name, name)
@@ -142,14 +197,10 @@ def cross_check(techtree: dict, civdata_path: Path) -> int:
             problems += 1
             continue
         disabled = {int(x["d"]) for x in civdata[key]["tech_tree"]["availability"]}
-        for spec in TOPICS:
-            pairs = [(spec["unit"], unit_enabler[spec["unit"]], "Unit")] + [
-                (t, t, "Tech") for t in spec["techs"]
-            ]
-            for item, dat_id, kind in pairs:
-                if (item in tree[kind]) != (dat_id not in disabled):
-                    print(f"cross-check: {name} disagrees on {kind} {item}", file=sys.stderr)
-                    problems += 1
+        for kind, item, dat_id in checked:
+            if (item in tree[kind]) != (dat_id not in disabled):
+                print(f"cross-check: {name} disagrees on {kind} {item}", file=sys.stderr)
+                problems += 1
     return problems
 
 
@@ -188,8 +239,7 @@ def main() -> int:
         if problems:
             return 1
 
-    wanted_nodes = {("Unit", spec["unit"]) for spec in TOPICS}
-    wanted_nodes |= {("Tech", t) for spec in TOPICS for t in spec["techs"]}
+    wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
     icons = icon_indices(commit, techtree, wanted_nodes)
 
     data = {
@@ -217,7 +267,7 @@ def main() -> int:
     for topic in data["topics"]:
         counts = {}
         for civ in topic["civs"].values():
-            counts[civ["verdict"]] = counts.get(civ["verdict"], 0) + 1
+            counts[civ["tier"]] = counts.get(civ["tier"], 0) + 1
         print(f"{topic['id']}: {counts}")
     return 0
 

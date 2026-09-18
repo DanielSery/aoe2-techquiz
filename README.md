@@ -10,6 +10,16 @@ what each one gets:
 | ◐ | up | `↑` | it has the unit, but not every upgrade |
 | ✓ | right | `→` | unit and every upgrade |
 
+You never have to remember that: in the quiz the answers sit on a pad below the
+card, each one in the direction you swipe for it, showing the topic's icons lit
+or dimmed for what that answer claims. The one you are about to pick lights up
+while you drag.
+
+A topic can use a fourth direction (`↓`) when its ladder has four rungs — see
+the note on `TOPICS` in `tools/build_data.py`. Hand Cannoneer uses three,
+because the fourth rung would be empty: no civilisation has the unit while
+missing more than Ring Archer Armor.
+
 The card turns over the moment you answer and shows what the civ actually has,
 icon by icon. At the end of a set you can repeat only the ones you got wrong,
 repeat the whole set, or go back and pick a different mix of topics.
@@ -42,12 +52,14 @@ of the same `.dat` and refuses to write anything if the two disagree — that
 disagreement would mean one of them is from a different patch. The current data
 passes for all 53 civilisations.
 
-A topic is a unit plus the upgrades that complete it. Adding one is a few lines
-in `TOPICS` at the top of `tools/build_data.py` — unit id and tech ids, both as
+A topic is a ladder of rungs, worst first, and a civ sits on the highest rung it
+can reach. Adding one is a few lines in `TOPICS` at the top of
+`tools/build_data.py` — a unit id and the tech ids that complete it, as
 [aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree) numbers them —
-and a re-run, which fetches the icons too. Techs that every civilisation has
-(Chemistry, Ballistics) are deliberately left out: they cannot tell two civs
-apart.
+and a re-run, which fetches the icons too. That short form expands to the
+three-rung ladder in `default_ladder`; write the rungs out in full to use all
+four directions. Techs that every civilisation has (Chemistry, Ballistics) are
+deliberately left out: they cannot tell two civs apart.
 
 ## Layout
 
@@ -57,7 +69,7 @@ apart.
 | `js/app.js` | screens, round state, rendering |
 | `data/topics.js` | generated: every civ's answer for every topic |
 | `js/data.js` | deck building and shuffling |
-| `js/swipe.js` | pointer drag to a verdict |
+| `js/swipe.js` | pointer drag to a direction |
 | `tools/build_data.py` | generates `data/topics.js` and downloads the icons |
 
 The data is a `.js` assignment rather than `.json` on purpose: a page opened

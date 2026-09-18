@@ -8,6 +8,7 @@
   --ink-dim: #a8968014;
 
   --none: #cf5340;
+  --bare: #d4763a;
   --partial: #dfa338;
   --full: #62a765;
 
@@ -142,20 +143,6 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   box-shadow: 0 0 0 2px #d9ab5233 inset;
 }
 
-.legend {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.legend .key { width: 16px; height: 16px; color: #8a7a64; }
-
 .mark {
   position: relative;
   display: inline-flex;
@@ -183,6 +170,7 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 }
 
 .is-none { color: var(--none); }
+.is-bare { color: var(--bare); }
 .is-partial { color: var(--partial); }
 .is-full { color: var(--full); }
 
@@ -240,29 +228,6 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   justify-content: center;
 }
 
-.target {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 2px dashed currentColor;
-  opacity: .22;
-  transition: opacity .12s, transform .12s;
-}
-
-.target svg { width: 30px; height: 30px; }
-
-.target.is-none { left: 0; top: 50%; transform: translateY(-50%); }
-.target.is-full { right: 0; top: 50%; transform: translateY(-50%); }
-.target.is-partial { top: 0; left: 50%; transform: translateX(-50%); }
-
-.target.armed { opacity: 1; border-style: solid; }
-.target.armed.is-none, .target.armed.is-full { transform: translateY(-50%) scale(1.15); }
-.target.armed.is-partial { transform: translateX(-50%) scale(1.15); }
-
 .stack {
   position: relative;
   width: var(--card-w);
@@ -276,6 +241,13 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
   perspective: 900px;
   touch-action: none;
   will-change: transform;
+}
+
+/* An <img> starts a native drag, which fires pointercancel and kills the swipe
+   a few pixels in; the card has to be the only thing the pointer can grab. */
+.card img {
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
 .card.under { transform: scale(.94) translateY(10px); filter: brightness(.6); }
@@ -414,21 +386,71 @@ h1 img { width: 40px; height: 40px; border-radius: 6px; }
 .part.on b { color: var(--full); }
 .part.off b { color: var(--none); }
 
-.controls {
-  display: flex;
-  gap: 14px;
+/* Each answer sits where its swipe goes: the pad is the legend. */
+.pad {
+  display: grid;
+  grid-template-areas: ". up ." "left topic right" ". down .";
+  gap: 6px;
+  align-items: center;
+  justify-items: center;
   padding-bottom: 6px;
 }
 
+.pad.no-down { grid-template-areas: ". up ." "left topic right"; }
+
+.pad-topic {
+  grid-area: topic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+}
+
+.pad-topic img { width: 34px; height: 34px; border-radius: 6px; opacity: .8; }
+
 .answer {
-  width: 66px;
-  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 8px;
+  min-width: 78px;
   border-width: 2px;
   border-color: currentColor;
   background: var(--panel);
 }
 
-.answer svg { width: 28px; height: 28px; }
+.answer[data-dir="left"] { grid-area: left; }
+.answer[data-dir="up"] { grid-area: up; }
+.answer[data-dir="right"] { grid-area: right; }
+.answer[data-dir="down"] { grid-area: down; }
+
+.answer .arrow { width: 18px; height: 18px; opacity: .85; }
+.answer .mark { width: 26px; height: 26px; border: 0; }
+.answer .mark svg { width: 24px; height: 24px; }
+
+.answer.armed {
+  background: #ffffff14;
+  box-shadow: 0 0 0 3px currentColor inset;
+}
+
+/* what that direction claims the civ has */
+.mini { display: flex; gap: 2px; }
+
+.mini span {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mini span.off img { filter: grayscale(1) brightness(.35); }
+
+/* "some of these, not all" */
+.mini span.some img { filter: grayscale(.55) brightness(.62); }
+.mini span.some { outline: 1px dashed currentColor; outline-offset: -1px; }
 
 /* ---------- results ---------- */
 

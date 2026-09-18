@@ -3,10 +3,14 @@ window.Quiz = window.Quiz || {};
 (function () {
   const THRESHOLD = 74;
 
-  window.Quiz.verdictFor = function (dx, dy) {
-    if (-dy > THRESHOLD && -dy > Math.abs(dx)) return "partial";
-    if (dx > THRESHOLD) return "full";
-    if (dx < -THRESHOLD) return "none";
+  window.Quiz.directionFor = function (dx, dy) {
+    if (Math.abs(dy) > Math.abs(dx)) {
+      if (-dy > THRESHOLD) return "up";
+      if (dy > THRESHOLD) return "down";
+      return null;
+    }
+    if (dx > THRESHOLD) return "right";
+    if (dx < -THRESHOLD) return "left";
     return null;
   };
 

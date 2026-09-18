@@ -228,34 +228,57 @@ window.QUIZ_DATA = {
      "id": "unit-5",
      "name": "Hand Cannoneer",
      "img": "img/topics/unit-5.png",
-     "icon_index": 22,
-     "key": true
+     "icon_index": 22
     },
     {
      "id": "tech-211",
      "name": "Padded Archer Armor",
      "img": "img/topics/tech-211.png",
-     "icon_index": 49,
-     "key": false
+     "icon_index": 49
     },
     {
      "id": "tech-212",
      "name": "Leather Archer Armor",
      "img": "img/topics/tech-212.png",
-     "icon_index": 50,
-     "key": false
+     "icon_index": 50
     },
     {
      "id": "tech-219",
      "name": "Ring Archer Armor",
      "img": "img/topics/tech-219.png",
-     "icon_index": 51,
-     "key": false
+     "icon_index": 51
+    }
+   ],
+   "tiers": [
+    {
+     "id": "none",
+     "dir": "left",
+     "mark": "none",
+     "has": []
+    },
+    {
+     "id": "partial",
+     "dir": "up",
+     "mark": "partial",
+     "has": [
+      "unit-5"
+     ]
+    },
+    {
+     "id": "full",
+     "dir": "right",
+     "mark": "full",
+     "has": [
+      "unit-5",
+      "tech-211",
+      "tech-212",
+      "tech-219"
+     ]
     }
    ],
    "civs": {
     "armenians": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -263,14 +286,14 @@ window.QUIZ_DATA = {
      ]
     },
     "aztecs": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "bengalis": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -278,7 +301,7 @@ window.QUIZ_DATA = {
      ]
     },
     "berbers": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -287,7 +310,7 @@ window.QUIZ_DATA = {
      ]
     },
     "bohemians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -296,7 +319,7 @@ window.QUIZ_DATA = {
      ]
     },
     "britons": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -304,14 +327,14 @@ window.QUIZ_DATA = {
      ]
     },
     "bulgarians": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "burgundians": {
-     "verdict": "partial",
+     "tier": "partial",
      "has": [
       "unit-5",
       "tech-211",
@@ -319,13 +342,13 @@ window.QUIZ_DATA = {
      ]
     },
     "burmese": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211"
      ]
     },
     "byzantines": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -334,7 +357,7 @@ window.QUIZ_DATA = {
      ]
     },
     "celts": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -342,7 +365,7 @@ window.QUIZ_DATA = {
      ]
     },
     "chinese": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -350,7 +373,7 @@ window.QUIZ_DATA = {
      ]
     },
     "cumans": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -358,7 +381,7 @@ window.QUIZ_DATA = {
      ]
     },
     "dravidians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -367,7 +390,7 @@ window.QUIZ_DATA = {
      ]
     },
     "ethiopians": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -375,7 +398,7 @@ window.QUIZ_DATA = {
      ]
     },
     "franks": {
-     "verdict": "partial",
+     "tier": "partial",
      "has": [
       "unit-5",
       "tech-211",
@@ -383,7 +406,7 @@ window.QUIZ_DATA = {
      ]
     },
     "georgians": {
-     "verdict": "partial",
+     "tier": "partial",
      "has": [
       "unit-5",
       "tech-211",
@@ -391,7 +414,7 @@ window.QUIZ_DATA = {
      ]
     },
     "goths": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -400,7 +423,7 @@ window.QUIZ_DATA = {
      ]
     },
     "gurjaras": {
-     "verdict": "partial",
+     "tier": "partial",
      "has": [
       "unit-5",
       "tech-211",
@@ -408,7 +431,7 @@ window.QUIZ_DATA = {
      ]
     },
     "hindustanis": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -417,14 +440,14 @@ window.QUIZ_DATA = {
      ]
     },
     "huns": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "incas": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -432,7 +455,7 @@ window.QUIZ_DATA = {
      ]
     },
     "italians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -441,7 +464,7 @@ window.QUIZ_DATA = {
      ]
     },
     "japanese": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -450,7 +473,7 @@ window.QUIZ_DATA = {
      ]
     },
     "jurchens": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -458,7 +481,7 @@ window.QUIZ_DATA = {
      ]
     },
     "khitans": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -466,7 +489,7 @@ window.QUIZ_DATA = {
      ]
     },
     "khmer": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -475,7 +498,7 @@ window.QUIZ_DATA = {
      ]
     },
     "koreans": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -484,7 +507,7 @@ window.QUIZ_DATA = {
      ]
     },
     "lithuanians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -493,7 +516,7 @@ window.QUIZ_DATA = {
      ]
     },
     "magyars": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -501,7 +524,7 @@ window.QUIZ_DATA = {
      ]
     },
     "malay": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -509,7 +532,7 @@ window.QUIZ_DATA = {
      ]
     },
     "malians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -518,7 +541,7 @@ window.QUIZ_DATA = {
      ]
     },
     "mapuche": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -526,7 +549,7 @@ window.QUIZ_DATA = {
      ]
     },
     "mayans": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -534,21 +557,21 @@ window.QUIZ_DATA = {
      ]
     },
     "mongols": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "muisca": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "persians": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -557,14 +580,14 @@ window.QUIZ_DATA = {
      ]
     },
     "poles": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "portuguese": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -573,7 +596,7 @@ window.QUIZ_DATA = {
      ]
     },
     "romans": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -581,7 +604,7 @@ window.QUIZ_DATA = {
      ]
     },
     "saracens": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -590,7 +613,7 @@ window.QUIZ_DATA = {
      ]
     },
     "shu": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -598,14 +621,14 @@ window.QUIZ_DATA = {
      ]
     },
     "sicilians": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"
      ]
     },
     "slavs": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -613,7 +636,7 @@ window.QUIZ_DATA = {
      ]
     },
     "spanish": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -622,7 +645,7 @@ window.QUIZ_DATA = {
      ]
     },
     "tatars": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -631,7 +654,7 @@ window.QUIZ_DATA = {
      ]
     },
     "teutons": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -640,7 +663,7 @@ window.QUIZ_DATA = {
      ]
     },
     "tupi": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -648,7 +671,7 @@ window.QUIZ_DATA = {
      ]
     },
     "turks": {
-     "verdict": "full",
+     "tier": "full",
      "has": [
       "unit-5",
       "tech-211",
@@ -657,7 +680,7 @@ window.QUIZ_DATA = {
      ]
     },
     "vietnamese": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -665,7 +688,7 @@ window.QUIZ_DATA = {
      ]
     },
     "vikings": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -673,7 +696,7 @@ window.QUIZ_DATA = {
      ]
     },
     "wei": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212",
@@ -681,7 +704,7 @@ window.QUIZ_DATA = {
      ]
     },
     "wu": {
-     "verdict": "none",
+     "tier": "none",
      "has": [
       "tech-211",
       "tech-212"

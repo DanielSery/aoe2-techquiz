@@ -1,7 +1,7 @@
-const { buildDeck, truth, shuffle, attachSwipe, verdictFor } = window.Quiz;
+const { buildDeck, truth, shuffle, attachSwipe, directionFor } = window.Quiz;
 
-const VERDICTS = { ArrowLeft: "none", ArrowUp: "partial", ArrowRight: "full" };
-const FLY = { none: [-1, 0], partial: [0, -1], full: [1, 0] };
+const KEYS = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down" };
+const FLY = { left: [-1, 0], up: [0, -1], right: [1, 0], down: [0, 1] };
 const PAUSE = { right: 850, wrong: 2400 };
 const STORE_KEY = "aoe2-techquiz.topics";
 
@@ -42,9 +42,10 @@ function start() {
   el("again-wrong").addEventListener("click", () =>
     beginRound(shuffle(state.results.filter((r) => !r.right).map((r) => r.card)), false)
   );
-  for (const button of document.querySelectorAll(".answer")) {
-    button.addEventListener("click", () => answer(button.dataset.verdict));
-  }
+  el("pad").addEventListener("click", (event) => {
+    const button = event.target.closest(".answer");
+    if (button) answer(button.dataset.dir);
+  });
   document.addEventListener("keydown", onKey);
 }
 
@@ -168,13 +169,13 @@ function renderCard() {
       if (state.phase !== "answer") return;
       node.classList.remove("settle");
       node.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx / 20}deg)`;
-      arm(verdictFor(dx, dy));
+      arm(directionFor(dx, dy));
     },
     onRelease: (dx, dy) => {
       if (state.phase !== "answer") return;
-      const verdict = verdictFor(dx, dy);
+      const direction = directionFor(dx, dy);
       arm(null);
-      if (verdict) return answer(verdict);
+      if (direction && tierAt(topic, direction)) return answer(direction);
       node.classList.add("settle");
       node.style.transform = "";
     },
@@ -182,6 +183,60 @@ function renderCard() {
 
   renderProgress();
   renderPrompt(topic);
+  renderPad(topic);
+}
+
+function tierAt(topic, direction) {
+  return topic.tiers.find((tier) => tier.dir === direction);
+}
+
+function tierById(topic, id) {
+  return topic.tiers.find((tier) => tier.id === id);
+}
+
+/* The pad is the only place that says what a direction means, so it is drawn
+   per topic: the arrow, the mark, and the parts that direction claims. */
+function renderPad(topic) {
+  const pad = el("pad");
+  pad.className = `pad${tierAt(topic, "down") ? "" : " no-down"}`;
+  pad.innerHTML =
+    topic.tiers
+      .map(
+        (tier, index) => `<button class="answer is-${tier.mark}" data-dir="${tier.dir}"
+          title="${padTitle(topic, index)}">
+          <svg class="arrow"><use href="#arrow-${tier.dir}"/></svg>
+          <span class="mark is-${tier.mark}"><svg><use href="#mark-${tier.mark}"/></svg></span>
+          <span class="mini">${miniHtml(topic, index)}</span>
+        </button>`
+      )
+      .join("") + `<span class="pad-topic"><img src="${topic.icon}" alt="${topic.name}"></span>`;
+}
+
+// a rung is "at least this much, and not all of the next one"
+function rungParts(topic, index) {
+  const has = topic.tiers[index].has;
+  const next = topic.tiers[index + 1] ? topic.tiers[index + 1].has : [];
+  return topic.parts.map((part) => ({
+    part,
+    state: has.includes(part.id) ? "on" : next.includes(part.id) ? "some" : "off",
+  }));
+}
+
+function miniHtml(topic, index) {
+  return rungParts(topic, index)
+    .map(
+      ({ part, state }) =>
+        `<span class="${state}" title="${part.name}"><img src="${part.img}" alt=""></span>`
+    )
+    .join("");
+}
+
+function padTitle(topic, index) {
+  const rows = rungParts(topic, index);
+  const on = rows.filter((r) => r.state === "on").map((r) => r.part.name);
+  const some = rows.filter((r) => r.state === "some").map((r) => r.part.name);
+  if (!on.length) return `no ${some.join(", ") || topic.name}`;
+  return some.length ? `${on.join(", ")} — but not all of: ${some.join(", ")}` : on.join(", ");
 }
 
 function partsHtml(topic, answer) {
@@ -196,16 +251,18 @@ function partsHtml(topic, answer) {
     .join("");
 }
 
-function markRow(verdict, wrongGuess) {
-  return ["none", "partial", "full"]
-    .map((option) => {
+function markRow(topic, truthId, wrongId) {
+  return topic.tiers
+    .map((tier) => {
       const classes = [
         "mark",
-        `is-${option}`,
-        option === verdict ? "truth" : "",
-        option === wrongGuess ? "yours struck" : "",
+        `is-${tier.mark}`,
+        tier.id === truthId ? "truth" : "",
+        tier.id === wrongId ? "yours struck" : "",
       ];
-      return `<span class="${classes.join(" ").trim()}"><svg><use href="#mark-${option}"/></svg></span>`;
+      return `<span class="${classes.join(" ").trim()}"><svg><use href="#mark-${
+        tier.mark
+      }"/></svg></span>`;
     })
     .join("");
 }
@@ -230,20 +287,23 @@ function renderProgress() {
   el("tally").textContent = answered ? `${right}/${answered}` : "";
 }
 
-function arm(verdict) {
-  for (const target of document.querySelectorAll(".target")) {
-    target.classList.toggle("armed", verdict !== null && target.classList.contains(`is-${verdict}`));
+function arm(direction) {
+  for (const button of el("pad").querySelectorAll(".answer")) {
+    button.classList.toggle("armed", button.dataset.dir === direction);
   }
 }
 
-function answer(guess) {
+function answer(direction) {
   if (state.phase !== "answer") return;
-  state.phase = "reveal";
 
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
-  const right = guess === fact.verdict;
-  state.results[state.index] = { card, guess, verdict: fact.verdict, right };
+  const guess = tierAt(topic, direction);
+  if (!guess) return; // a direction this topic does not use
+
+  state.phase = "reveal";
+  const right = guess.id === fact.tier;
+  state.results[state.index] = { card, guess: guess.id, tier: fact.tier, right };
 
   const node = el("stack").querySelector(".card:not(.under)");
   const back = node.querySelector(".face.back");
@@ -255,7 +315,8 @@ function answer(guess) {
   back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${
     right ? "right" : "wrong"
   }"/></svg>`;
-  back.querySelector(".options").innerHTML = markRow(fact.verdict, right ? null : guess);
+  back.querySelector(".options").innerHTML = markRow(topic, fact.tier, right ? null : guess.id);
+  arm(null);
 
   renderProgress();
   state.timer = setTimeout(advance, PAUSE[right ? "right" : "wrong"]);
@@ -266,7 +327,8 @@ function advance() {
   if (state.phase !== "reveal") return;
 
   const node = el("stack").querySelector(".card:not(.under)");
-  const [x, y] = FLY[state.results[state.index].verdict];
+  const { topic } = truth(state.data, state.deck[state.index]);
+  const [x, y] = FLY[tierById(topic, state.results[state.index].tier).dir];
   node.classList.add("gone");
   node.style.transform = `translate(${x * 120}%, ${y * 120}%) rotate(${x * 18}deg)`;
 
@@ -287,13 +349,15 @@ function showResults() {
   const wrong = state.results.filter((r) => !r.right);
   el("review").innerHTML = [...wrong, ...state.results.filter((r) => r.right)]
     .map((result) => {
-      const { civ } = truth(state.data, result.card);
+      const { topic, civ } = truth(state.data, result.card);
+      const shown = tierById(topic, result.tier).mark;
+      const yourMark = result.right ? null : tierById(topic, result.guess).mark;
       const yours = result.right
         ? ""
-        : `<span class="mark yours struck is-${result.guess}"><svg><use href="#mark-${result.guess}"/></svg></span>`;
+        : `<span class="mark yours struck is-${yourMark}"><svg><use href="#mark-${yourMark}"/></svg></span>`;
       return `<div class="row ${result.right ? "" : "wrong"}">
         <img src="${civ.img}" alt="${civ.name}">
-        <div class="pair">${yours}<span class="mark is-${result.verdict}"><svg><use href="#mark-${result.verdict}"/></svg></span></div>
+        <div class="pair">${yours}<span class="mark is-${shown}"><svg><use href="#mark-${shown}"/></svg></span></div>
         <em>${civ.name}</em>
       </div>`;
     })
@@ -324,16 +388,16 @@ function onKey(event) {
   if (event.key === "Escape") return show("menu");
 
   if (state.phase === "reveal") {
-    if (event.key === " " || event.key === "Enter" || event.key in VERDICTS) {
+    if (event.key === " " || event.key === "Enter" || event.key in KEYS) {
       event.preventDefault();
       advance();
     }
     return;
   }
 
-  const verdict = VERDICTS[event.key];
-  if (verdict) {
+  const direction = KEYS[event.key];
+  if (direction) {
     event.preventDefault();
-    answer(verdict);
+    answer(direction);
   }
 }
