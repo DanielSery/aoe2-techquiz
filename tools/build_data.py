@@ -40,6 +40,14 @@ MAX_UPGRADES = 7
 # own. `unit` may be left out: then the topic is the upgrades alone, and left
 # means the civ has none of them rather than "no unit".
 #
+# `below` is the unit a civ is left with when it has none of this topic -- the
+# Archer where the topic starts at the Crossbowman -- because "no" means two
+# different things and the board should say which. It is a picture and nothing
+# else: no tier, no claim, no bonus word. Only four topics have one, and which
+# four is not a judgement call: `build_topic` checks that *every* civ with
+# nothing here really does have it, so a topic where "no" means no cavalry at
+# all (the Stable civs have no Scout Cavalry either) cannot quietly acquire one.
+#
 # `bonus` decides the down answer: does the civ have a civ bonus, team bonus or
 # unique tech about this unit? That is not in the tech tree, so it is read out
 # of the game's own civilisation descriptions -- `words` are the phrases that
@@ -76,6 +84,7 @@ TOPICS = [
         "id": "siege_ram",
         "group": "Siege",
         "name": "Siege Ram / Siege Elephant",
+        "below": ("Unit", 1258),
         "upgrades": [[("Unit", 548), ("Unit", 1746)], 377],
         "words": [r"rams?", r"siege", r"siege elephants?"],
     },
@@ -113,6 +122,7 @@ TOPICS = [
         "group": "Archery Range",
         "name": "Crossbowman",
         "unit": 24,
+        "below": ("Unit", 4),
         "upgrades": [("Unit", 492), 201, 219, 437],
         "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?",
                   r"ranged soldiers?", r"archer armou?r"],
@@ -154,6 +164,7 @@ TOPICS = [
         "group": "Barracks",
         "name": "Pikeman",
         "unit": 358,
+        "below": ("Unit", 93),
         "upgrades": [("Unit", 359), 77, 75, 215],
         "words": [r"halberdiers?", r"pikemen", r"spearman", r"spearmen", r"infantry",
                   r"barracks"],
@@ -168,6 +179,7 @@ TOPICS = [
         "group": "Barracks",
         "name": "Long Swordsman / Champi Warrior",
         "unit": [77, 2552],
+        "below": ("Unit", 75),
         "upgrades": [[("Unit", 567), ("Unit", 2554)], 875, 215, 77, 75],
         "words": [r"militia-line", r"champions?", r"champi\w*", r"infantry", r"barracks"],
         "veto": [r"villagers?"],
@@ -486,13 +498,42 @@ def gate_units(spec: dict) -> list:
 
 def nodes_of(spec: dict) -> list:
     """Every (kind, id) the topic names once each: the gate units first, then the
-    upgrades. A unit that is its own last upgrade is named twice and drawn once."""
+    upgrades. A unit that is its own last upgrade is named twice and drawn once.
+
+    `below` is deliberately not one of them: it is a picture of what a civ keeps,
+    never a thing the card asks about, so it stays out of `parts` -- out of the
+    bonus words, out of `has`, and out of the cross-check."""
     ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec)
     return list(dict.fromkeys(ordered))
 
 
 def part_id(kind: str, item: int) -> str:
     return f"{kind.lower()}-{item}"
+
+
+def below_part(spec: dict, techtree: dict, icons: dict, civs: dict) -> dict | None:
+    """What a civ with none of this topic still builds, and proof that it does.
+
+    The claim is made about every civ at once, so it has to hold for every civ
+    at once: a Turk with no Pikeman has a Spearman, but a Maya with no Light
+    Cavalry has no Scout Cavalry either, and there the answer is that it has
+    nothing. One civ short and the build fails rather than draw a unit the card
+    would be wrong about."""
+    node = spec.get("below")
+    if node is None:
+        return None
+    kind, item = node
+    index, name = icons[node]
+    for civ, answer in civs.items():
+        tree = next(t for n, t in techtree["civs"].items() if n.lower() == civ)
+        if answer["tier"] == "none" and item not in tree[kind]:
+            raise SystemExit(f"{spec['id']}: the {civ} have nothing here, not even the {name}")
+    return {
+        "id": part_id(kind, item),
+        "name": name,
+        "img": f"img/topics/{part_id(kind, item)}.png",
+        "icon_index": index,
+    }
 
 
 def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> dict:
@@ -546,6 +587,7 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         "name": spec["name"],
         "group": spec["group"],
         "icon": icon_part["img"],
+        "below": below_part(spec, techtree, icons, civs),
         "unit": gate_ids[0] if gate_ids else None,
         "gate": gate_ids,
         "alts": alts,
@@ -608,7 +650,7 @@ def download_images(commit: str, data: dict) -> None:
     for civ in data["civs"].values():
         wanted[civ["img"]] = f"img/Civs/{Path(civ['img']).name}"
     for topic in data["topics"]:
-        for part in topic["parts"]:
+        for part in topic["parts"] + [p for p in [topic["below"]] if p]:
             folder = "Unit" if part["id"].startswith("unit") else "Tech"
             wanted[part["img"]] = f"img/{folder}/{part['icon_index']}.png"
 
@@ -644,6 +686,7 @@ def main() -> int:
             return 1
 
     wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
+    wanted_nodes |= {spec["below"] for spec in TOPICS if spec.get("below")}
     icons = icon_indices(commit, techtree, wanted_nodes)
 
     strings = json.loads(

@@ -224,6 +224,7 @@ window.QUIZ_DATA = {
    "name": "Hand Cannoneer",
    "group": "Archery Range",
    "icon": "img/topics/unit-5.png",
+   "below": null,
    "unit": "unit-5",
    "gate": [
     "unit-5"
@@ -810,6 +811,12 @@ window.QUIZ_DATA = {
    "name": "Siege Ram / Siege Elephant",
    "group": "Siege",
    "icon": "img/topics/unit-548.png",
+   "below": {
+    "id": "unit-1258",
+    "name": "Battering Ram",
+    "img": "img/topics/unit-1258.png",
+    "icon_index": 74
+   },
    "unit": null,
    "gate": [],
    "alts": {
@@ -1454,6 +1461,7 @@ window.QUIZ_DATA = {
    "name": "Bombard Cannon / Traction Trebuchet",
    "group": "Siege",
    "icon": "img/topics/unit-36.png",
+   "below": null,
    "unit": "unit-36",
    "gate": [
     "unit-36",
@@ -2082,6 +2090,7 @@ window.QUIZ_DATA = {
    "name": "Scorpion",
    "group": "Siege",
    "icon": "img/topics/unit-279.png",
+   "below": null,
    "unit": "unit-279",
    "gate": [
     "unit-279"
@@ -2791,6 +2800,7 @@ window.QUIZ_DATA = {
    "name": "Onager",
    "group": "Siege",
    "icon": "img/topics/unit-550.png",
+   "below": null,
    "unit": "unit-550",
    "gate": [
     "unit-550"
@@ -3499,6 +3509,12 @@ window.QUIZ_DATA = {
    "name": "Crossbowman",
    "group": "Archery Range",
    "icon": "img/topics/unit-24.png",
+   "below": {
+    "id": "unit-4",
+    "name": "Archer",
+    "img": "img/topics/unit-4.png",
+    "icon_index": 17
+   },
    "unit": "unit-24",
    "gate": [
     "unit-24"
@@ -4342,6 +4358,7 @@ window.QUIZ_DATA = {
    "name": "Skirmisher",
    "group": "Archery Range",
    "icon": "img/topics/unit-7.png",
+   "below": null,
    "unit": "unit-7",
    "gate": [
     "unit-7"
@@ -5123,6 +5140,7 @@ window.QUIZ_DATA = {
    "name": "Cavalry Archer / Elephant Archer / Bolas Rider / Xianbei Raider",
    "group": "Archery Range",
    "icon": "img/topics/unit-39.png",
+   "below": null,
    "unit": "unit-39",
    "gate": [
     "unit-39",
@@ -6224,6 +6242,12 @@ window.QUIZ_DATA = {
    "name": "Pikeman",
    "group": "Barracks",
    "icon": "img/topics/unit-358.png",
+   "below": {
+    "id": "unit-93",
+    "name": "Spearman",
+    "img": "img/topics/unit-93.png",
+    "icon_index": 31
+   },
    "unit": "unit-358",
    "gate": [
     "unit-358"
@@ -7087,6 +7111,12 @@ window.QUIZ_DATA = {
    "name": "Long Swordsman / Champi Warrior",
    "group": "Barracks",
    "icon": "img/topics/unit-77.png",
+   "below": {
+    "id": "unit-75",
+    "name": "Man-at-Arms",
+    "img": "img/topics/unit-75.png",
+    "icon_index": 10
+   },
    "unit": "unit-77",
    "gate": [
     "unit-77",
@@ -8038,6 +8068,7 @@ window.QUIZ_DATA = {
    "name": "Eagle Scout / Fire Lancer / Temple Guard",
    "group": "Barracks",
    "icon": "img/topics/unit-751.png",
+   "below": null,
    "unit": "unit-751",
    "gate": [
     "unit-751",
@@ -8302,6 +8333,7 @@ window.QUIZ_DATA = {
    "name": "Light Cavalry",
    "group": "Stable",
    "icon": "img/topics/unit-546.png",
+   "below": null,
    "unit": "unit-546",
    "gate": [
     "unit-546"
@@ -9228,6 +9260,7 @@ window.QUIZ_DATA = {
    "name": "Knight / Shrivamsha Rider / Hei Guang Cavalry",
    "group": "Stable",
    "icon": "img/topics/unit-38.png",
+   "below": null,
    "unit": "unit-38",
    "gate": [
     "unit-38",
@@ -10196,6 +10229,7 @@ window.QUIZ_DATA = {
    "name": "Camel Rider",
    "group": "Stable",
    "icon": "img/topics/unit-329.png",
+   "below": null,
    "unit": "unit-329",
    "gate": [
     "unit-329"
@@ -11067,6 +11101,7 @@ window.QUIZ_DATA = {
    "name": "Battle Elephant",
    "group": "Stable",
    "icon": "img/topics/unit-1132.png",
+   "below": null,
    "unit": "unit-1132",
    "gate": [
     "unit-1132"
@@ -11260,6 +11295,7 @@ window.QUIZ_DATA = {
    "name": "Steppe Lancer",
    "group": "Stable",
    "icon": "img/topics/unit-1370.png",
+   "below": null,
    "unit": "unit-1370",
    "gate": [
     "unit-1370"
@@ -11435,6 +11471,7 @@ window.QUIZ_DATA = {
    "name": "Monk",
    "group": "Monastery",
    "icon": "img/topics/unit-125.png",
+   "below": null,
    "unit": "unit-125",
    "gate": [
     "unit-125"
@@ -12465,6 +12502,7 @@ window.QUIZ_DATA = {
    "name": "Defense",
    "group": "Defense",
    "icon": "img/topics/tech-63.png",
+   "below": null,
    "unit": null,
    "gate": [],
    "alts": {},
@@ -13455,6 +13493,7 @@ window.QUIZ_DATA = {
    "name": "Economy",
    "group": "Economy",
    "icon": "img/topics/tech-12.png",
+   "below": null,
    "unit": null,
    "gate": [],
    "alts": {

@@ -473,8 +473,18 @@ function openBoard(card) {
     <p class="ask-words">which upgrades do the <b>${civ.name}</b> have?</p>
     <div class="board">
       <button class="act rail" data-claim="${NO_UNIT_ID}" title="${cannotTitle(topic)}">
-        <span class="rail-art struck">${tileHtml(topic)}<svg><use href="#mark-none"/></svg></span>
-        <span>no</span><b class="verdict"></b>
+        ${
+          topic.below
+            ? `<span class="rail-art only">
+                 <img src="${topic.below.img}" alt="${topic.below.name}">
+               </span>
+               <span>${topic.below.name}</span>`
+            : `<span class="rail-art struck">
+                 ${tileHtml(topic)}<svg><use href="#mark-none"/></svg>
+               </span>
+               <span>none</span>`
+        }
+        <b class="verdict"></b>
       </button>
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
         ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
@@ -522,10 +532,12 @@ function fullHtml(topic) {
   return splitHtml(slotImages(topic, top), slotName(topic, topic.parts.find((p) => p.id === top)));
 }
 
-/* The rail says "no" and the crossed-out unit says what of, so only the tooltip
-   has to tell the two apart: a unit a civ may not be able to build at all, and
-   Defense and Economy, which are upgrades with no unit behind them. */
+/* "No" means one of two things and the rail shows which: where the line has
+   something under it the civ keeps -- the Archer under the Crossbowman -- that
+   unit is the picture and its name is the label; where it has not, the topic's
+   own unit is struck out and the label is "none". */
 function cannotTitle(topic) {
+  if (topic.below) return `it only has the ${topic.below.name}, none of this line`;
   const gates = topic.parts.filter((part) => !topic.upgrades.includes(part.id));
   const unit = gates.length > 0 && gates.every((part) => part.id.startsWith("unit-"));
   return unit ? "it cannot build this unit at all" : "it has none of these";

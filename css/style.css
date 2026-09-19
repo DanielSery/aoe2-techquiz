@@ -872,6 +872,10 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .rail-art.lit img { filter: brightness(.82); }
 .rail-art.lit svg { color: var(--full); }
 
+/* what the civ keeps when it has none of the line: a unit it really does
+   build, so it wears no cross -- the rail's own red says which end it is */
+.rail-art.only img { filter: brightness(.82); }
+
 .rail span,
 .claim-actions .act span {
   font-size: min(9px, calc(var(--cell) * .17));

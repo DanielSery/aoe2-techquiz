@@ -13,10 +13,10 @@ asked on. The two ends are the answers that need no tiles, and they are rails
 the full height of the tiles, so the board is one block whatever the topic:
 
 ```
- ┌──────┬─────────────────────┬──────┐
- │  ▨✗  │  ▣ ▣ ▣ ▣            │  ▣✓  │
- │  NO  │  ▣ ▣ ▣   upgrades   │ FULL │
- └──────┴─────────────────────┴──────┘
+ ┌────────┬───────────────────┬──────┐
+ │   ▣    │  ▣ ▣ ▣ ▣          │  ▣✓  │
+ │ ARCHER │  ▣ ▣ ▣  upgrades  │ FULL │
+ └────────┴───────────────────┴──────┘
             ★ BONUS    ✔ DONE
 ```
 
@@ -36,14 +36,26 @@ red ✗, cannot be built at all; **the unit the line ends at**, lit under a gree
 ✓, is the whole of it — the Crossbowman on the left, the Arbalester on the right
 (`fullHtml`). Three topics end in a tech (Hand Cannoneer, Bombard Cannon, Monk)
 and two are techs throughout (Defense, Economy); there the right rail keeps the
-topic's own icon. The picture carries the claim, so the words under them are
-only **no** and **full**; what "no" means for the topic in hand is left to the
-tooltip (`cannotTitle`) — it cannot build this unit at all, or, on Defense and
-Economy, which have no unit behind them, it has none of these.
+topic's own icon.
+
+**"No" means two different things, and the left rail says which.** A civ with no
+Crossbowman still builds an **Archer**; a civ with no Cavalry Archer builds
+nothing of the sort at all. So where the line has something under it, that unit
+is the picture and its own name is the label — Archer, Spearman, Man-at-Arms,
+Battering Ram — and where it has not, the topic's unit is struck out under a red
+✗ and the label is **none**.
+
+Which four topics have one is not a judgement call: `below` in
+`tools/build_data.py` is checked against every civ, and the build fails if a
+single civ with nothing here does not really build it. That check is what keeps
+Light Cavalry off the list — the Teutons have a Scout Cavalry, but the Maya have
+no Stable at all, so "only the Scout Cavalry" would be a lie about six civs out
+of seven. It is a picture and nothing else: no tier, no claim, no bonus word,
+and it stays out of `parts` so it cannot leak into what a card asks.
 
 | | Means | |
 |---|---|---|
-| ✗ **no**, left rail | it cannot build this unit at all | ±10, **and that is the answer** |
+| left rail, **the unit under the line** | it has only that — none of this line | ±10, **and that is the answer** |
 | ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
 | ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |
