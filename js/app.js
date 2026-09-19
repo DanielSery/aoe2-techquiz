@@ -35,6 +35,18 @@ const TOP_SCORES = 25;
    forgetting is proportional too -- a card at 91 answered wrong falls to 23
    rather than shrugging off a fixed ten. */
 const KNOWN_STEP = { right: 0.7, half: 0.6, wrong: 0.25 };
+
+/* A card you keep getting wrong does not come back to known at the rate of one
+   you have never missed. Every miss on its record damps the climb -- the seven
+   tenths of the gap a clean card closes becomes a half at one miss, a third at
+   two -- so a card you have failed three times takes eight right answers to
+   master where a clean one takes five. The record is paid off rather than
+   carried for ever: a right answer on a card already at 70 or better clears one
+   miss, so two good answers in a row begin to forgive it, and one lucky answer
+   does not. */
+const MISS_DAMP = 0.5;
+const MISS_CAP = 6;
+const MISS_FORGIVEN_AT = 70;
 /* What a card is worth in the open draw: how much of it you do not know,
    squared, over a floor that keeps a mastered card possible rather than
    frequent. 0% is 10.02 against 100%'s 0.02, so an unknown card is five hundred
@@ -222,8 +234,23 @@ function knownKey(card) {
   return `${card.topicId}:${card.civId}`;
 }
 
+/* What is remembered about a card: how well it is known, and how many times it
+   has been got wrong. Stored as a number alone before the misses were counted,
+   so a plain number still reads as a clean record. */
+function recordOf(card) {
+  const entry = state.known[knownKey(card)];
+  if (entry === undefined || entry === null) return null;
+  return typeof entry === "number" ? { k: entry, w: 0 } : entry;
+}
+
 function knownOf(card) {
-  return state.known[knownKey(card)] || 0;
+  const record = recordOf(card);
+  return record ? record.k : 0;
+}
+
+function missesOf(card) {
+  const record = recordOf(card);
+  return record ? record.w : 0;
 }
 
 /* Answered at nothing is not the same as never answered, so the entry is kept
@@ -231,9 +258,21 @@ function knownOf(card) {
    deck has never put in front of you, and the menu counts the second sort. */
 function learnFrom(card, verdict) {
   const was = knownOf(card);
-  const share = KNOWN_STEP[verdict];
-  const moved = Math.round(verdict === "right" ? was + (100 - was) * share : was * share);
-  state.known[knownKey(card)] = Math.max(0, Math.min(100, moved));
+  const misses = missesOf(card);
+  const climb = KNOWN_STEP.right / (1 + misses * MISS_DAMP);
+  const moved = Math.round(
+    verdict === "right" ? was + (100 - was) * climb : was * KNOWN_STEP[verdict]
+  );
+  const record = {
+    k: Math.max(0, Math.min(100, moved)),
+    w:
+      verdict === "wrong"
+        ? Math.min(MISS_CAP, misses + 1)
+        : verdict === "right" && was >= MISS_FORGIVEN_AT
+        ? Math.max(0, misses - 1)
+        : misses,
+  };
+  state.known[knownKey(card)] = record;
   rememberKnown();
 
   // and when to ask it again, counted from the card it was asked on
@@ -266,7 +305,7 @@ function restFactor(verdict, known) {
 }
 
 function isNew(card) {
-  return state.known[knownKey(card)] === undefined;
+  return recordOf(card) === null;
 }
 
 /* Every round of Play that was the whole forty, best first. A retry of the ones

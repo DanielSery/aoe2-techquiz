@@ -178,6 +178,29 @@ forgetting is proportional too — a card at 91 answered wrong falls to 23, and 
 half answer to 55, rather than shrugging off a fixed ten. The three shares are
 `KNOWN_STEP`.
 
+**A card you keep getting wrong climbs back slower.** Every miss is counted
+against it and damps the climb — the seven tenths of the gap a clean card closes
+becomes a half at one miss, a third at two — so where a clean card is mastered
+in five right answers, one missed three times takes nine:
+
+| record | the climb, right answer by right answer |
+|---|---|
+| never missed | 70 · 91 · 97 · 99 · **100** |
+| missed once | 47 · 72 · 85 · 96 · 99 · **100** |
+| missed twice | 35 · 58 · 73 · 82 · 90 · 97 · 99 · **100** |
+| missed three times | 28 · 48 · 63 · 73 · 81 · 88 · 94 · 98 · **99** |
+
+The record is paid off rather than carried for ever: a right answer on a card
+already at 70 or better clears one miss, so **two good answers in a row** begin
+to forgive it and one lucky answer does not. Measured on a live card answered
+wrong three times and then right: 0 · 0 · 0 · 28 · 48 · 63 · 73 · 81 · 88, with
+the misses falling away over the last two. `MISS_DAMP` is the rate and
+`MISS_CAP` the worst it gets.
+
+A card's memory is `{k, w}` — how well it is known and how many times it has
+been missed. A bare number, which is what the store held before misses were
+counted, still reads as a clean record.
+
 Those percentages live in `localStorage` (`aoe2-techquiz.known`), **not** in a
 cookie: a cookie is capped around 4KB and is sent to the server on every
 request, and 19 topics × 53 civilisations do not fit in one. Nothing leaves the
