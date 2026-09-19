@@ -884,8 +884,12 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   opacity: .85;
 }
 
-/* two words on a rail one tile wide: "can't build" wraps rather than clips */
+/* "missing" is one long word on a rail three quarters of a tile wide, and there
+   is nowhere to break it: the label rides a shade smaller than the one under
+   the board so it fits whole at every cell size. */
 .rail span {
+  font-size: clamp(6px, calc(var(--cell) * .14), 9px);
+  letter-spacing: .02em;
   line-height: 1.15;
   text-align: center;
 }

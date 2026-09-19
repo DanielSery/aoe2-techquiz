@@ -107,10 +107,13 @@ TOPICS = [
         "words": [r"scorpions?", r"siege"],
     },
     {
+        # Like the Light Cavalry: the Mangonel is what a civ without the Onager
+        # is left with, except where it has no Mangonel line at all.
         "id": "onager",
         "group": "Siege",
         "name": "Onager",
         "unit": 550,
+        "below": ("Unit", 280),
         "upgrades": [("Unit", 588), 377],
         "words": [r"onagers?", r"mangonels?", r"siege"],
     },

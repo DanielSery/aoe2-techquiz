@@ -13,10 +13,10 @@ asked on. The two ends are the answers that need no tiles, and they are rails
 the full height of the tiles, so the board is one block whatever the topic:
 
 ```
- ┌──────┬─────────────────────┬──────┐
- │  ▣   │  ▣ ▣ ▣ ▣            │  ▣✓  │
- │  NO  │  ▣ ▣ ▣   upgrades   │ FULL │
- └──────┴─────────────────────┴──────┘
+ ┌─────────┬──────────────────┬──────┐
+ │    ▣    │  ▣ ▣ ▣ ▣         │  ▣✓  │
+ │ MISSING │  ▣ ▣ ▣  upgrades │ FULL │
+ └─────────┴──────────────────┴──────┘
             ★ BONUS    ✔ DONE
 ```
 
@@ -38,11 +38,11 @@ red ✗, cannot be built at all; **the unit the line ends at**, lit under a gree
 and two are techs throughout (Defense, Economy); there the right rail keeps the
 topic's own icon.
 
-**"No" means two different things, and the picture says which.** Both rails are
-labelled **no**; the left one is struck out under a red ✗ where the civ builds
-nothing of the sort — no Cavalry Archer at all — and drawn whole where the line
-has something under it the civ keeps: the **Archer** under the Crossbowman, the
-Spearman, the Man-at-Arms, the Battering Ram, the Scout Cavalry, the Skirmisher.
+**"Missing" means two different things, and the picture says which.** The left
+rail is struck out under a red ✗ where the civ builds nothing of the sort — no
+Cavalry Archer at all — and drawn whole where the line has something under it
+the civ keeps: the **Archer** under the Crossbowman, the Spearman, the
+Man-at-Arms, the Battering Ram, the Mangonel, the Scout Cavalry, the Skirmisher.
 That unit is `below` in `tools/build_data.py`.
 
 One picture stands for every civ on the topic, so it can be generous, and the
@@ -57,7 +57,7 @@ what a card asks.
 
 | | Means | |
 |---|---|---|
-| **no**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±10, **and that is the answer** |
+| **missing**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±10, **and that is the answer** |
 | ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
 | ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |

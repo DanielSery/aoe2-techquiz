@@ -2800,7 +2800,12 @@ window.QUIZ_DATA = {
    "name": "Onager",
    "group": "Siege",
    "icon": "img/topics/unit-550.png",
-   "below": null,
+   "below": {
+    "id": "unit-280",
+    "name": "Mangonel",
+    "img": "img/topics/unit-280.png",
+    "icon_index": 27
+   },
    "unit": "unit-550",
    "gate": [
     "unit-550"

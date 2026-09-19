@@ -482,7 +482,7 @@ function openBoard(card) {
                  ${tileHtml(topic)}<svg><use href="#mark-none"/></svg>
                </span>`
         }
-        <span>no</span><b class="verdict"></b>
+        <span>missing</span><b class="verdict"></b>
       </button>
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
         ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
