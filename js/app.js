@@ -35,7 +35,20 @@ const TOP_SCORES = 25;
    forgetting is proportional too -- a card at 91 answered wrong falls to 23
    rather than shrugging off a fixed ten. */
 const KNOWN_STEP = { right: 0.7, half: 0.6, wrong: 0.25 };
-const LEARN_WEIGHT = 10;
+/* What a card is worth in the open draw: how much of it you do not know,
+   squared, over a floor that keeps a mastered card possible rather than
+   frequent. 0% is 10.02 against 100%'s 0.02, so an unknown card is five hundred
+   times the pull of one you have down -- and the floor is why "have down" is
+   not "never again". */
+const LEARN_FLOOR = 0.02;
+const LEARN_PULL = 10;
+
+/* And how long it rests: the 20 to 50 of a card just recovered stretches with
+   what you know, to sixteen times that at 100. Without it the queue alone
+   serves a mastered card every 20 to 50 cards whatever its weight, because an
+   appointment does not look at how well you know the thing -- measured, that
+   was 35 of 60 draws spent on cards already mastered. */
+const REST_AT_100 = 16;
 
 /* When a card comes round again, counted in cards dealt after it. A card you
    just got wrong is worth asking again while the answer is still in the room --
@@ -225,7 +238,31 @@ function learnFrom(card, verdict) {
 
   // and when to ask it again, counted from the card it was asked on
   const [from, to] = AGAIN_AFTER[verdict];
-  state.due[knownKey(card)] = state.index + from + Math.floor(Math.random() * (to - from + 1));
+  const gap = (from + Math.random() * (to - from)) * restFactor(verdict, knownOf(card));
+  state.due[knownKey(card)] = state.index + Math.round(gap);
+}
+
+/* A card you have just got wrong comes back soon whatever you used to know --
+   its percentage has just fallen anyway. Getting it right is what buys rest,
+   and each right answer in a row roughly doubles it. Written against the rungs
+   of the ladder rather than as a curve over the percentage, because the rungs
+   are what it has to line up with: 70, 91, 97, 99, 100 is one right answer,
+   then two, then three, four, five.
+
+       70  ->  1x   20-50 cards      the short interval, a card still in play
+       91  ->  2x   40-100
+       97  ->  4x   80-200           about one sighting a long session
+       99  ->  8x   160-400
+      100  -> 16x   320-800          rare, and never impossible: a deck with
+                                     nothing else in it still deals them */
+function restFactor(verdict, known) {
+  if (verdict !== "right") return 1;
+  const gap = Math.max(100 - known, 0);
+  if (gap >= 30) return 1;
+  if (gap >= 9) return 2;
+  if (gap >= 3) return 4;
+  if (gap >= 1) return REST_AT_100 / 2;
+  return REST_AT_100;
 }
 
 function isNew(card) {
@@ -436,14 +473,25 @@ function drawLearnCard(avoid) {
   }
   state.streak = 0;
 
+  /* Nobody owed and nothing new: something has to be dealt, and it is drawn by
+     what you know rather than by whose appointment is nearest. Thirteen cards in
+     play cannot fill sixty draws without coming round sooner than their
+     interval, and asking one of those early is worth more than spending the
+     draw on a card at 100 -- which is the other way the mastered forty crept
+     back in. */
   const choices = waiting.length ? waiting : free;
-  const weights = choices.map((card) => 1 + (100 - knownOf(card)) / LEARN_WEIGHT);
+  const weights = choices.map(learnWeight);
   let roll = Math.random() * weights.reduce((sum, weight) => sum + weight, 0);
   for (let i = 0; i < choices.length; i++) {
     roll -= weights[i];
     if (roll <= 0) return choices[i];
   }
   return choices[choices.length - 1];
+}
+
+function learnWeight(card) {
+  const unknown = (100 - knownOf(card)) / 100;
+  return LEARN_FLOOR + LEARN_PULL * unknown * unknown;
 }
 
 /* the one that has been waiting longest, and of two the same the one you know
@@ -459,10 +507,27 @@ function longestOverdue(cards) {
 
 /* ---------- round ---------- */
 
+/* At the start of a session every card already answered takes its place in the
+   rotation by what is known of it: a mastered card lands somewhere inside its
+   own long interval, a shaky one lands soon. Without this, "not scheduled yet"
+   is a side door -- the deck answers the thirteen it has never seen, and then
+   has nothing left to deal but the forty it knows, which is how 34 of 60 draws
+   went to mastered cards. Never-answered cards keep no due at all: they are the
+   ones the deck is for. */
+function seedSchedule() {
+  const [from, to] = AGAIN_AFTER.right;
+  state.due = {};
+  for (const card of deckNow()) {
+    if (isNew(card)) continue;
+    const span = (from + Math.random() * (to - from)) * restFactor("right", knownOf(card));
+    state.due[knownKey(card)] = Math.round(Math.random() * span);
+  }
+}
+
 /* Learning deals one card at a time and keeps one in hand, so the stack still
    has something under it and the draw still sees the answer before it. */
 function beginLearning() {
-  state.due = {};
+  seedSchedule();
   state.dealt = 0;
   state.streak = 0;
   const first = drawLearnCard();

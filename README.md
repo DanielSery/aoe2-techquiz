@@ -132,11 +132,37 @@ between them is every card: without the let-out the deck deals those six for
 ever and the other forty-seven are never seen. An appointment it makes wait is a
 card or two late, which is cheaper than a session that never moves on.
 
-With nothing owed the draw is the open field — every card never dealt and every
-one not yet due — and there the less you know a card the likelier it is: a card
-at nothing is **eleven times** likelier than one at 100. A pull rather than a
-rule, so a card you have down still turns up. Measured with 20 of 53 mastered,
-30 draws hit a mastered card 4 times where a flat draw would hit about 11.
+**Rest doubles with every right answer in a row**, written against the rungs of
+the known ladder rather than as a curve over the percentage, because the rungs
+are what it has to line up with:
+
+| known | rest | comes round |
+|---|---|---|
+| 70 — right once | 1× | 20–50 cards |
+| 91 — twice | 2× | 40–100 |
+| 97 — three times | 4× | 80–200 |
+| 99 — four times | 8× | 160–400 |
+| **100** | **16×** | **320–800** |
+
+Without that the queue alone serves a mastered card every 20 to 50 cards
+whatever its weight, because an appointment does not look at how well you know
+the thing.
+
+**A session starts by placing what you already know**, each card somewhere
+inside its own interval — a mastered card a long way out, a shaky one soon.
+Cards never answered keep no appointment: they are the ones the deck is for.
+Without that seeding, "not scheduled yet" is a side door — the deck answers the
+thirteen it has never seen, then has nothing left to deal but the forty it knows.
+
+With nothing owed the draw is the open field, where the weight is how much of a
+card you do **not** know, squared, over a floor: **10.02 at nothing against 0.02
+at 100**, five hundred to one. The floor is why "have down" is not "never
+again".
+
+Measured on a deck of 40 mastered cards and 13 unknown, over 60 draws: **4 to 5
+of them went to mastered cards**, each a different one, and all from their
+scheduled appointments. A deck where everything is mastered deals them every
+draw, because there is nothing else to deal — rare is not impossible.
 
 **Never answered is its own state**, not 0% — the entry is kept even when a card
 falls to nothing, so "keeps failing" and "never seen" are different things. The
