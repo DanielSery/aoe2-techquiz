@@ -1,12 +1,13 @@
 # AoE2 Tech Quiz
 
 A flash-card game for learning the Age of Empires II: DE tech tree. It asks one
-question, of every civilisation in turn, and it is played by tapping or clicking
-— on a phone as much as on a desktop.
+question, and it is played by tapping or clicking — on a phone as much as on a
+desktop. Two games ask it: **Play**, forty cards against the clock, and
+**Learn**, which has no end and deals you what you know least.
 
 **Which upgrades do they have?** A civilisation and a topic on the card, and
 under it the board. Tap an upgrade to claim it: it is answered on the spot and
-cannot be taken back, **+10** for a right claim, **−10** for a wrong one.
+cannot be taken back, **+5** for a right claim, **−5** for a wrong one.
 
 The board reads **left to right as none, some, all** — the scale the question is
 asked on. The two ends are the answers that need no tiles, and they are rails
@@ -57,7 +58,7 @@ what a card asks.
 
 | | Means | |
 |---|---|---|
-| **missing**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±10, **and that is the answer** |
+| **missing**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±5, **and that is the answer** |
 | ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
 | ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |
@@ -73,17 +74,109 @@ same, and what you never claimed is charged as ever.
 
 **★ is bonus points and nothing else.** Leaving it costs nothing and cannot turn
 a right card into a half one; claiming one that is not there costs its **−10**
-and no more. Everything else on the board counts: ✔ (or `Enter`) charges **−10**
+and no more. Everything else on the board counts: ✔ (or `Enter`) charges **−5**
 for each upgrade you never claimed, and naming them all and nothing else is worth
-a further **+100**, so the card is right only when the set is exactly right. Some
-of them right is amber — out of the tally, and in the ones to repeat. None of
-them right is simply wrong.
+a further **+100**, so the card is right only when the set is exactly right.
+
+| the card | worth |
+|---|---|
+| every upgrade named and nothing else | **+100**, and up to **+20** more for the time left on the clock |
+| some of them right | the claims themselves and no more — amber, out of the tally, and in the ones to repeat |
+| none of them right, or the clock ran out | **−50** |
+
+**A card is right when the claims match what the civ has** — nothing claimed
+falsely, nothing it has left unclaimed — read off the facts rather than off the
+claims, because "nothing to claim" is a real answer. An empty board is the shape
+of two different cards: the Georgians build **Hand Cannoneers with no Ring
+Archer Armour**, where ✔ on an empty board is exactly right, and the Aztecs
+build none at all, where the ✗ rail is what says so and is therefore owed. Said
+and true, that rail answers for the whole card, techs and all.
+
+Speed is only ever a bonus on a card you got completely right: a card you half
+knew is worth no more for being rushed. The clock is Play's; there is none in
+Learn, and no speed bonus with it.
+
+## The two games
+
+**Play** is forty cards, **30 seconds** each. Run out of time and the card is
+answered for you and counted wrong — the same −50, and the upgrades you never
+claimed charged as ever, so the clock costs exactly what pressing ✔ blind would.
+Forty whatever the topics: a selection bigger than forty is drawn from at
+random, a smaller one is simply all of it.
+
+At the end of the round every topic it could have drawn on is worth **+50**
+(`PER_TOPIC`). Forty cards of Crossbowman is a narrower thing to know than forty
+drawn from all nineteen topics, and without that the two would score the same;
+the results screen shows the bonus on its own line rather than folding it into
+the last card. It lands once, only on a full round — a retry of the ones you
+missed is a different, easier round and is not scored against the others.
+
+**Learn** has no length and no clock. It stops when you go back to the menu, and
+the bar along the top is how much of the selection you know.
+
+**An appointment first, the open field second.** A card you have answered is due
+back at a position — **2 to 5 cards** after one you got wrong, **20 to 50** after
+one you got right, drawn from the range at random — and when that position
+arrives the card is *taken*, longest overdue first, so "again in three cards"
+means three cards. Measured over four runs: wrong cards came back after 2, 2, 3
+and 4 cards, and once answered right went 27, 29, 49 and 50 away.
+
+That order is the whole of it, and the first version had it wrong: letting due
+cards back into the general draw instead of taking them put a card answered
+wrong **26 cards** later, because it was one of 53 the draw could equally have
+picked.
+
+**Every third card is a new one** while any card is still unseen, whatever is
+owed. Six cards answered wrong come back every two to five cards each, which
+between them is every card: without the let-out the deck deals those six for
+ever and the other forty-seven are never seen. An appointment it makes wait is a
+card or two late, which is cheaper than a session that never moves on.
+
+With nothing owed the draw is the open field — every card never dealt and every
+one not yet due — and there the less you know a card the likelier it is: a card
+at nothing is **eleven times** likelier than one at 100. A pull rather than a
+rule, so a card you have down still turns up. Measured with 20 of 53 mastered,
+30 draws hit a mastered card 4 times where a flat draw would hit about 11.
+
+**Never answered is its own state**, not 0% — the entry is kept even when a card
+falls to nothing, so "keeps failing" and "never seen" are different things. The
+menu and the bar count the second sort: *53 cards, 8% known, 43 new*. The
+appointments themselves are for the session only; the percentages are what
+learning remembers, and a spacing from yesterday means nothing today.
+
+The percentage moves in **shares, not steps**. A right answer closes most of the
+gap to 100 and no more, so **one right answer reads 70** — getting a card right
+once is not knowing it, and it has to come back four more times to finish the
+rest: 70, 91, 97, 99, 100. Wrong and half keep a share of what was there, so
+forgetting is proportional too — a card at 91 answered wrong falls to 23, and a
+half answer to 55, rather than shrugging off a fixed ten. The three shares are
+`KNOWN_STEP`.
+
+Those percentages live in `localStorage` (`aoe2-techquiz.known`), **not** in a
+cookie: a cookie is capped around 4KB and is sent to the server on every
+request, and 19 topics × 53 civilisations do not fit in one. Nothing leaves the
+browser either way. Cards at nothing are dropped rather than stored, so a fresh
+start is an empty object.
+
+## The board
+
+Every full round of Play is kept — score, how many you got right, **and the
+topics it was drawn from**, because a round of Crossbowman and a round of
+everything are both forty cards and only the topics say which was which. The
+best 25 are on it, reachable from the menu (🏆) and from the end of a round,
+where the one you have just played is outlined in gold.
+
+**The board is this browser's, by design.** It lives in `localStorage`
+(`aoe2-techquiz.scores`, one `{score, right, cards, topics, at}` per round) and
+nothing is sent anywhere — which keeps the game what it is: a static page with
+no backend, no account and no name to type. Another browser, another device or a
+cleared store is another board.
 
 ## How a round is dealt
 
-A civilisation comes up **once** on a board of its own, so a round is one pass
-over the civilisations — 53 cards on a topic every civ can be asked about. Every
-civ is worth asking, including the ones with no unit at all: "what does it have",
+A civilisation comes up **once** per topic, so the pool is one pass over the
+civilisations — 53 cards on a topic every civ can be asked about. Every civ is
+worth asking, including the ones with no unit at all: "what does it have",
 answered with a ✗ and the techs it owns anyway, is exactly the fact worth
 knowing.
 
@@ -174,14 +267,15 @@ Single replaces the selection as you pick, Custom lets the tiles toggle for a
 mixed set, All takes every topic. Picking a tile outside Custom drops back to
 Single on that topic, and the choice is remembered between visits.
 
-The slider under it is **how many questions to ask**: all the way over is the
-whole set, anywhere short of that is that many drawn at random from it. Moving
-to another topic keeps the number if it fits and clamps it if it does not, and
-a slider left at the end means "all of them" whatever the next topic's size.
+**Play / Learn** under that is which game, and the line beneath says what you
+are in for: how many cards the selection holds, and — in Learn — how much of it
+you know. Both choices are remembered between visits, like the topics.
 
-At the end of a set you can repeat the ones you did not get right -- the wrong
-ones *and* the amber half-answers, which is the same set the tally counted
-against you -- repeat the whole set, or go back and pick a different topic.
+At the end of a round of Play you can repeat the ones you did not get right --
+the wrong ones *and* the amber half-answers, which is the same set the tally
+counted against you -- repeat the whole forty, or go back and pick a different
+topic. Learn has no end to arrive at: the home button is how you stop, and every
+card is saved as you go.
 
 ## Playing it
 

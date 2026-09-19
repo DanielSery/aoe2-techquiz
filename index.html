@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AoE2 Tech Quiz</title>
 <meta name="description" content="Learn which Age of Empires II civilisations have which units and upgrades.">
-<link rel="stylesheet" href="css/style.css?v=31">
+<link rel="stylesheet" href="css/style.css?v=33">
 <link rel="icon" href="img/topics/unit-5.png">
 </head>
 <body>
@@ -18,6 +18,9 @@
   <symbol id="mark-wrong" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></symbol>
   <symbol id="icon-replay" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.6-5.9M20 3v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-board" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0zM7 6H4v2a3 3 0 003 3M17 6h3v2a3 3 0 01-3 3M9 20h6M12 14v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-learn" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H19v14H6.5A2.5 2.5 0 004 19.5zM19 17v4H6.5A2.5 2.5 0 014 18.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7v5.4l3.4 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.2 6.1L12 16.8 6.6 19.7l1.2-6.1L3.3 9.4l6.1-.8z" fill="currentColor"/></symbol>
   <symbol id="icon-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="icon-custom" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
@@ -43,11 +46,19 @@
       </button>
     </div>
 
-    <div class="sizer">
-      <input id="size" type="range" min="1" max="1" value="1" aria-label="how many questions">
+    <div class="games" id="games">
+      <button class="game" data-game="play" aria-pressed="true">
+        <svg><use href="#icon-play"/></svg><span>Play</span>
+      </button>
+      <button class="game" data-game="learn" aria-pressed="false">
+        <svg><use href="#icon-learn"/></svg><span>Learn</span>
+      </button>
     </div>
 
+    <p id="pool-note" class="pool-note"></p>
+
     <div class="menu-actions">
+      <button id="to-board" class="ghost" title="Best rounds"><svg><use href="#icon-board"/></svg></button>
       <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
     </div>
   </section>
@@ -56,7 +67,9 @@
     <div class="hud">
       <button id="quit" class="ghost" title="Back to topics"><svg><use href="#icon-home"/></svg></button>
       <div id="progress" class="progress"></div>
+      <div id="clock" class="clock" hidden><svg><use href="#icon-clock"/></svg><b>30</b></div>
       <div class="tally"><b id="score-now">0</b><span id="delta" class="delta"></span></div>
+      <i id="clock-bar" class="clock-bar"></i>
     </div>
 
     <div class="arena">
@@ -69,12 +82,25 @@
   </section>
 
   <section id="results" class="screen">
-    <div class="score"><b id="final-score"></b><small id="final-tally"></small></div>
+    <div class="score">
+      <b id="final-score"></b>
+      <small id="final-tally"></small>
+      <p id="final-note" class="final-note"></p>
+    </div>
     <div id="review" class="review"></div>
     <div class="actions">
+      <button id="see-board" class="ghost" title="Best rounds" hidden><svg><use href="#icon-board"/></svg></button>
       <button id="again-wrong" class="primary"><svg><use href="#icon-replay"/></svg><span id="wrong-count"></span></button>
       <button id="again-all" class="ghost"><svg><use href="#icon-replay"/></svg><span id="all-count"></span></button>
       <button id="to-menu" class="ghost"><svg><use href="#icon-home"/></svg></button>
+    </div>
+  </section>
+
+  <section id="scores" class="screen">
+    <h2 class="board-title"><svg><use href="#icon-board"/></svg> Best rounds</h2>
+    <ol id="scoreboard" class="scoreboard"></ol>
+    <div class="actions">
+      <button id="board-back" class="ghost"><svg><use href="#icon-home"/></svg></button>
     </div>
   </section>
 
@@ -85,8 +111,8 @@
   Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
 </footer>
 
-<script src="data/topics.js?v=31"></script>
-<script src="js/data.js?v=31"></script>
-<script src="js/app.js?v=31"></script>
+<script src="data/topics.js?v=33"></script>
+<script src="js/data.js?v=33"></script>
+<script src="js/app.js?v=33"></script>
 </body>
 </html>

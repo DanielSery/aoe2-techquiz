@@ -191,35 +191,30 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 
-/* how many of the questions to ask: all of them, or a handful drawn at random */
-.sizer { display: flex; align-items: center; gap: 8px; width: min(100%, 320px); }
-
-.sizer input {
-  flex: 1;
-  height: 4px;
-  appearance: none;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--gold) var(--filled, 100%), #3a2f23 var(--filled, 100%));
+/* forty cards against the clock, or as long as you like: the two are different
+   games rather than two lengths of the same one, so they sit apart from the
+   single/custom/all switch and not next to it */
+.games {
+  display: flex;
+  gap: 8px;
 }
 
-.sizer input::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #17120b;
-  background: var(--gold);
-  cursor: pointer;
+.game {
+  gap: 7px;
+  padding: 9px 18px;
+  color: #a8967f;
 }
 
-.sizer input::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #17120b;
-  background: var(--gold);
-  cursor: pointer;
+.game svg { width: 17px; height: 17px; }
+.game span { font-size: 13px; }
+
+.game[aria-pressed="true"] {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--panel-2);
 }
+
+.pool-note { margin: 0; font-size: 12px; color: #8a7a64; }
 
 /* single / custom / all, one of them always on */
 .modes {
@@ -289,10 +284,75 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 /* ---------- game ---------- */
 
 .hud {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
+}
+
+/* what is left of the thirty seconds, read twice: a number to work to and a
+   bar under the whole hud to see without reading */
+.clock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #a8967f;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock svg { width: 15px; height: 15px; }
+.clock b { font-size: 15px; }
+.clock.low { color: var(--partial); }
+.clock.out { color: var(--none); animation: bump .7s ease-out infinite; }
+
+.clock-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  opacity: .5;
+  transform-origin: left center;
+  transition: transform 1s linear;
+}
+
+/* `hidden` is a display of its own and .clock sets one, so it has to be said */
+.clock[hidden] { display: none; }
+.clock[hidden] ~ .clock-bar { display: none; }
+
+/* learning has no length to fill, so the bar carries what it does have. Block,
+   not the ticks' flex row: a flex child ignores the width it is given. */
+.progress.meter {
+  position: relative;
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: #3a2f23;
+  overflow: hidden;
+}
+
+.progress.meter i {
+  display: block;
+  flex: none;
+  height: 100%;
+  background: linear-gradient(90deg, #4a7a4d, var(--full));
+  transition: width .3s ease-out;
+}
+
+.progress.meter b {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow: 0 1px 2px #000b;
 }
 
 .hud .ghost { padding: 6px 8px; border-color: transparent; }
@@ -723,6 +783,19 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .bonus-note .said.right { color: var(--full); }
 .bonus-note .said.wrong { color: var(--none); }
 
+/* the clock's part in the score, said once on the card it happened to */
+.card-note {
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  font-size: clamp(9px, 3.6cqw, 12px);
+}
+
+.card-note span { display: flex; align-items: center; gap: 4px; }
+.card-note svg { width: 1.1em; height: 1.1em; }
+.card-note .quick { color: var(--full); }
+.card-note .late { color: var(--none); }
+
 .card-delta.up { color: var(--full); }
 .card-delta.down { color: var(--none); }
 
@@ -1117,3 +1190,82 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 @media (prefers-reduced-motion: reduce) {
   .card-inner, .card.settle, .card.gone { transition: none; }
 }
+
+/* ---------- the board of best rounds ---------- */
+
+.board-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.board-title svg { width: 18px; height: 18px; }
+
+.final-note {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #a8967f;
+  text-align: center;
+}
+
+/* it sits inside .score, where a <b> is the 40px number */
+.final-note b { font-size: inherit; color: var(--gold); }
+.final-note b.best { color: var(--full); }
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 2px;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.scoreboard::-webkit-scrollbar { display: none; }
+
+.scoreboard li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  background: var(--panel);
+  font-variant-numeric: tabular-nums;
+}
+
+/* the round just played, wherever it landed */
+.scoreboard li.mine {
+  border-color: var(--gold);
+  background: var(--panel-2);
+  box-shadow: 0 0 0 1px #d9ab5255 inset;
+}
+
+.scoreboard li.empty {
+  justify-content: center;
+  color: #8a7a64;
+  font-size: 12px;
+}
+
+.scoreboard .place { width: 20px; color: #8a7a64; font-size: 12px; text-align: right; }
+.scoreboard .tally { width: 62px; color: var(--gold); font-size: 16px; font-weight: 700; }
+.scoreboard .of { width: 46px; color: #a8967f; font-size: 12px; }
+.scoreboard .when { margin-left: auto; color: #8a7a64; font-size: 11px; }
+
+/* which topics the round was drawn from, since the number alone cannot say */
+.scoreboard .topics { display: flex; align-items: center; gap: 3px; min-width: 0; }
+.scoreboard .badge { display: block; width: 22px; height: 22px; }
+.scoreboard .badge img,
+.scoreboard .badge .split { width: 100%; height: 100%; border-radius: 5px; }
+.scoreboard .badge .split img { border-radius: 0; }
+.scoreboard .topics em { font-style: normal; font-size: 11px; color: #8a7a64; }

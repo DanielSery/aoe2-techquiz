@@ -2,11 +2,47 @@ const { buildDeck, truth, shuffle } = window.Quiz;
 
 const STORE_KEY = "aoe2-techquiz.topics";
 const MODE_KEY = "aoe2-techquiz.mode";
-const SIZE_KEY = "aoe2-techquiz.size";
+const GAME_KEY = "aoe2-techquiz.game";
+const KNOWN_KEY = "aoe2-techquiz.known";
+const SCORES_KEY = "aoe2-techquiz.scores";
 const MODES = ["single", "custom", "all"];
+const GAMES = ["play", "learn"];
 
 // how long a revealed card waits before it deals the next one itself
 const AUTO_NEXT_MS = 5000;
+
+// Play is a fixed round against the clock: the same forty cards' worth of work
+// every time, so two scores are comparable.
+const PLAY_CARDS = 40;
+const CARD_SECONDS = 30;
+
+/* Forty cards drawn from one topic is a narrower thing to know than forty drawn
+   from nineteen, and the same score for both would say otherwise. Every topic
+   the round could draw on is worth this much at the end of it, so the board can
+   compare them -- and it shows which topics they were, because the number alone
+   still cannot. */
+const PER_TOPIC = 50;
+const TOP_SCORES = 25;
+
+/* Learn keeps a percentage per card and deals the ones you know least, so it
+   needs no length: what it asks drifts towards what you keep getting wrong, and
+   you stop when you are done.
+
+   The moves are shares, not steps. Right closes most of the gap to 100 and no
+   more, so a card answered right once reads 70: getting it right once is not
+   knowing it, and the card has to come back four more times to finish the rest
+   (91, 97, 99, 100). Wrong and half keep a share of what was there, so
+   forgetting is proportional too -- a card at 91 answered wrong falls to 23
+   rather than shrugging off a fixed ten. */
+const KNOWN_STEP = { right: 0.7, half: 0.6, wrong: 0.25 };
+const LEARN_WEIGHT = 10;
+
+/* When a card comes round again, counted in cards dealt after it. A card you
+   just got wrong is worth asking again while the answer is still in the room --
+   but only once, and then it has to survive the long gap to prove anything, so
+   getting it right sends it 20 to 50 cards away. Drawn from the range at
+   random, or the deck falls into a rhythm you can feel coming. */
+const AGAIN_AFTER = { wrong: [2, 5], half: [5, 12], right: [20, 50] };
 
 // Two claims that are not upgrades and sit with the actions rather than on the
 // board: the civ's bonus, and "it cannot build this at all". The bonus is part
@@ -20,15 +56,24 @@ const NO_UNIT_ID = "no-unit";
 // play.
 const POINTS = {
   tier: 100,
-  spotted: 10,
-  falsely: -10,
-  missed: -10,
-  bonus: 20,
-  bonusWrong: -20,
+  tierWrong: -50,
+  spotted: 5,
+  falsely: -5,
+  missed: -5,
+  bonus: 10,
+  bonusWrong: -10,
+  // the most a whole right card can earn for being quick, all of it or none of
+  // it: a card you only half knew is worth no more for being rushed
+  speed: 20,
 };
 
 const el = (id) => document.getElementById(id);
-const screens = { menu: el("menu"), game: el("game"), results: el("results") };
+const screens = {
+  menu: el("menu"),
+  game: el("game"),
+  results: el("results"),
+  scores: el("scores"),
+};
 
 const state = {
   data: null,
@@ -43,11 +88,27 @@ const state = {
   score: 0,
   picked: {},
   mode: "single",
-  // how many questions a round asks; null is "all of them", and stays all when
-  // the topics change under it
-  limit: null,
+  // which game: a round of forty against the clock, or endless learning
+  game: "play",
+  // how well each card is known, 0 to 100, keyed topic:civ -- learn's whole
+  // memory, and the only thing here that outlives a round
+  known: {},
+  left: 0,
+  // where in this session's dealing each card is wanted next, and how many have
+  // been dealt. Session-only: the percentages are what learning remembers, and
+  // a spacing from yesterday means nothing today.
+  due: {},
+  dealt: 0,
+  streak: 0,
+  // the topics a round was dealt from, kept as it was dealt: the menu can be
+  // changed under a finished round
+  played: [],
+  whole: false,
+  place: -1,
+  scores: [],
   timer: 0,
   wait: 0,
+  clock: 0,
 };
 
 start();
@@ -62,9 +123,14 @@ function start() {
   restoreSelection();
   renderMenu();
 
-  el("start").addEventListener("click", () => beginRound(deckToPlay(), true));
+  el("start").addEventListener("click", () =>
+    state.game === "learn" ? beginLearning() : beginRound(deckToPlay(), true)
+  );
   el("quit").addEventListener("click", () => show("menu"));
   el("to-menu").addEventListener("click", () => show("menu"));
+  el("to-board").addEventListener("click", () => openBoardScreen(-1));
+  el("see-board").addEventListener("click", () => openBoardScreen(state.place));
+  el("board-back").addEventListener("click", () => show("menu"));
   el("again-all").addEventListener("click", () => beginRound(shuffle(state.fullDeck), true));
   el("again-wrong").addEventListener("click", () =>
     beginRound(
@@ -88,13 +154,10 @@ function start() {
     const button = event.target.closest(".mode");
     if (button) setMode(button.dataset.mode);
   });
-  // dragging must not redraw the menu under the thumb, so it only moves the count
-  el("size").addEventListener("input", (event) => {
-    const size = Number(event.target.value);
-    state.limit = size >= Number(event.target.max) ? null : size;
-    showSize(size);
+  el("games").addEventListener("click", (event) => {
+    const button = event.target.closest(".game");
+    if (button) setGame(button.dataset.game);
   });
-  el("size").addEventListener("change", rememberSelection);
   document.addEventListener("keydown", onKey);
 }
 
@@ -106,8 +169,12 @@ function restoreSelection() {
     saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
     const mode = localStorage.getItem(MODE_KEY);
     if (MODES.includes(mode)) state.mode = mode;
-    const size = Number(localStorage.getItem(SIZE_KEY));
-    state.limit = size > 0 ? size : null;
+    const game = localStorage.getItem(GAME_KEY);
+    if (GAMES.includes(game)) state.game = game;
+    const known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
+    if (known && typeof known === "object") state.known = known;
+    const scores = JSON.parse(localStorage.getItem(SCORES_KEY) || "[]");
+    if (Array.isArray(scores)) state.scores = scores;
   } catch (ignored) {
     saved = [];
   }
@@ -121,10 +188,67 @@ function rememberSelection() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
     localStorage.setItem(MODE_KEY, state.mode);
-    localStorage.setItem(SIZE_KEY, state.limit === null ? "" : String(state.limit));
+    localStorage.setItem(GAME_KEY, state.game);
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
+}
+
+/* What learn knows about you, saved after every card rather than at the end:
+   there is no end, and quitting is how you stop. Cards at nothing are dropped
+   instead of stored, so the whole tech tree unlearnt is an empty object. */
+function rememberKnown() {
+  try {
+    localStorage.setItem(KNOWN_KEY, JSON.stringify(state.known));
+  } catch (ignored) {
+    /* private mode, or opened off disk */
+  }
+}
+
+function knownKey(card) {
+  return `${card.topicId}:${card.civId}`;
+}
+
+function knownOf(card) {
+  return state.known[knownKey(card)] || 0;
+}
+
+/* Answered at nothing is not the same as never answered, so the entry is kept
+   even at 0: it is the difference between a card you keep failing and one the
+   deck has never put in front of you, and the menu counts the second sort. */
+function learnFrom(card, verdict) {
+  const was = knownOf(card);
+  const share = KNOWN_STEP[verdict];
+  const moved = Math.round(verdict === "right" ? was + (100 - was) * share : was * share);
+  state.known[knownKey(card)] = Math.max(0, Math.min(100, moved));
+  rememberKnown();
+
+  // and when to ask it again, counted from the card it was asked on
+  const [from, to] = AGAIN_AFTER[verdict];
+  state.due[knownKey(card)] = state.index + from + Math.floor(Math.random() * (to - from + 1));
+}
+
+function isNew(card) {
+  return state.known[knownKey(card)] === undefined;
+}
+
+/* Every round of Play that was the whole forty, best first. A retry of the ones
+   you missed is not one of them: it is a different and easier round, and putting
+   it beside the others would say they were comparable. */
+function recordScore(entry) {
+  state.scores = [...state.scores, entry].sort((a, b) => b.score - a.score).slice(0, TOP_SCORES);
+  try {
+    localStorage.setItem(SCORES_KEY, JSON.stringify(state.scores));
+  } catch (ignored) {
+    /* private mode, or opened off disk */
+  }
+  return state.scores.indexOf(entry);
+}
+
+/* How well the selection is known as one number, for the menu and the bar. */
+function knownShare(cards) {
+  if (!cards.length) return 0;
+  return Math.round(cards.reduce((sum, card) => sum + knownOf(card), 0) / cards.length);
 }
 
 // Single keeps one topic, All takes every one, Custom leaves the choice alone.
@@ -133,6 +257,13 @@ function applyMode() {
   else if (state.mode === "single" && state.selected.size > 1) {
     state.selected = new Set([[...state.selected][0]]);
   }
+}
+
+function setGame(game) {
+  if (!GAMES.includes(game)) return;
+  state.game = game;
+  rememberSelection();
+  renderMenu();
 }
 
 function setMode(mode) {
@@ -191,15 +322,30 @@ function renderMenu() {
   for (const button of el("modes").querySelectorAll(".mode")) {
     button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
   }
-  const whole = deckNow().length;
-  const slider = el("size");
-  slider.max = String(Math.max(whole, 1));
-  slider.disabled = whole < 2;
-  const asking = state.limit === null ? whole : Math.min(state.limit, whole);
-  slider.value = String(Math.max(asking, 1));
-  el("start").disabled = whole === 0;
-  showSize(whole ? asking : 0);
+  for (const button of el("games").querySelectorAll(".game")) {
+    button.setAttribute("aria-pressed", String(button.dataset.game === state.game));
+  }
+
+  const pool = deckNow();
+  const learning = state.game === "learn";
+  el("start").disabled = pool.length === 0;
+  el("start-count").textContent = pool.length === 0 ? "" : learning ? "∞" : `${playSize(pool)}`;
+  el("pool-note").textContent = !pool.length
+    ? ""
+    : learning
+    ? `${pool.length} cards, ${knownShare(pool)}% known${fresh(pool)}`
+    : `${pool.length} cards to draw from, ${CARD_SECONDS}s each`;
   markScrollable(grid);
+}
+
+function playSize(pool) {
+  return Math.min(PLAY_CARDS, pool.length);
+}
+
+/* how many of them have never been answered at all */
+function fresh(pool) {
+  const never = pool.filter(isNew).length;
+  return never ? `, ${never} new` : "";
 }
 
 /* The scrollbar is hidden, so a menu taller than the screen looks like the
@@ -242,25 +388,94 @@ function deckNow() {
   return buildDeck(state.data, [...state.selected]);
 }
 
-/* A shorter round is a random handful of the questions, not the first of them:
-   the deck is already shuffled, so the cut is the draw. */
+/* Forty cards, whatever the topics: the deck is already shuffled, so the cut is
+   the draw, and a selection smaller than forty is simply all of it. */
 function deckToPlay() {
   const deck = deckNow();
-  return state.limit === null ? deck : deck.slice(0, state.limit);
+  return deck.slice(0, playSize(deck));
 }
 
-function showSize(size) {
-  el("start-count").textContent = size ? `${size}` : "";
-  const slider = el("size");
-  const span = Number(slider.max) - 1 || 1;
-  slider.style.setProperty("--filled", `${((Number(slider.value) - 1) / span) * 100}%`);
+/* An appointment first, and anything else only when none is owed.
+
+   A card that has been answered is due back at a position: soon if you got it
+   wrong, a long way off if you got it right. When that position arrives the
+   card is *taken*, not merely allowed -- the longest overdue first, so a
+   backlog drains oldest-first and "again in three cards" means three cards.
+   Letting the due ones back into the general draw instead is what the first
+   version did, and a card answered wrong came back 26 cards later, because it
+   was one of 53 the draw could equally have picked.
+
+   With nothing owed the draw is the open field: every card never dealt and
+   every one not yet due, and there the less you know a card the likelier it is
+   -- eleven times as likely at nothing known as at mastered. A pull rather than
+   a rule, so a card you have down still turns up. */
+function drawLearnCard(avoid) {
+  const at = state.dealt++;
+  const pool = deckNow();
+  const free =
+    avoid && pool.length > 1
+      ? pool.filter((card) => knownKey(card) !== knownKey(avoid))
+      : pool;
+
+  const owed = free.filter((card) => {
+    const due = state.due[knownKey(card)];
+    return due !== undefined && due <= at;
+  });
+  const waiting = free.filter((card) => state.due[knownKey(card)] === undefined);
+
+  /* Two owed in a row is enough while anything is still unseen. Getting a
+     handful wrong puts them back every two to five cards each, which between
+     them is every card: answer the first six wrong and the deck deals those six
+     for ever, and the other forty-seven are never seen. So every third card is
+     a new one until there are no new ones left, and an appointment it makes
+     wait is a card or two late rather than lost. */
+  const hogging = waiting.length > 0 && state.streak >= 2;
+  if (owed.length && !hogging) {
+    state.streak += 1;
+    return longestOverdue(owed);
+  }
+  state.streak = 0;
+
+  const choices = waiting.length ? waiting : free;
+  const weights = choices.map((card) => 1 + (100 - knownOf(card)) / LEARN_WEIGHT);
+  let roll = Math.random() * weights.reduce((sum, weight) => sum + weight, 0);
+  for (let i = 0; i < choices.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return choices[i];
+  }
+  return choices[choices.length - 1];
+}
+
+/* the one that has been waiting longest, and of two the same the one you know
+   less well */
+function longestOverdue(cards) {
+  return cards.reduce((best, card) => {
+    const a = state.due[knownKey(card)];
+    const b = state.due[knownKey(best)];
+    if (a !== b) return a < b ? card : best;
+    return knownOf(card) < knownOf(best) ? card : best;
+  });
 }
 
 /* ---------- round ---------- */
 
+/* Learning deals one card at a time and keeps one in hand, so the stack still
+   has something under it and the draw still sees the answer before it. */
+function beginLearning() {
+  state.due = {};
+  state.dealt = 0;
+  state.streak = 0;
+  const first = drawLearnCard();
+  if (!first) return;
+  state.game = "learn";
+  beginRound([first, drawLearnCard(first)], false);
+}
+
 function beginRound(cards, isFullSet) {
   if (!cards.length) return;
   state.deck = cards;
+  state.whole = Boolean(isFullSet);
+  state.played = [...state.selected];
   if (isFullSet) state.fullDeck = cards;
   state.index = 0;
   state.results = [];
@@ -274,6 +489,7 @@ function beginRound(cards, isFullSet) {
 function show(name) {
   clearTimeout(state.timer);
   clearTimeout(state.wait);
+  stopClock();
   closePicker();
   for (const [key, node] of Object.entries(screens)) node.classList.toggle("is-active", key === name);
   if (name === "menu") renderMenu();
@@ -315,6 +531,44 @@ function renderCard() {
   layStack();
   renderBoardCard(card);
   renderProgress();
+  startClock();
+}
+
+/* ---------- the clock ---------- */
+
+/* Thirty seconds a card, and only in Play: learning is not a test, and a clock
+   over it would make it one. What is left when the card is answered is what the
+   speed bonus is worth, so the reading has to survive finishPicks -- stopClock
+   leaves `left` where it stopped rather than zeroing it. */
+function startClock() {
+  stopClock();
+  state.left = CARD_SECONDS;
+  showClock();
+  if (state.game !== "play") return;
+  state.clock = setInterval(() => {
+    state.left -= 1;
+    showClock();
+    if (state.left <= 0) {
+      stopClock();
+      finishPicks(false, true);
+    }
+  }, 1000);
+}
+
+function stopClock() {
+  clearInterval(state.clock);
+  state.clock = 0;
+}
+
+function showClock() {
+  const clock = el("clock");
+  clock.hidden = state.game !== "play";
+  if (clock.hidden) return;
+  const left = Math.max(state.left, 0);
+  clock.querySelector("b").textContent = `${left}`;
+  clock.classList.toggle("low", left <= 10);
+  clock.classList.toggle("out", left <= 5);
+  el("clock-bar").style.transform = `scaleX(${left / CARD_SECONDS})`;
 }
 
 /* the card under this one, and the emblem of the card after it */
@@ -365,6 +619,7 @@ function renderBoardCard(card) {
           <div class="civ-name">${civ.name}</div>
         </div>
         <div class="parts">${partsHtml(topic, fact, null)}</div>
+        <div class="card-note"></div>
         <div class="bonus-slot"></div>
         <div class="next-hint">
           <svg><use href="#icon-play"/></svg><svg><use href="#icon-play"/></svg>
@@ -437,6 +692,18 @@ function wasRight(result) {
 function renderProgress() {
   const bar = el("progress");
   bar.innerHTML = "";
+
+  // A learning round has no length to show, so the bar shows the thing that is
+  // actually moving: how much of the selection you know.
+  if (state.game === "learn") {
+    const pool = deckNow();
+    const share = knownShare(pool);
+    bar.className = "progress meter";
+    bar.innerHTML = `<i style="width: ${share}%"></i><b>${share}% known${fresh(pool)}</b>`;
+    return;
+  }
+
+  bar.className = "progress";
   state.deck.forEach((_, i) => {
     const tick = document.createElement("i");
     const pending = i === state.index && state.phase !== "reveal";
@@ -585,9 +852,12 @@ function pick(id, holding) {
 
   const hit = wanted(fact, id);
   const outcome = hit ? "spotted" : "falsely";
+  const worth = id === BONUS_ID
+    ? (hit ? POINTS.bonus : POINTS.bonusWrong)
+    : (hit ? POINTS.spotted : POINTS.falsely);
   state.picked[id] = outcome;
-  state.results[state.index].delta += hit ? POINTS.spotted : POINTS.falsely;
-  bumpScore(hit ? POINTS.spotted : POINTS.falsely);
+  state.results[state.index].delta += worth;
+  bumpScore(worth);
   markClaim(id, outcome);
   if (holding) return;
 
@@ -617,8 +887,9 @@ function markClaim(id, outcome) {
 /* What you never claimed: the ones you missed. The bonus is not one of them --
    it is worth points and nothing else, so leaving it costs nothing and cannot
    make a right card a half one. */
-function finishPicks(answered) {
+function finishPicks(answered, timedOut) {
   if (state.phase !== "picking") return;
+  stopClock();
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
 
@@ -632,21 +903,53 @@ function finishPicks(answered) {
     }
   }
 
-  // naming them all and nothing else is the answer, and only then is the card
-  // worth its 100; some of them right is a half answer, none of them a wrong one
+  /* A card is right when the claims match what the civ has: nothing claimed
+     falsely, and nothing it has left unclaimed. Read off the facts rather than
+     off the claims, because "nothing to claim" is a real answer and an empty
+     board is the shape of two different cards -- the Georgians build Hand
+     Cannoneers with no Ring Archer Armour, where done on an empty board is
+     exactly right, and the Aztecs build none at all, where the ✗ rail is what
+     says so and is therefore owed. Said and true, that rail answers for the
+     whole card: a civ may own the techs anyway and is not charged for leaving
+     them (the Armenians have the armour and no Hand Cannoneer).
+
+     Some of them right is a half answer, worth what the claims came to and no
+     more; none of them right is a wrong one and costs the 50. The clock running
+     out is a wrong answer however much of it was right, so it takes the same. */
   const outcomes = Object.entries(state.picked)
     .filter(([id]) => id !== BONUS_ID)
     .map(([, outcome]) => outcome);
-  const clean = outcomes.every((outcome) => outcome === "spotted");
-  const named = outcomes.some((outcome) => outcome === "spotted");
-  if (clean) delta += POINTS.tier;
+  const owing = claimables(topic)
+    .concat({ id: NO_UNIT_ID })
+    .filter(({ id }) => id !== BONUS_ID && wanted(fact, id) && state.picked[id] !== "spotted");
+  const shortcut = state.picked[NO_UNIT_ID] === "spotted";
+  const clean =
+    !timedOut &&
+    !outcomes.includes("falsely") &&
+    (shortcut || owing.length === 0);
+  const named = !timedOut && outcomes.some((outcome) => outcome === "spotted");
+  let quick = 0;
+  if (clean) {
+    delta += POINTS.tier;
+    // the whole card right and quick with it, worth up to 20 more; there is no
+    // clock to beat when learning
+    if (state.game === "play") {
+      quick = Math.round((POINTS.speed * Math.max(state.left, 0)) / CARD_SECONDS);
+      delta += quick;
+    }
+  } else if (!named) {
+    delta += POINTS.tierWrong;
+  }
 
   const result = state.results[state.index];
   result.right = clean;
   result.clean = clean || !named;
+  result.quick = quick;
+  result.timedOut = Boolean(timedOut);
   result.picks = state.picked;
   result.delta += delta;
   if (delta) bumpScore(delta);
+  learnFrom(card, verdictOf(result));
   reveal();
 }
 
@@ -678,6 +981,11 @@ function reveal() {
   const delta = back.querySelector(".card-delta");
   delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
   delta.textContent = result.delta > 0 ? `+${result.delta}` : `${result.delta}`;
+  back.querySelector(".card-note").innerHTML = result.timedOut
+    ? `<span class="late"><svg><use href="#icon-clock"/></svg> out of time</span>`
+    : result.quick
+    ? `<span class="quick"><svg><use href="#icon-clock"/></svg> +${result.quick} for the pace</span>`
+    : "";
 
   // The card waits for you, but not for ever. The bar is filled in here rather
   // than in the markup, or it would drain while the board was still being
@@ -703,6 +1011,8 @@ function advance() {
   state.index += 1;
   state.phase = "between";
   state.timer = setTimeout(() => {
+    // learning never runs out of cards: it draws the next one as it goes
+    if (state.game === "learn") state.deck.push(drawLearnCard(state.deck[state.index]));
     if (state.index >= state.deck.length) showResults();
     else renderCard();
   }, 180);
@@ -712,8 +1022,39 @@ function advance() {
 
 function showResults() {
   const right = state.results.filter(wasRight).length;
+
+  // The breadth bonus lands once, at the end, where it reads as its own line
+  // rather than disappearing into whichever card happened to be last.
+  const topics = state.played.filter((id) => state.data.topics.some((topic) => topic.id === id));
+  const whole = state.game === "play" && state.whole;
+  const bonus = whole ? topics.length * PER_TOPIC : 0;
+  if (bonus) bumpScore(bonus);
+
+  state.place = whole
+    ? recordScore({
+        score: state.score,
+        right,
+        cards: state.results.length,
+        topics,
+        at: Date.now(),
+      })
+    : -1;
+
   el("final-score").textContent = state.score > 0 ? `+${state.score}` : `${state.score}`;
   el("final-tally").textContent = `${right} / ${state.results.length}`;
+  el("final-note").innerHTML = [
+    bonus
+      ? `${topics.length} ${topics.length === 1 ? "topic" : "topics"} &times; ${PER_TOPIC} = +${bonus}`
+      : "",
+    state.place === 0
+      ? `<b class="best">best yet</b>`
+      : state.place > 0
+      ? `<b>${ordinal(state.place + 1)} best</b>`
+      : "",
+  ]
+    .filter(Boolean)
+    .join(" &middot; ");
+  el("see-board").hidden = state.scores.length === 0;
 
   const wrong = state.results.filter((result) => !wasRight(result));
   el("review").innerHTML = [...wrong, ...state.results.filter(wasRight)]
@@ -735,6 +1076,52 @@ function showResults() {
   el("wrong-count").textContent = wrong.length ? `${wrong.length}` : "0";
   el("all-count").textContent = `${state.deck.length}`;
   show("results");
+}
+
+function ordinal(n) {
+  const tail = n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
+  return `${n}${tail}`;
+}
+
+function openBoardScreen(highlight) {
+  renderScores(highlight);
+  show("scores");
+}
+
+/* The board is the scores and what they were scored on: a round of Crossbowman
+   and a round of everything are both forty cards, and only the topics beside
+   the number say which was which. */
+function renderScores(highlight) {
+  const board = el("scoreboard");
+  if (!state.scores.length) {
+    board.innerHTML = `<li class="empty">No rounds yet — play forty and you are on it.</li>`;
+    return;
+  }
+  board.innerHTML = state.scores
+    .map((entry, i) => {
+      const topics = (entry.topics || [])
+        .map((id) => state.data.topics.find((topic) => topic.id === id))
+        .filter(Boolean);
+      const shown = topics.slice(0, 5);
+      const more = topics.length - shown.length;
+      return `<li class="${i === highlight ? "mine" : ""}">
+        <b class="place">${i + 1}</b>
+        <span class="tally">${entry.score > 0 ? `+${entry.score}` : entry.score}</span>
+        <span class="of">${entry.right}/${entry.cards}</span>
+        <span class="topics" title="${topics.map((topic) => topic.name).join(", ")}">
+          ${shown.map((topic) => `<span class="badge">${tileHtml(topic)}</span>`).join("")}
+          ${more > 0 ? `<em>+${more}</em>` : ""}
+        </span>
+        <span class="when">${when(entry.at)}</span>
+      </li>`;
+    })
+    .join("");
+}
+
+function when(at) {
+  if (!at) return "";
+  const date = new Date(at);
+  return `${date.getDate()}/${date.getMonth() + 1}`;
 }
 
 /* what the card was about */
