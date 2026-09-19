@@ -477,14 +477,12 @@ function openBoard(card) {
           topic.below
             ? `<span class="rail-art only">
                  <img src="${topic.below.img}" alt="${topic.below.name}">
-               </span>
-               <span>${topic.below.name}</span>`
+               </span>`
             : `<span class="rail-art struck">
                  ${tileHtml(topic)}<svg><use href="#mark-none"/></svg>
-               </span>
-               <span>none</span>`
+               </span>`
         }
-        <b class="verdict"></b>
+        <span>no</span><b class="verdict"></b>
       </button>
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
         ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
@@ -532,10 +530,10 @@ function fullHtml(topic) {
   return splitHtml(slotImages(topic, top), slotName(topic, topic.parts.find((p) => p.id === top)));
 }
 
-/* "No" means one of two things and the rail shows which: where the line has
+/* Both rails say "no"; the picture says what kind of no. Where the line has
    something under it the civ keeps -- the Archer under the Crossbowman -- that
-   unit is the picture and its name is the label; where it has not, the topic's
-   own unit is struck out and the label is "none". */
+   unit is drawn whole, because it can still be built. Where it has not, the
+   topic's own unit is struck out: there is nothing there at all. */
 function cannotTitle(topic) {
   if (topic.below) return `it only has the ${topic.below.name}, none of this line`;
   const gates = topic.parts.filter((part) => !topic.upgrades.includes(part.id));

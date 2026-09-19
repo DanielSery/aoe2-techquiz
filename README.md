@@ -13,10 +13,10 @@ asked on. The two ends are the answers that need no tiles, and they are rails
 the full height of the tiles, so the board is one block whatever the topic:
 
 ```
- ┌────────┬───────────────────┬──────┐
- │   ▣    │  ▣ ▣ ▣ ▣          │  ▣✓  │
- │ ARCHER │  ▣ ▣ ▣  upgrades  │ FULL │
- └────────┴───────────────────┴──────┘
+ ┌──────┬─────────────────────┬──────┐
+ │  ▣   │  ▣ ▣ ▣ ▣            │  ▣✓  │
+ │  NO  │  ▣ ▣ ▣   upgrades   │ FULL │
+ └──────┴─────────────────────┴──────┘
             ★ BONUS    ✔ DONE
 ```
 
@@ -38,24 +38,26 @@ red ✗, cannot be built at all; **the unit the line ends at**, lit under a gree
 and two are techs throughout (Defense, Economy); there the right rail keeps the
 topic's own icon.
 
-**"No" means two different things, and the left rail says which.** A civ with no
-Crossbowman still builds an **Archer**; a civ with no Cavalry Archer builds
-nothing of the sort at all. So where the line has something under it, that unit
-is the picture and its own name is the label — Archer, Spearman, Man-at-Arms,
-Battering Ram — and where it has not, the topic's unit is struck out under a red
-✗ and the label is **none**.
+**"No" means two different things, and the picture says which.** Both rails are
+labelled **no**; the left one is struck out under a red ✗ where the civ builds
+nothing of the sort — no Cavalry Archer at all — and drawn whole where the line
+has something under it the civ keeps: the **Archer** under the Crossbowman, the
+Spearman, the Man-at-Arms, the Battering Ram, the Scout Cavalry, the Skirmisher.
+That unit is `below` in `tools/build_data.py`.
 
-Which four topics have one is not a judgement call: `below` in
-`tools/build_data.py` is checked against every civ, and the build fails if a
-single civ with nothing here does not really build it. That check is what keeps
-Light Cavalry off the list — the Teutons have a Scout Cavalry, but the Maya have
-no Stable at all, so "only the Scout Cavalry" would be a lie about six civs out
-of seven. It is a picture and nothing else: no tier, no claim, no bonus word,
-and it stays out of `parts` so it cannot leak into what a card asks.
+One picture stands for every civ on the topic, so it can be generous, and the
+build prints how generous: every civ with no Pikeman has a Spearman, but of the
+seven with no Light Cavalry only the Teutons have a Scout Cavalry — the other
+six have no Stable at all. Drawn per civ instead it would *answer* the card,
+since "no Scout either" is only ever true of a civ that cannot have the Light
+Cavalry, so the shortfall is reported rather than fixed; a unit no civ on the
+topic keeps fails the build outright. `below` is a picture and nothing else: no
+tier, no claim, no bonus word, and it stays out of `parts`, so it cannot reach
+what a card asks.
 
 | | Means | |
 |---|---|---|
-| left rail, **the unit under the line** | it has only that — none of this line | ±10, **and that is the answer** |
+| **no**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±10, **and that is the answer** |
 | ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
 | ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |
@@ -143,7 +145,11 @@ teaches nothing. The threshold is `RARE` in `tools/build_data.py`.
 A topic is gated on the unit that says the line exists at all, which is where its
 name comes from: the Crossbowman topic asks about the Arbalester upgrade, so a
 civ that stops at crossbows has the unit and is missing that upgrade, and only
-the two civilisations with no crossbow at all have nothing. A
+the two civilisations with no crossbow at all have nothing. **Elite Skirmisher
+is the exception**, gated on the Elite itself: every civ has the Skirmisher, so
+gating there asks a question with one answer and makes the Elite a tile nobody
+can weigh. Gated on the Elite, the Turks are the one civ with nothing and the
+plain Skirmisher is what they keep. A
 gate can also be a choice of units — Shu, Wei and Wu field the **Traction
 Trebuchet** where everyone else has a **Bombard Cannon**, and either counts, so
 the card asks for one of them rather than marking the other as missing.

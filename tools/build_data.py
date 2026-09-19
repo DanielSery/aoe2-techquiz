@@ -131,13 +131,18 @@ TOPICS = [
                  r"double crossbow"],
     },
     {
-        # No Thumb Ring: it is an archer tech the Skirmisher barely trades on,
-        # and one more icon to weigh up on every card.
+        # Gated on the *Elite* Skirmisher, unlike the rest: every civ has the
+        # Skirmisher, so gating on it asks a question with one answer and makes
+        # the Elite an upgrade tile nobody can meaningfully weigh. Gated here,
+        # the Elite is the unit and the Skirmisher is what a civ without it
+        # keeps. No Thumb Ring either: it is an archer tech the Skirmisher
+        # barely trades on, and one more icon on every card.
         "id": "skirmisher",
         "group": "Archery Range",
-        "name": "Skirmisher",
-        "unit": 7,
-        "upgrades": [("Unit", 6), 201, 219],
+        "name": "Elite Skirmisher",
+        "unit": 6,
+        "below": ("Unit", 7),
+        "upgrades": [201, 219],
         "words": [r"skirmishers?", r"skirmisher-line", r"foot archers?", r"archery ranges?",
                   r"ranged soldiers?", r"archer armou?r"],
         "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer"],
@@ -198,10 +203,16 @@ TOPICS = [
         "veto": [r"villagers?"],
     },
     {
+        # The Scout is what a civ without the Light Cavalry is left with -- the
+        # six civs with no Stable at all are left with nothing, and the rail is
+        # drawn per topic rather than per civ, so it is generous to them. Drawn
+        # per civ it would answer the card: "no Scout either" is only ever true
+        # of a civ that cannot have the Light Cavalry.
         "id": "hussar",
         "group": "Stable",
         "name": "Light Cavalry",
         "unit": 546,
+        "below": ("Unit", 448),
         "upgrades": [[("Unit", 441), ("Unit", 1707)], 435, 39, 80, 75],
         "words": [r"hussars?", r"light cavalry", r"scout cavalry", r"cavalry", r"stables?",
                   r"mounted units?", r"stable units?"],
@@ -512,22 +523,31 @@ def part_id(kind: str, item: int) -> str:
 
 
 def below_part(spec: dict, techtree: dict, icons: dict, civs: dict) -> dict | None:
-    """What a civ with none of this topic still builds, and proof that it does.
+    """What a civ with none of this topic still builds, and how true that is.
 
-    The claim is made about every civ at once, so it has to hold for every civ
-    at once: a Turk with no Pikeman has a Spearman, but a Maya with no Light
-    Cavalry has no Scout Cavalry either, and there the answer is that it has
-    nothing. One civ short and the build fails rather than draw a unit the card
-    would be wrong about."""
+    One picture stands for every civ on the topic, so it can be generous: a Turk
+    with no Pikeman has a Spearman and every civ without one does, but of the
+    seven with no Light Cavalry only the Teutons have a Scout Cavalry -- the
+    rest have no Stable at all. Drawn per civ instead it would answer the card,
+    since "no Scout either" is only ever true of a civ that cannot have the
+    Light Cavalry. So the shortfall is printed rather than fixed, and only a
+    unit no civ here keeps is an outright mistake."""
     node = spec.get("below")
     if node is None:
         return None
     kind, item = node
     index, name = icons[node]
-    for civ, answer in civs.items():
-        tree = next(t for n, t in techtree["civs"].items() if n.lower() == civ)
-        if answer["tier"] == "none" and item not in tree[kind]:
-            raise SystemExit(f"{spec['id']}: the {civ} have nothing here, not even the {name}")
+    nothing = [civ for civ, answer in civs.items() if answer["tier"] == "none"]
+    keep = [
+        civ
+        for civ in nothing
+        if item in next(t for n, t in techtree["civs"].items() if n.lower() == civ)[kind]
+    ]
+    if nothing and not keep:
+        raise SystemExit(f"{spec['id']}: no civ with nothing here has the {name}")
+    if len(keep) < len(nothing):
+        print(f"{spec['id']}: {name} is what {len(keep)} of {len(nothing)} with nothing here keep"
+              f" -- {sorted(set(nothing) - set(keep))} have not even that")
     return {
         "id": part_id(kind, item),
         "name": name,
