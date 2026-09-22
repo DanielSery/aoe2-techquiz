@@ -283,6 +283,22 @@ TOPICS = [
         "bonus_fix": {"Huns": False, "Vikings": False},
     },
     {
+        "id": "blacksmith",
+        "group": "Blacksmith",
+        "name": "Blacksmith",
+        "icon": ("Tech", 75),
+        "upgrades": [77, 80, 219, 201, 75],
+        "blacksmith_lines": [
+            [74, 76, 77],     # infantry armor
+            [81, 82, 80],     # cavalry armor
+            [211, 212, 219],  # archer armor
+            [199, 200, 201],  # archer attack
+            [67, 68, 75],     # melee attack
+        ],
+        "words": [r"blacksmith", r"infantry armou?r", r"cavalry armou?r",
+                  r"archer armou?r", r"attack upgrades?"],
+    },
+    {
         # No unit at the foot of it: the topic is the upgrades themselves, so a
         # civ with none of the seven is the ✗ rather than "no unit". Bracer is
         # here because it is what gives a tower its range, which is the one
@@ -521,7 +537,8 @@ def nodes_of(spec: dict) -> list:
     `below` is deliberately not one of them: it is a picture of what a civ keeps,
     never a thing the card asks about, so it stays out of `parts` -- out of the
     bonus words, out of `has`, and out of the cross-check."""
-    ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec)
+    blacksmith = [("Tech", item) for line in spec.get("blacksmith_lines", []) for item in line]
+    ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec) + blacksmith
     return list(dict.fromkeys(ordered))
 
 
@@ -626,6 +643,9 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         "parts": parts,
         "tiers": tiers_for(gate_ids, [part for group in groups for part in group]),
         "civs": trim_to_owners(civs, gate_ids),
+        **({"blacksmithLines": [[part_id("Tech", item) for item in line]
+                                 for line in spec["blacksmith_lines"]]}
+           if spec.get("blacksmith_lines") else {}),
         **({"buildingLevels": {
             "parts": [{"id": part_id(kind, item), "name": icons[(kind, item)][1],
                        "img": f"img/topics/{part_id(kind, item)}.png", "icon_index": icons[(kind, item)][0]}

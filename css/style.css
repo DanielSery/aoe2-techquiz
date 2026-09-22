@@ -110,6 +110,7 @@ button.primary {
 }
 
 button.ghost { background: transparent; }
+button.danger { color: var(--none); border-color: #cf534055; }
 
 button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
@@ -642,28 +643,6 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .face.back .emblem { width: clamp(24px, 12cqw, 40px); }
 .face.back .civ-name { font-size: clamp(12px, 5.5cqw, 17px); }
 
-.judge-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: clamp(38px, 20cqw, 64px);
-  height: clamp(38px, 20cqw, 64px);
-  border-radius: 50%;
-  color: #17120b;
-  animation: pop .28s ease-out;
-}
-
-.judge-badge svg { width: 68%; height: 68%; }
-.judge-badge.right { background: var(--full); box-shadow: 0 0 22px #62a76566; }
-.judge-badge.wrong { background: var(--none); box-shadow: 0 0 22px #cf534066; }
-.judge-badge.half { background: var(--partial); box-shadow: 0 0 22px #dfa33866; }
-
-@keyframes pop {
-  from { transform: scale(.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
 /* the card waits for you; this says so */
 .next-hint {
   display: flex;
@@ -743,6 +722,74 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .part.falsely { border-color: var(--none); box-shadow: 0 0 0 2px var(--none); }
 .part.missed { border-color: var(--partial); box-shadow: 0 0 0 2px var(--partial); }
 
+.parts.configuration-neighbors {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  width: 100%;
+  min-height: 0;
+}
+
+.configuration-block {
+  padding: 5px;
+  border: 1px solid #ffffff18;
+  border-radius: 8px;
+}
+
+.configuration-block.exact {
+  background: #d8b35a18;
+  border-color: #d8b35a55;
+}
+
+.configuration-block.exact.empty { padding: 9px 6px; background: #00000020; border-color: #ffffff1c; }
+
+.configuration-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 3px;
+  font-size: clamp(8px, 3.5cqw, 11px);
+  color: #c8b99f;
+}
+
+.configuration-summary b { color: var(--gold); font-size: clamp(10px, 4cqw, 13px); }
+.configuration-summary.alone b { color: #f0d493; }
+.configuration-block.exact.empty .configuration-summary { flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+.configuration-block.exact.empty .configuration-summary b { color: #a8967f; }
+
+.configuration-civs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+  gap: 4px;
+  max-height: clamp(56px, 30cqh, 105px);
+  padding: 3px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.configuration-civs.closest { grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+.configuration-civs.exact { display: flex; flex-wrap: wrap; justify-content: center; max-height: 58px; }
+.configuration-civs.exact .configuration-civ { width: clamp(32px, 13cqw, 44px); }
+
+.configuration-civ {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 3px 1px;
+  border: 1px solid #ffffff18;
+  border-radius: 7px;
+  background: #00000020;
+}
+
+.configuration-civ img { width: clamp(22px, 9cqw, 30px); height: clamp(22px, 9cqw, 30px); object-fit: contain; }
+.configuration-civ em { max-width: 100%; overflow: hidden; font-size: clamp(6px, 2.6cqw, 8px); font-style: normal; text-overflow: ellipsis; white-space: nowrap; color: #d2c4ae; }
+.configuration-civ small { position: absolute; top: 1px; right: 2px; font-size: 7px; color: var(--partial); }
+
 /* what the card was worth, at the end of its own band: anywhere else on the
    back and it lands on the band or on the parts */
 .card-delta {
@@ -771,6 +818,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .bonus-note svg { width: clamp(13px, 5.5cqw, 18px); height: clamp(13px, 5.5cqw, 18px); flex: none; color: var(--bonus); }
+.bonus-note.none { border-color: #ffffff1c; background: #0000001c; color: #a8967f; }
+.bonus-note.none svg { color: #766b5d; }
 .bonus-note .said { flex: none; }
 .bonus-note .said.right { color: var(--full); }
 .bonus-note .said.wrong { color: var(--none); }
@@ -962,6 +1011,17 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   width: 1px;
   background: #e5c99266;
   pointer-events: none;
+}
+
+.unit-state > .unit-or-missing .split-missing {
+  display: flex;
+  width: 72%;
+  height: 72%;
+  place-self: center;
+  color: var(--none);
+  background: #241613;
+  box-shadow: 0 0 0 calc(var(--cell) * .12) #241613;
+  filter: drop-shadow(0 1px 2px #000d);
 }
 
 .unit-state > .split.n3,

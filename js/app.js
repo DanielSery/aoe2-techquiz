@@ -9,7 +9,7 @@ const MODES = ["single", "custom", "all"];
 const GAMES = ["play", "learn"];
 
 // how long a revealed card waits before it deals the next one itself
-const AUTO_NEXT_MS = 5000;
+const AUTO_NEXT_MS = 30000;
 
 // Play is a fixed round against the clock: the same forty cards' worth of work
 // every time, so two scores are comparable.
@@ -28,10 +28,9 @@ const TOP_SCORES = 25;
    needs no length: what it asks drifts towards what you keep getting wrong, and
    you stop when you are done.
 
-   The moves are shares, not steps. Right closes most of the gap to 100 and no
-   more, so a card answered right once reads 70: getting it right once is not
-   knowing it, and the card has to come back four more times to finish the rest
-   (91, 97, 99, 100). Wrong and half keep a share of what was there, so
+   The moves are shares, not steps. A right answer normally closes 70% of the
+   gap to 100, adjusted by the card's smoothed response pace; getting it right
+   once is still not mastery. Wrong and half keep a share of what was there, so
    forgetting is proportional too -- a card at 91 answered wrong falls to 23
    rather than shrugging off a fixed ten. */
 const KNOWN_STEP = { right: 0.7, half: 0.6, wrong: 0.25 };
@@ -60,14 +59,10 @@ const LEARN_PULL = 10;
    serves a mastered card every 20 to 50 cards whatever its weight, because an
    appointment does not look at how well you know the thing -- measured, that
    was 35 of 60 draws spent on cards already mastered. */
-const REST_AT_100 = 16;
-
-/* When a card comes round again, counted in cards dealt after it. A card you
-   just got wrong is worth asking again while the answer is still in the room --
-   but only once, and then it has to survive the long gap to prove anything, so
-   getting it right sends it 20 to 50 cards away. Drawn from the range at
-   random, or the deck falls into a rhythm you can feel coming. */
-const AGAIN_AFTER = { wrong: [2, 5], half: [5, 12], right: [20, 50] };
+/* When a card comes round again, counted in cards dealt after it. Uncertain
+   cards stay in the short loop; long rests have to be earned through repeated,
+   confident right answers. Ranges keep the rotation from becoming predictable. */
+const AGAIN_AFTER = { wrong: [2, 4], half: [3, 6] };
 
 // Two claims that are not upgrades and sit with the actions rather than on the
 // board: the civ's bonus, and "it cannot build this at all". The bonus is part
@@ -76,18 +71,19 @@ const BONUS_ID = "bonus";
 const NO_UNIT_ID = "no-unit";
 const UNIT_STATE_ID = "unit-state";
 
-// Naming every upgrade and nothing else is the question; the rest are worth
-// what they cost to find out. An upgrade you leave alone and the civ has is
-// worth nothing: only a claim scores, or doing nothing would be the safe way to
-// play.
+// Every upgrade is a binary decision: selecting one says the civ has it, while
+// leaving it clear and pressing done says it does not. Both kinds of knowledge
+// are worth the same. Unit lines are multi-way decisions, so their value grows
+// with the number of states and alternative units shown in a state.
 const POINTS = {
-  tier: 100,
-  tierWrong: -50,
-  spotted: 5,
-  falsely: -5,
-  missed: -5,
-  bonus: 10,
-  bonusWrong: -10,
+  complete: 30,
+  whollyWrong: -30,
+  upgrade: 10,
+  upgradeWrong: -10,
+  unitPerState: 5,
+  unitAlternative: 2,
+  bonus: 15,
+  bonusWrong: -15,
   // the most a whole right card can earn for being quick, all of it or none of
   // it: a card you only half knew is worth no more for being rushed
   speed: 20,
@@ -135,6 +131,7 @@ const state = {
   timer: 0,
   wait: 0,
   clock: 0,
+  answerStartedAt: 0,
 };
 
 start();
@@ -152,6 +149,8 @@ function start() {
   normalizeChampionTopic();
   mergeBarracksTopics();
   mergeStableTopics();
+  prepareBlacksmithTopic();
+  prepareUnitBlacksmithUpgrades();
   prepareDefenseControls();
   restoreSelection();
   renderMenu();
@@ -164,6 +163,7 @@ function start() {
   el("to-board").addEventListener("click", () => openBoardScreen(-1));
   el("see-board").addEventListener("click", () => openBoardScreen(state.place));
   el("board-back").addEventListener("click", () => show("menu"));
+  el("clear-data").addEventListener("click", clearAllData);
   el("again-all").addEventListener("click", () => beginRound(shuffle(state.fullDeck), true));
   el("again-wrong").addEventListener("click", () =>
     beginRound(
@@ -240,11 +240,15 @@ function mergeGunpowderTopics() {
     };
   }
 
+  hand.replacedUpgrades = ["tech-219"];
+  bombard.replacedUpgrades = ["tech-377"];
+  const traction = bombard.parts.find((part) => part.id === "unit-1942");
   const combined = {
     id: "gunpowder_units",
     name: "Hand Cannoneer + Bombard Cannon",
     group: "Gunpowder",
-    icon: "img/topics/tech-chemistry.png",
+    icon: hand.icon,
+    images: [hand.icon, bombard.icon, traction.img],
     below: null,
     unit: null,
     gate: [],
@@ -265,6 +269,22 @@ function mergeSiegeTopics() {
     id: "siege_units", name: "Ram / Onager / Scorpion", group: "Siege",
     icon: "img/topics/building-siege-workshop.png",
   });
+}
+
+function clearAllData() {
+  if (!window.confirm("Clear all saved progress, settings, and scores?")) return;
+  try {
+    for (const key of [STORE_KEY, MODE_KEY, GAME_KEY, KNOWN_KEY, SCORES_KEY]) localStorage.removeItem(key);
+  } catch (ignored) {
+    /* private mode, or opened off disk */
+  }
+  state.known = {};
+  state.scores = [];
+  state.due = {};
+  state.mode = "single";
+  state.game = "play";
+  state.selected = new Set(state.data.topics.slice(0, 1).map((topic) => topic.id));
+  renderMenu();
 }
 
 function mergeArcherTopics() {
@@ -380,6 +400,49 @@ function prepareDefenseControls() {
   }
 }
 
+function prepareBlacksmithTopic() {
+  const topic = state.data.topics.find((topic) => topic.id === "blacksmith");
+  if (!topic?.blacksmithLines) return;
+  const names = ["Infantry Armor", "Cavalry Armor", "Archer Armor", "Archer Attack", "Melee Attack"];
+  topic.icon = "img/topics/building-blacksmith.png";
+  topic.merged = topic.blacksmithLines.map((ids, index) => ({
+    id: `blacksmith_${index}`,
+    name: names[index],
+    unit: ids[1],
+    below: topic.parts.find((part) => part.id === ids[0]),
+    parts: topic.parts.filter((part) => ids.includes(part.id)),
+    upgrades: [ids[2]],
+    alts: {},
+    stateIds: ids,
+    blacksmithLine: true,
+    replacedUpgrades: [ids[2]],
+  }));
+  for (const fact of Object.values(topic.civs)) {
+    fact.mergedFacts = Object.fromEntries(topic.merged.map((child) => [child.id, {
+      tier: "partial", has: fact.has, missing: [], bonus: false, why: [],
+    }]));
+  }
+
+}
+
+function prepareUnitBlacksmithUpgrades() {
+  const blacksmith = state.data.topics.find((topic) => topic.id === "blacksmith");
+  if (!blacksmith?.merged) return;
+  const assignments = {
+    archer_skirmisher: [2, 3],
+    barracks_units: [0, 4],
+    cavalry_archer: [2, 3],
+    stable_units: [1, 4],
+  };
+
+  for (const [topicId, lineIndexes] of Object.entries(assignments)) {
+    const topic = state.data.topics.find((item) => item.id === topicId);
+    if (!topic) continue;
+    const earlierLevels = new Set(lineIndexes.flatMap((index) => blacksmith.merged[index].stateIds.slice(0, -1)));
+    topic.upgrades = topic.upgrades.filter((id) => !earlierLevels.has(id));
+  }
+}
+
 /* ---------- menu ---------- */
 
 function restoreSelection() {
@@ -435,13 +498,14 @@ function knownKey(card) {
   return `${card.topicId}:${card.civId}`;
 }
 
-/* What is remembered about a card: how well it is known, and how many times it
-   has been got wrong. Stored as a number alone before the misses were counted,
-   so a plain number still reads as a clean record. */
+/* What is remembered about a card: how well it is known, how many times it has
+   been got wrong, and its smoothed response pace. Stored as a number alone
+   before the extra signals were counted, so a plain number still reads as a
+   clean record. */
 function recordOf(card) {
   const entry = state.known[knownKey(card)];
   if (entry === undefined || entry === null) return null;
-  return typeof entry === "number" ? { k: entry, w: 0 } : entry;
+  return typeof entry === "number" ? { k: entry, w: 0, t: null } : entry;
 }
 
 function knownOf(card) {
@@ -457,10 +521,21 @@ function missesOf(card) {
 /* Answered at nothing is not the same as never answered, so the entry is kept
    even at 0: it is the difference between a card you keep failing and one the
    deck has never put in front of you, and the menu counts the second sort. */
-function learnFrom(card, verdict) {
+function learnFrom(card, verdict, elapsedSeconds, decisions) {
   const was = knownOf(card);
   const misses = missesOf(card);
-  const climb = KNOWN_STEP.right / (1 + misses * MISS_DAMP);
+  const previous = recordOf(card);
+  const expectedSeconds = 4 + Math.max(1, decisions) * 1.5;
+  const measuredPace = Math.max(0, elapsedSeconds) / expectedSeconds;
+  const pace = previous?.t == null ? measuredPace : previous.t * 0.65 + measuredPace * 0.35;
+  const confidence = pace <= 0.65
+    ? 1.08
+    : pace <= 1
+    ? 1
+    : pace <= 1.75
+    ? 1 - ((pace - 1) / 0.75) * 0.3
+    : 0.55;
+  const climb = Math.min(0.85, (KNOWN_STEP.right * confidence) / (1 + misses * MISS_DAMP));
   const moved = Math.round(
     verdict === "right" ? was + (100 - was) * climb : was * KNOWN_STEP[verdict]
   );
@@ -472,37 +547,26 @@ function learnFrom(card, verdict) {
         : verdict === "right" && was >= MISS_FORGIVEN_AT
         ? Math.max(0, misses - 1)
         : misses,
+    t: Math.round(pace * 100) / 100,
   };
   state.known[knownKey(card)] = record;
   rememberKnown();
 
   // and when to ask it again, counted from the card it was asked on
-  const [from, to] = AGAIN_AFTER[verdict];
-  const gap = (from + Math.random() * (to - from)) * restFactor(verdict, knownOf(card));
+  const [from, to] = repeatRange(verdict, knownOf(card));
+  const gap = from + Math.random() * (to - from);
   state.due[knownKey(card)] = state.index + Math.round(gap);
 }
 
-/* A card you have just got wrong comes back soon whatever you used to know --
-   its percentage has just fallen anyway. Getting it right is what buys rest,
-   and each right answer in a row roughly doubles it. Written against the rungs
-   of the ladder rather than as a curve over the percentage, because the rungs
-   are what it has to line up with: 70, 91, 97, 99, 100 is one right answer,
-   then two, then three, four, five.
-
-       70  ->  1x   20-50 cards      the short interval, a card still in play
-       91  ->  2x   40-100
-       97  ->  4x   80-200           about one sighting a long session
-       99  ->  8x   160-400
-      100  -> 16x   320-800          rare, and never impossible: a deck with
-                                     nothing else in it still deals them */
-function restFactor(verdict, known) {
-  if (verdict !== "right") return 1;
-  const gap = Math.max(100 - known, 0);
-  if (gap >= 30) return 1;
-  if (gap >= 9) return 2;
-  if (gap >= 3) return 4;
-  if (gap >= 1) return REST_AT_100 / 2;
-  return REST_AT_100;
+function repeatRange(verdict, known) {
+  if (verdict !== "right") return AGAIN_AFTER[verdict];
+  if (known < 40) return [3, 6];
+  if (known < 65) return [5, 10];
+  if (known < 80) return [8, 16];
+  if (known < 92) return [16, 32];
+  if (known < 98) return [35, 70];
+  if (known < 100) return [80, 160];
+  return [180, 360];
 }
 
 function isNew(card) {
@@ -691,7 +755,7 @@ function drawLearnCard(avoid) {
   const waiting = free.filter((card) => state.due[knownKey(card)] === undefined);
 
   /* Two owed in a row is enough while anything is still unseen. Getting a
-     handful wrong puts them back every two to five cards each, which between
+     handful wrong puts them back every two to four cards each, which between
      them is every card: answer the first six wrong and the deck deals those six
      for ever, and the other forty-seven are never seen. So every third card is
      a new one until there are no new ones left, and an appointment it makes
@@ -745,11 +809,10 @@ function longestOverdue(cards) {
    went to mastered cards. Never-answered cards keep no due at all: they are the
    ones the deck is for. */
 function seedSchedule() {
-  const [from, to] = AGAIN_AFTER.right;
   state.due = {};
   for (const card of deckNow()) {
     if (isNew(card)) continue;
-    const span = (from + Math.random() * (to - from)) * restFactor("right", knownOf(card));
+    const [, span] = repeatRange("right", knownOf(card));
     state.due[knownKey(card)] = Math.round(Math.random() * span);
   }
 }
@@ -823,6 +886,7 @@ function bumpScore(delta) {
 function renderCard() {
   const card = state.deck[state.index];
   state.phase = "answer";
+  state.answerStartedAt = Date.now();
   layStack();
   renderBoardCard(card);
   renderProgress();
@@ -908,12 +972,11 @@ function renderBoardCard(card) {
         <div class="topic-band">${band}
           <b class="card-delta"></b>
         </div>
-        <div class="judge-badge"></div>
         <div class="who">
           <img class="emblem" src="${civ.img}" alt="">
           <div class="civ-name">${civ.name}</div>
         </div>
-        <div class="parts">${partsHtml(topic, fact, null)}</div>
+        <div class="parts configuration-neighbors"></div>
         <div class="card-note"></div>
         <div class="bonus-slot"></div>
         <div class="next-hint">
@@ -1053,13 +1116,14 @@ function openBoard(card) {
         title="a civ bonus, team bonus or unique tech about this unit">
         <svg><use href="#icon-star"/></svg><span>bonus</span><b class="verdict"></b>
       </button>
-      <button id="picker-done" class="act primary" title="that is all of them">
-        <svg><use href="#mark-right"/></svg><span>done</span>
-      </button>
       <button id="claim-all" class="act full" title="every upgrade and the highest unit state">
         <svg><use href="#mark-full"/></svg><span>full</span>
       </button>
+      <button id="picker-done" class="act primary" title="that is all of them">
+        <svg><use href="#mark-right"/></svg><span>done</span>
+      </button>
     </div>`;
+  syncDoneState(topic);
 }
 
 function unitStates(topic) {
@@ -1074,7 +1138,11 @@ function middleUnitId(topic) {
 
 function defaultUnitStateId(topic) {
   const data = unitStateData(topic);
-  return data ? data.default || data.middle.id : "";
+  if (!data) return "";
+  if (["eagle", "camel", "regional_cavalry"].includes(topic.id) && data.states.some((state) => state.id === NO_UNIT_ID)) {
+    return NO_UNIT_ID;
+  }
+  return data.default || data.middle.id;
 }
 
 function unitStatesHtml(topic, unitKey = "") {
@@ -1095,6 +1163,11 @@ function unitStatesHtml(topic, unitKey = "") {
 }
 
 function stateLabel(topic, unit, index) {
+  if (unit.id === NO_UNIT_ID) return unit.name;
+  if (topic.blacksmithLine && index === 0) return `${unit.name} / No upgrade`;
+  if (topic.id === "hussar" && index === 0) return "Scout Cavalry / Missing Scout";
+  if (topic.id === "hand_cannoneer") return ["Missing", "Hand Cannoneer without Ring Archer Armor", "Hand Cannoneer + Ring Archer Armor"][index];
+  if (topic.id === "bombard_cannon") return ["Missing", "Bombard Cannon / Traction Trebuchet without Siege Engineers", "Bombard Cannon / Traction Trebuchet + Siege Engineers"][index];
   if (["cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) return slotName(topic, unit);
   if (topic.id === "siege_ram") return ["Battering Ram / Armored Elephant", "Capped Ram / Siege Elephant", "Siege Ram / Nothing"][index];
   if (topic.id !== "champion") return unit.name;
@@ -1102,6 +1175,27 @@ function stateLabel(topic, unit, index) {
 }
 
 function stateArt(topic, unit, index, label) {
+  if (topic.blacksmithLine && index === 0) {
+    return `<span class="split n2 unit-or-missing"><img src="${unit.img}" alt="${unit.name}" title="${unit.name}"><svg class="split-missing" aria-label="No upgrade"><use href="#mark-none"/></svg></span>`;
+  }
+  if (topic.id === "hussar" && index === 0) {
+    return `<span class="split n2 unit-or-missing"><img src="${unit.img}" alt="Scout Cavalry" title="Scout Cavalry"><svg class="split-missing" aria-label="Missing Scout"><use href="#mark-none"/></svg></span>`;
+  }
+  if (topic.id === "hand_cannoneer" && index === 2) {
+    const data = unitStateData(topic);
+    return splitHtml([...slotImages(topic, data.middle.id), data.upper.img], label);
+  }
+  if (topic.id === "bombard_cannon") {
+    if (index === 2) return splitHtml([
+      topic.parts.find((part) => part.id === "unit-36").img,
+      topic.parts.find((part) => part.id === "unit-1942").img,
+      topic.parts.find((part) => part.id === "tech-377").img,
+    ], label);
+    if (index === 1) return splitHtml([
+      topic.parts.find((part) => part.id === "unit-36").img,
+      topic.parts.find((part) => part.id === "unit-1942").img,
+    ], label);
+  }
   if (["champion", "siege_ram", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) {
     const parts = slotGroup(topic, unit.id);
     if (parts.length > 1) return `<span class="split n${parts.length}">${parts.map((part) => `<img src="${part.img}" alt="${part.name}" title="${part.name}">`).join("")}</span>`;
@@ -1109,11 +1203,11 @@ function stateArt(topic, unit, index, label) {
   return `<img src="${unit.img}" alt="${label}">`;
 }
 
-function unitStateData(topic) {
+function unitStateData(topic, fact = currentUnitFact(topic), civId = state.deck[state.index]?.civId) {
   if (topic.id === "monk") return null;
   if (topic.stateIds) {
     const [low, mid, top] = topic.stateIds;
-    const lowerId = topic.id === "defense_towers" && state.deck[state.index]?.civId === "sicilians" ? "building-1665" : low;
+    const lowerId = topic.id === "defense_towers" && civId === "sicilians" ? "building-1665" : low;
     const lower = lowerId ? topic.parts.find((part) => part.id === lowerId)
       : { id: NO_UNIT_ID, name: topic.id === "defense_walls" ? "No Stone Walls" : topic.id === "defense_masonry" ? "No Masonry" : "No tower" };
     const middle = topic.parts.find((part) => part.id === mid);
@@ -1130,10 +1224,22 @@ function unitStateData(topic) {
     const siege = topic.parts.find((part) => part.id === "unit-548");
     return { lower, middle, second, upper: siege, states: [middle, second, siege], three: true, default: second.id };
   }
+  if (["hand_cannoneer", "bombard_cannon"].includes(topic.id)) {
+    const upgradeId = topic.id === "hand_cannoneer" ? "tech-219" : "tech-377";
+    const full = topic.parts.find((part) => part.id === upgradeId);
+    const missing = { id: NO_UNIT_ID, name: "Missing" };
+    if (topic.id === "bombard_cannon") {
+      return { lower: missing, middle, upper: full, states: [missing, middle, full], three: true, default: middle.id };
+    }
+    return { lower: missing, middle, upper: full, states: [missing, middle, full], three: true, default: middle.id };
+  }
   if (topic.id === "champion") {
     const second = topic.parts.find((part) => part.id === "unit-473");
     const champion = topic.parts.find((part) => part.id === "unit-567");
-    return { lower, middle, second, upper: champion, states: [middle, second, champion], three: true, default: second.id };
+    const first = fact?.tier === "none"
+      ? { id: NO_UNIT_ID, name: "No swordsman line" }
+      : middle;
+    return { lower, middle: first, second, upper: champion, states: [first, second, champion], three: true, default: second.id };
   }
   if (!upper) return { lower, middle, states: [lower, middle], three: false };
   return {
@@ -1143,6 +1249,14 @@ function unitStateData(topic) {
     states: [lower, middle, upper],
     three: true,
   };
+}
+
+function currentUnitFact(unitTopic) {
+  const card = state.deck[state.index];
+  if (!card || !state.data) return null;
+  const topic = state.data.topics.find((item) => item.id === card.topicId);
+  const fact = topic?.civs[card.civId];
+  return topic?.merged ? fact?.mergedFacts?.[unitTopic.id] : fact;
 }
 
 function chooseUnitState(id, unitKey = "") {
@@ -1157,7 +1271,8 @@ function chooseUnitState(id, unitKey = "") {
   const hit = id === unitStateFor(unitTopic, fact);
   const outcome = hit ? "spotted" : "falsely";
   state.picked[pickedKey] = outcome;
-  const worth = hit ? POINTS.spotted : POINTS.falsely;
+  const value = unitStatePoints(unitTopic);
+  const worth = hit ? value : -value;
   state.results[state.index].delta += worth;
   bumpScore(worth);
   for (const button of el("pad").querySelectorAll(".unit-state")) {
@@ -1167,10 +1282,14 @@ function chooseUnitState(id, unitKey = "") {
     button.setAttribute("aria-pressed", String(selected));
   }
   markUnitState(outcome, unitKey);
-  if (topic.merged) {
-    const allMissing = topic.merged.every((item) => state.picked[`${UNIT_STATE_ID}:${item.id}`] && state.unitState[item.id] === NO_UNIT_ID);
-    if (allMissing) finishPicks(true);
-  } else if (id === NO_UNIT_ID) finishPicks(hit);
+  syncDoneState(topic);
+}
+
+function syncDoneState(topic) {
+  const done = el("picker-done");
+  if (!done) return;
+  done.disabled = !unitAnswersComplete(topic);
+  done.title = done.disabled ? "choose one state for every unit line first" : "mark the remaining upgrades absent and reveal";
 }
 
 function tileCount(topic) {
@@ -1181,6 +1300,21 @@ function tileCount(topic) {
    2, not 4 and 1. Four is the widest the rails leave room for. */
 function columnsFor(tiles) {
   return tiles <= 3 ? tiles : Math.ceil(tiles / 2);
+}
+
+function unitStatePoints(topic) {
+  const states = unitStates(topic);
+  const alternatives = Math.max(1, ...states
+    .filter((state) => state.id !== NO_UNIT_ID && topic.parts.some((part) => part.id === state.id))
+    .map((state) => slotGroup(topic, state.id).length));
+  return states.length * POINTS.unitPerState + (alternatives - 1) * POINTS.unitAlternative;
+}
+
+function unitAnswersComplete(topic) {
+  if (topic.merged) {
+    return topic.merged.every((child) => !unitStateData(child) || state.picked[`${UNIT_STATE_ID}:${child.id}`]);
+  }
+  return !unitStateData(topic) || state.picked[UNIT_STATE_ID];
 }
 
 /* "Full" is the top of the line, so it wears the unit the line ends at -- the
@@ -1249,17 +1383,15 @@ function closePicker() {
   el("pad").className = "pad";
 }
 
-/* A right claim is one the civ has. The two that are not upgrades read their own
-   facts: a bonus about the unit, and not being able to build it at all. */
+/* A right claim is one the civ has. The bonus reads its own fact. */
 function wanted(fact, id) {
   if (id === BONUS_ID) return Boolean(fact.bonus);
   if (id === NO_UNIT_ID) return fact.tier === "none";
   return !fact.missing.includes(id);
 }
 
-/* A claim is answered on the spot and cannot be taken back. Two of them are the
-   whole answer and end the card: every upgrade at once, and "it cannot build
-   this at all". */
+/* A claim is answered on the spot and cannot be taken back. The card stays face
+   up until Done finalizes every unselected upgrade as absent. */
 function pick(id, holding) {
   if (state.phase !== "picking" || state.picked[id]) return;
   const card = state.deck[state.index];
@@ -1269,23 +1401,13 @@ function pick(id, holding) {
   const outcome = hit ? "spotted" : "falsely";
   const worth = id === BONUS_ID
     ? (hit ? POINTS.bonus : POINTS.bonusWrong)
-    : (hit ? POINTS.spotted : POINTS.falsely);
+    : (hit ? POINTS.upgrade : POINTS.upgradeWrong);
   state.picked[id] = outcome;
   state.results[state.index].delta += worth;
   bumpScore(worth);
   markClaim(id, outcome);
   if (holding) return;
 
-  // Said and true, "it cannot build this at all" is the whole answer: the civ
-  // may own the techs all the same -- the Aztecs have Bracer and no cavalry
-  // archer -- so the reveal names them, but nothing is charged for not claiming
-  // them. Said and wrong, the card is answered too, and what you never claimed
-  // is charged as ever.
-  if (id === NO_UNIT_ID) return finishPicks(hit);
-
-  // the bonus is worth points, never the answer, so the board ends on its own
-  // only once every tile and any bonus going has been claimed
-  if (claimables(topic).every((tile) => state.picked[tile.id])) finishPicks();
 }
 
 function markClaim(id, outcome) {
@@ -1329,22 +1451,29 @@ function finishPicks(answered, timedOut) {
       state.unitState[key] = selected;
       state.picked[`${UNIT_STATE_ID}:${key}`] = outcome;
       markUnitState(outcome, key);
-      delta += outcome === "spotted" ? POINTS.spotted : POINTS.falsely;
+      const value = unitStatePoints(child);
+      delta += outcome === "spotted" ? value : -value;
     }
   } else if (unitData) {
     if (!state.picked[UNIT_STATE_ID]) {
       const unitOutcome = unitHit ? "spotted" : "falsely";
       state.picked[UNIT_STATE_ID] = unitOutcome;
       markUnitState(unitOutcome);
-      delta += unitHit ? POINTS.spotted : POINTS.falsely;
+      const value = unitStatePoints(topic);
+      delta += unitHit ? value : -value;
     }
   }
   if (!answered) {
     for (const { id } of claimables(topic)) {
-      if (id === BONUS_ID || state.picked[id] || !wanted(fact, id)) continue;
-      state.picked[id] = "missed";
-      markClaim(id, "missed");
-      delta += POINTS.missed;
+      if (id === BONUS_ID || state.picked[id]) continue;
+      if (wanted(fact, id)) {
+        state.picked[id] = "missed";
+        markClaim(id, "missed");
+        delta += POINTS.upgradeWrong;
+      } else if (!timedOut) {
+        state.picked[id] = "cleared";
+        delta += POINTS.upgrade;
+      }
     }
   }
 
@@ -1359,7 +1488,7 @@ function finishPicks(answered, timedOut) {
      them (the Armenians have the armour and no Hand Cannoneer).
 
      Some of them right is a half answer, worth what the claims came to and no
-     more; none of them right is a wrong one and costs the 50. The clock running
+     more; none of them right is a wrong one and costs the wholly-wrong penalty. The clock running
      out is a wrong answer however much of it was right, so it takes the same. */
   const outcomes = Object.entries(state.picked)
     .filter(([id]) => id !== BONUS_ID)
@@ -1367,9 +1496,7 @@ function finishPicks(answered, timedOut) {
   const owing = claimables(topic)
     .concat({ id: NO_UNIT_ID })
     .filter(({ id }) => id !== BONUS_ID && wanted(fact, id) && state.picked[id] !== "spotted");
-  const unitShortcut = topic.merged
-    ? mergedUnitKeys.every((key) => state.picked[`${UNIT_STATE_ID}:${key}`] === "spotted" && state.unitState[key] === NO_UNIT_ID)
-    : state.picked[UNIT_STATE_ID] === "spotted" && state.unitState === NO_UNIT_ID;
+  const unitShortcut = !topic.merged && state.picked[UNIT_STATE_ID] === "spotted" && state.unitState === NO_UNIT_ID;
   const clean =
     !timedOut &&
     unitHit &&
@@ -1378,7 +1505,7 @@ function finishPicks(answered, timedOut) {
   const named = !timedOut && outcomes.some((outcome) => outcome === "spotted");
   let quick = 0;
   if (clean) {
-    delta += POINTS.tier;
+    delta += POINTS.complete;
     // the whole card right and quick with it, worth up to 20 more; there is no
     // clock to beat when learning
     if (state.game === "play") {
@@ -1386,7 +1513,7 @@ function finishPicks(answered, timedOut) {
       delta += quick;
     }
   } else if (!named) {
-    delta += POINTS.tierWrong;
+    delta += POINTS.whollyWrong;
   }
 
   const result = state.results[state.index];
@@ -1397,13 +1524,24 @@ function finishPicks(answered, timedOut) {
   result.picks = state.picked;
   result.delta += delta;
   if (delta) bumpScore(delta);
-  learnFrom(card, verdictOf(result));
+  const elapsedSeconds = (Date.now() - state.answerStartedAt) / 1000;
+  const decisions = (topic.merged
+    ? topic.merged.filter((child) => unitStateData(child)).length
+    : unitStateData(topic) ? 1 : 0) + claimables(topic).filter(({ id }) => id !== BONUS_ID).length;
+  learnFrom(card, verdictOf(result), elapsedSeconds, decisions);
   reveal();
 }
 
-function unitStateFor(topic, fact) {
-  const data = unitStateData(topic);
+function unitStateFor(topic, fact, civId) {
+  const data = unitStateData(topic, fact, civId);
   if (!data) return null;
+  if (fact.tier === "none" && data.states.some((state) => state.id === NO_UNIT_ID)) return NO_UNIT_ID;
+  if (topic.blacksmithLine && !data.states.some((state) => fact.has.includes(state.id))) return data.lower.id;
+  if (["hand_cannoneer", "bombard_cannon"].includes(topic.id)) {
+    if (!slotGroup(topic, data.middle.id).some((part) => fact.has.includes(part.id))) return NO_UNIT_ID;
+    if (fact.has.includes(data.upper.id)) return data.upper.id;
+    return data.middle.id;
+  }
   if (data.upper && slotGroup(topic, data.upper.id).some((part) => fact.has.includes(part.id))) return data.upper.id;
   if (data.second && slotGroup(topic, data.second.id).some((part) => fact.has.includes(part.id))) return data.second.id;
   if (slotGroup(topic, data.middle.id).some((part) => fact.has.includes(part.id))) return data.middle.id;
@@ -1422,18 +1560,76 @@ function markUnitState(outcome, unitKey = "") {
   button.classList.add(outcome, "done");
   const verdict = button.querySelector(".verdict");
   if (verdict) verdict.innerHTML = `<svg><use href="#mark-${outcome === "spotted" ? "right" : "wrong"}"/></svg>`;
+  if (outcome === "falsely") {
+    const card = state.deck[state.index];
+    const { topic, answer } = truth(state.data, card);
+    const unitTopic = unitKey ? topic.merged.find((item) => item.id === unitKey) : topic;
+    const fact = unitKey ? answer.mergedFacts[unitKey] : answer;
+    const correctId = unitStateFor(unitTopic, fact, card.civId);
+    const correct = [...el("pad").querySelectorAll(".unit-state")].find(
+      (node) => node.dataset.unitState === correctId && (node.dataset.unitKey || "") === unitKey
+    );
+    if (correct && correct !== button) {
+      correct.classList.add("spotted", "done");
+      const correctVerdict = correct.querySelector(".verdict");
+      if (correctVerdict) correctVerdict.innerHTML = '<svg><use href="#mark-right"/></svg>';
+    }
+  }
 }
 
 /* the civ's bonus, named on the reveal: it is why a civ a slot short can still
    be good */
 function bonusHtml(fact) {
-  if (!fact.bonus) return "";
+  if (!fact.bonus) return `<div class="bonus-note none"><svg><use href="#icon-star"/></svg><span>No civilisation bonus for this topic</span></div>`;
   const why = (fact.why || []).join(" • ");
   return `<div class="bonus-note"><svg><use href="#icon-star"/></svg><span>${why}</span></div>`;
 }
 
+function configurationOf(topic, fact, civId) {
+  const children = topic.merged || [topic];
+  const units = children
+    .filter((child) => unitStateData(child, topic.merged ? fact.mergedFacts[child.id] : fact, civId))
+    .map((child) => {
+      const childFact = topic.merged ? fact.mergedFacts[child.id] : fact;
+      return unitStateFor(child, childFact, civId);
+    });
+  const upgrades = claimables(topic)
+    .filter(({ id }) => id !== BONUS_ID)
+    .map(({ id }) => wanted(fact, id));
+  return { units, upgrades };
+}
+
+function configurationDistance(a, b) {
+  return a.units.reduce((sum, value, index) => sum + (value === b.units[index] ? 0 : 1), 0) +
+    a.upgrades.reduce((sum, value, index) => sum + (value === b.upgrades[index] ? 0 : 1), 0);
+}
+
+function configurationCivHtml(civId, distance = 0, showName = true) {
+  const civ = state.data.civs[civId];
+  return `<span class="configuration-civ" title="${civ.name}${distance ? ` — ${distance} different ${distance === 1 ? "decision" : "decisions"}` : ""}">
+    <img src="${civ.img}" alt="${civ.name}">${showName ? `<em>${civ.name}</em>` : ""}${distance ? `<small>${distance}</small>` : ""}
+  </span>`;
+}
+
+function configurationHtml(topic, civId) {
+  const own = configurationOf(topic, topic.civs[civId], civId);
+  const comparisons = Object.keys(topic.civs)
+    .filter((otherId) => otherId !== civId)
+    .map((otherId) => ({
+      civId: otherId,
+      distance: configurationDistance(own, configurationOf(topic, topic.civs[otherId], otherId)),
+    }))
+    .sort((a, b) => a.distance - b.distance || state.data.civs[a.civId].name.localeCompare(state.data.civs[b.civId].name));
+  const exact = comparisons.filter((item) => item.distance === 0);
+  return `<section class="configuration-block exact${exact.length ? "" : " empty"}">
+      <div class="configuration-summary"><b>${exact.length ? "Same configuration" : "Unique configuration"}</b><span>${exact.length ? `${exact.length} exact` : "No same configuration"}</span></div>
+      ${exact.length ? `<div class="configuration-civs exact">${exact.map(({ civId: otherId }) => configurationCivHtml(otherId, 0, false)).join("")}</div>` : ""}
+    </section>`;
+}
+
 function reveal() {
-  const { topic, answer: fact } = truth(state.data, state.deck[state.index]);
+  const card = state.deck[state.index];
+  const { topic, answer: fact } = truth(state.data, card);
   const result = state.results[state.index];
   state.phase = "reveal";
 
@@ -1443,11 +1639,9 @@ function reveal() {
   node.style.transform = "";
   const verdict = verdictOf(result);
   back.classList.add(verdict);
-  back.querySelector(".judge-badge").className = `judge-badge ${verdict}`;
-  back.querySelector(".judge-badge").innerHTML = `<svg><use href="#mark-${
-    verdict === "half" ? "partial" : verdict
-  }"/></svg>`;
-  back.querySelector(".parts").innerHTML = partsHtml(topic, fact, result.picks);
+  const comparison = back.querySelector(".parts");
+  comparison.className = "parts configuration-neighbors";
+  comparison.innerHTML = configurationHtml(topic, card.civId);
   back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact);
   const delta = back.querySelector(".card-delta");
   delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
@@ -1622,7 +1816,8 @@ function onKey(event) {
   if (state.phase === "picking") {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      finishPicks();
+      const topic = state.data.topics.find((item) => item.id === state.deck[state.index].topicId);
+      if (unitAnswersComplete(topic)) finishPicks();
     }
     return;
   }

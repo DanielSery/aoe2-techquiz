@@ -115,11 +115,12 @@ missed is a different, easier round and is not scored against the others.
 the bar along the top is how much of the selection you know.
 
 **An appointment first, the open field second.** A card you have answered is due
-back at a position — **2 to 5 cards** after one you got wrong, **20 to 50** after
-one you got right, drawn from the range at random — and when that position
+back at a position — **2 to 4 cards** after one you got wrong and **3 to 6**
+after a partial answer. A right answer earns anywhere from **3–6 cards** for a
+still-uncertain card to **180–360** for a mastered one, drawn from the range at
+random — and when that position
 arrives the card is *taken*, longest overdue first, so "again in three cards"
-means three cards. Measured over four runs: wrong cards came back after 2, 2, 3
-and 4 cards, and once answered right went 27, 29, 49 and 50 away.
+means three cards.
 
 That order is the whole of it, and the first version had it wrong: letting due
 cards back into the general draw instead of taking them put a card answered
@@ -127,26 +128,27 @@ wrong **26 cards** later, because it was one of 53 the draw could equally have
 picked.
 
 **Every third card is a new one** while any card is still unseen, whatever is
-owed. Six cards answered wrong come back every two to five cards each, which
+owed. Six cards answered wrong come back every two to four cards each, which
 between them is every card: without the let-out the deck deals those six for
 ever and the other forty-seven are never seen. An appointment it makes wait is a
 card or two late, which is cheaper than a session that never moves on.
 
-**Rest doubles with every right answer in a row**, written against the rungs of
-the known ladder rather than as a curve over the percentage, because the rungs
-are what it has to line up with:
+**Rest grows with mastery.** A correct answer no longer sends a shaky card out
+of sight: it stays in a short loop until several correct answers, at a confident
+pace, establish that it is known.
 
 | known | rest | comes round |
 |---|---|---|
-| 70 — right once | 1× | 20–50 cards |
-| 91 — twice | 2× | 40–100 |
-| 97 — three times | 4× | 80–200 |
-| 99 — four times | 8× | 160–400 |
-| **100** | **16×** | **320–800** |
+| under 40 | — | 3–6 cards |
+| 40–64 | — | 5–10 |
+| 65–79 | — | 8–16 |
+| 80–91 | — | 16–32 |
+| 92–97 | — | 35–70 |
+| 98–99 | — | 80–160 |
+| **100** | — | **180–360** |
 
-Without that the queue alone serves a mastered card every 20 to 50 cards
-whatever its weight, because an appointment does not look at how well you know
-the thing.
+The mastery bands apply to appointments as well as the weighted open draw, so a
+shaky card cannot receive the same rest as a fluent one.
 
 **A session starts by placing what you already know**, each card somewhere
 inside its own interval — a mastered card a long way out, a shaky one soon.
@@ -170,10 +172,13 @@ menu and the bar count the second sort: *53 cards, 8% known, 43 new*. The
 appointments themselves are for the session only; the percentages are what
 learning remembers, and a spacing from yesterday means nothing today.
 
-The percentage moves in **shares, not steps**. A right answer closes most of the
-gap to 100 and no more, so **one right answer reads 70** — getting a card right
-once is not knowing it, and it has to come back four more times to finish the
-rest: 70, 91, 97, 99, 100. Wrong and half keep a share of what was there, so
+The percentage moves in **shares, not steps**. A right answer closes part of the
+gap to 100, adjusted by how long that particular card took relative to its
+number of decisions. A fast answer can close a little more than the normal 70%
+share; a slow answer closes as little as 38.5%, so correctness without fluency
+keeps the card nearby. Recent response pace is smoothed with the card's previous
+pace so one lucky guess cannot make it look mastered. Wrong and half keep a
+share of what was there, so
 forgetting is proportional too — a card at 91 answered wrong falls to 23, and a
 half answer to 55, rather than shrugging off a fixed ten. The three shares are
 `KNOWN_STEP`.
@@ -181,7 +186,8 @@ half answer to 55, rather than shrugging off a fixed ten. The three shares are
 **A card you keep getting wrong climbs back slower.** Every miss is counted
 against it and damps the climb — the seven tenths of the gap a clean card closes
 becomes a half at one miss, a third at two — so where a clean card is mastered
-in five right answers, one missed three times takes nine:
+in five right answers at the normal pace, one missed three times takes nine.
+These examples hold response pace neutral to show the effect of misses alone:
 
 | record | the climb, right answer by right answer |
 |---|---|
@@ -197,9 +203,10 @@ wrong three times and then right: 0 · 0 · 0 · 28 · 48 · 63 · 73 · 81 · 8
 the misses falling away over the last two. `MISS_DAMP` is the rate and
 `MISS_CAP` the worst it gets.
 
-A card's memory is `{k, w}` — how well it is known and how many times it has
-been missed. A bare number, which is what the store held before misses were
-counted, still reads as a clean record.
+A card's memory is `{k, w, t}` — how well it is known, how many times it has
+been missed, and its smoothed response pace. A bare number, which is what the
+store held before those extra signals were counted, still reads as a clean
+record.
 
 Those percentages live in `localStorage` (`aoe2-techquiz.known`), **not** in a
 cookie: a cookie is capped around 4KB and is sent to the server on every

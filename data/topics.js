@@ -12663,6 +12663,1436 @@ window.QUIZ_DATA = {
    }
   },
   {
+   "id": "blacksmith",
+   "name": "Blacksmith",
+   "group": "Blacksmith",
+   "icon": "img/topics/tech-75.png",
+   "below": null,
+   "unit": null,
+   "gate": [],
+   "alts": {},
+   "upgrades": [
+    "tech-77",
+    "tech-80",
+    "tech-219",
+    "tech-201",
+    "tech-75"
+   ],
+   "parts": [
+    {
+     "id": "tech-77",
+     "name": "Plate Mail Armor",
+     "img": "img/topics/tech-77.png",
+     "icon_index": 64
+    },
+    {
+     "id": "tech-80",
+     "name": "Plate Barding Armor",
+     "img": "img/topics/tech-80.png",
+     "icon_index": 65
+    },
+    {
+     "id": "tech-219",
+     "name": "Ring Archer Armor",
+     "img": "img/topics/tech-219.png",
+     "icon_index": 51
+    },
+    {
+     "id": "tech-201",
+     "name": "Bracer",
+     "img": "img/topics/tech-201.png",
+     "icon_index": 37
+    },
+    {
+     "id": "tech-75",
+     "name": "Blast Furnace",
+     "img": "img/topics/tech-75.png",
+     "icon_index": 21
+    },
+    {
+     "id": "tech-74",
+     "name": "Scale Mail Armor",
+     "img": "img/topics/tech-74.png",
+     "icon_index": 63
+    },
+    {
+     "id": "tech-76",
+     "name": "Chain Mail Armor",
+     "img": "img/topics/tech-76.png",
+     "icon_index": 22
+    },
+    {
+     "id": "tech-81",
+     "name": "Scale Barding Armor",
+     "img": "img/topics/tech-81.png",
+     "icon_index": 66
+    },
+    {
+     "id": "tech-82",
+     "name": "Chain Barding Armor",
+     "img": "img/topics/tech-82.png",
+     "icon_index": 23
+    },
+    {
+     "id": "tech-211",
+     "name": "Padded Archer Armor",
+     "img": "img/topics/tech-211.png",
+     "icon_index": 49
+    },
+    {
+     "id": "tech-212",
+     "name": "Leather Archer Armor",
+     "img": "img/topics/tech-212.png",
+     "icon_index": 50
+    },
+    {
+     "id": "tech-199",
+     "name": "Fletching",
+     "img": "img/topics/tech-199.png",
+     "icon_index": 34
+    },
+    {
+     "id": "tech-200",
+     "name": "Bodkin Arrow",
+     "img": "img/topics/tech-200.png",
+     "icon_index": 35
+    },
+    {
+     "id": "tech-67",
+     "name": "Forging",
+     "img": "img/topics/tech-67.png",
+     "icon_index": 17
+    },
+    {
+     "id": "tech-68",
+     "name": "Iron Casting",
+     "img": "img/topics/tech-68.png",
+     "icon_index": 18
+    }
+   ],
+   "tiers": [
+    {
+     "id": "none",
+     "dir": "left",
+     "mark": "none",
+     "has": []
+    },
+    {
+     "id": "partial",
+     "dir": "up",
+     "mark": "partial",
+     "has": []
+    },
+    {
+     "id": "full",
+     "dir": "right",
+     "mark": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75"
+     ]
+    }
+   ],
+   "civs": {
+    "armenians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "aztecs": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bengalis": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "berbers": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "bohemians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "britons": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "bulgarians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": true,
+     "why": [
+      "Blacksmith and Siege Workshop technologies cost -50% food"
+     ]
+    },
+    "burgundians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "burmese": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "byzantines": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "celts": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "chinese": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "cumans": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "dravidians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "ethiopians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "franks": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "georgians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "goths": {
+     "tier": "partial",
+     "has": [
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77",
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "gurjaras": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "hindustanis": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "huns": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77",
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "incas": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": true,
+     "why": [
+      "Villagers affected by Infantry Blacksmith upgrades starting in Castle Age"
+     ]
+    },
+    "italians": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "japanese": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "jurchens": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "khitans": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Melee attack upgrade effects are doubled"
+     ]
+    },
+    "khmer": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "koreans": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Archer armor and tower upgrades free (Bombard Tower requires Chemistry)"
+     ]
+    },
+    "lithuanians": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "magyars": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": true,
+     "why": [
+      "Melee attack upgrades free"
+     ]
+    },
+    "malay": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": true,
+     "why": [
+      "Infantry armor upgrades free"
+     ]
+    },
+    "malians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-201",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mapuche": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mayans": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "mongols": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "muisca": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-219",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "persians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "poles": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "portuguese": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "romans": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77",
+      "tech-201"
+     ],
+     "bonus": true,
+     "why": [
+      "Infantry armor upgrade effects are doubled"
+     ]
+    },
+    "saracens": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "shu": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Archery Unit technologies at the Archery Range and Blacksmith cost -25%"
+     ]
+    },
+    "sicilians": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "slavs": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "spanish": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Blacksmith upgrades cost no gold"
+     ]
+    },
+    "tatars": {
+     "tier": "partial",
+     "has": [
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "teutons": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-201"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "tupi": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "turks": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "vietnamese": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "vikings": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wei": {
+     "tier": "partial",
+     "has": [
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-77",
+      "tech-80"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wu": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-219"
+     ],
+     "bonus": false,
+     "why": []
+    }
+   },
+   "blacksmithLines": [
+    [
+     "tech-74",
+     "tech-76",
+     "tech-77"
+    ],
+    [
+     "tech-81",
+     "tech-82",
+     "tech-80"
+    ],
+    [
+     "tech-211",
+     "tech-212",
+     "tech-219"
+    ],
+    [
+     "tech-199",
+     "tech-200",
+     "tech-201"
+    ],
+    [
+     "tech-67",
+     "tech-68",
+     "tech-75"
+    ]
+   ]
+  },
+  {
    "id": "defense",
    "name": "Defense",
    "group": "Defense",
