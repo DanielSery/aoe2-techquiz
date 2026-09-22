@@ -811,36 +811,57 @@ window.QUIZ_DATA = {
    "name": "Siege Ram / Siege Elephant",
    "group": "Siege",
    "icon": "img/topics/unit-548.png",
-   "below": {
-    "id": "unit-1258",
-    "name": "Battering Ram",
-    "img": "img/topics/unit-1258.png",
-    "icon_index": 74
-   },
-   "unit": null,
-   "gate": [],
+   "below": null,
+   "unit": "unit-1258",
+   "gate": [
+    "unit-1258",
+    "unit-1744"
+   ],
    "alts": {
-    "unit-548": [
-     "unit-548",
+    "unit-422": [
+     "unit-422",
      "unit-1746"
+    ],
+    "unit-1258": [
+     "unit-1258",
+     "unit-1744"
     ]
    },
    "upgrades": [
+    "unit-422",
     "unit-548",
     "tech-377"
    ],
    "parts": [
     {
-     "id": "unit-548",
-     "name": "Siege Ram",
-     "img": "img/topics/unit-548.png",
-     "icon_index": 73
+     "id": "unit-1258",
+     "name": "Battering Ram",
+     "img": "img/topics/unit-1258.png",
+     "icon_index": 74
+    },
+    {
+     "id": "unit-1744",
+     "name": "Armored Elephant",
+     "img": "img/topics/unit-1744.png",
+     "icon_index": 394
+    },
+    {
+     "id": "unit-422",
+     "name": "Capped Ram",
+     "img": "img/topics/unit-422.png",
+     "icon_index": 63
     },
     {
      "id": "unit-1746",
      "name": "Siege Elephant",
      "img": "img/topics/unit-1746.png",
      "icon_index": 395
+    },
+    {
+     "id": "unit-548",
+     "name": "Siege Ram",
+     "img": "img/topics/unit-548.png",
+     "icon_index": 73
     },
     {
      "id": "tech-377",
@@ -860,15 +881,21 @@ window.QUIZ_DATA = {
      "id": "partial",
      "dir": "up",
      "mark": "partial",
-     "has": []
+     "has": [
+      "unit-1258",
+      "unit-1744"
+     ]
     },
     {
      "id": "full",
      "dir": "right",
      "mark": "full",
      "has": [
-      "unit-548",
+      "unit-1258",
+      "unit-1744",
+      "unit-422",
       "unit-1746",
+      "unit-548",
       "tech-377"
      ]
     }
@@ -877,6 +904,8 @@ window.QUIZ_DATA = {
     "armenians": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -888,6 +917,8 @@ window.QUIZ_DATA = {
     "aztecs": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -896,18 +927,23 @@ window.QUIZ_DATA = {
      "why": []
     },
     "bengalis": {
-     "tier": "full",
+     "tier": "partial",
      "has": [
+      "unit-1744",
       "unit-1746",
       "tech-377"
      ],
-     "missing": [],
+     "missing": [
+      "unit-548"
+     ],
      "bonus": false,
      "why": []
     },
     "berbers": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -919,6 +955,8 @@ window.QUIZ_DATA = {
     "bohemians": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -930,6 +968,8 @@ window.QUIZ_DATA = {
     "britons": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -941,6 +981,8 @@ window.QUIZ_DATA = {
     "bulgarians": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -951,8 +993,11 @@ window.QUIZ_DATA = {
      ]
     },
     "burgundians": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258",
+      "unit-422"
+     ],
      "missing": [
       "unit-548",
       "tech-377"
@@ -963,6 +1008,8 @@ window.QUIZ_DATA = {
     "burmese": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -974,6 +1021,8 @@ window.QUIZ_DATA = {
     "byzantines": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -985,6 +1034,8 @@ window.QUIZ_DATA = {
     "celts": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -999,6 +1050,8 @@ window.QUIZ_DATA = {
     "chinese": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1010,6 +1063,8 @@ window.QUIZ_DATA = {
     "cumans": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1023,9 +1078,11 @@ window.QUIZ_DATA = {
     "dravidians": {
      "tier": "partial",
      "has": [
+      "unit-1744",
       "unit-1746"
      ],
      "missing": [
+      "unit-548",
       "tech-377"
      ],
      "bonus": true,
@@ -1036,6 +1093,8 @@ window.QUIZ_DATA = {
     "ethiopians": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1048,6 +1107,8 @@ window.QUIZ_DATA = {
     "franks": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1059,6 +1120,8 @@ window.QUIZ_DATA = {
     "georgians": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1067,8 +1130,11 @@ window.QUIZ_DATA = {
      "why": []
     },
     "goths": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258",
+      "unit-422"
+     ],
      "missing": [
       "unit-548",
       "tech-377"
@@ -1079,27 +1145,34 @@ window.QUIZ_DATA = {
     "gurjaras": {
      "tier": "partial",
      "has": [
+      "unit-1744",
       "unit-1746"
      ],
      "missing": [
+      "unit-548",
       "tech-377"
      ],
      "bonus": false,
      "why": []
     },
     "hindustanis": {
-     "tier": "full",
+     "tier": "partial",
      "has": [
+      "unit-1744",
       "unit-1746",
       "tech-377"
      ],
-     "missing": [],
+     "missing": [
+      "unit-548"
+     ],
      "bonus": false,
      "why": []
     },
     "huns": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1111,6 +1184,8 @@ window.QUIZ_DATA = {
     "incas": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1119,8 +1194,11 @@ window.QUIZ_DATA = {
      "why": []
     },
     "italians": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258",
+      "unit-422"
+     ],
      "missing": [
       "unit-548",
       "tech-377"
@@ -1131,6 +1209,8 @@ window.QUIZ_DATA = {
     "japanese": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1142,6 +1222,8 @@ window.QUIZ_DATA = {
     "jurchens": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1155,6 +1237,8 @@ window.QUIZ_DATA = {
     "khitans": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1165,6 +1249,8 @@ window.QUIZ_DATA = {
     "khmer": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1175,6 +1261,8 @@ window.QUIZ_DATA = {
     "koreans": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1184,8 +1272,11 @@ window.QUIZ_DATA = {
      "why": []
     },
     "lithuanians": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258",
+      "unit-422"
+     ],
      "missing": [
       "unit-548",
       "tech-377"
@@ -1196,6 +1287,8 @@ window.QUIZ_DATA = {
     "magyars": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1207,6 +1300,8 @@ window.QUIZ_DATA = {
     "malay": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1216,8 +1311,11 @@ window.QUIZ_DATA = {
      "why": []
     },
     "malians": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258",
+      "unit-422"
+     ],
      "missing": [
       "unit-548",
       "tech-377"
@@ -1228,6 +1326,8 @@ window.QUIZ_DATA = {
     "mapuche": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1239,6 +1339,8 @@ window.QUIZ_DATA = {
     "mayans": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1250,6 +1352,8 @@ window.QUIZ_DATA = {
     "mongols": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1262,6 +1366,8 @@ window.QUIZ_DATA = {
     "muisca": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1273,6 +1379,8 @@ window.QUIZ_DATA = {
     "persians": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1284,6 +1392,8 @@ window.QUIZ_DATA = {
     "poles": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1294,6 +1404,8 @@ window.QUIZ_DATA = {
     "portuguese": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1305,6 +1417,8 @@ window.QUIZ_DATA = {
     "romans": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1315,6 +1429,8 @@ window.QUIZ_DATA = {
     "saracens": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1325,6 +1441,8 @@ window.QUIZ_DATA = {
     "shu": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1337,6 +1455,8 @@ window.QUIZ_DATA = {
     "sicilians": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1347,6 +1467,8 @@ window.QUIZ_DATA = {
     "slavs": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1359,6 +1481,8 @@ window.QUIZ_DATA = {
     "spanish": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1370,6 +1494,8 @@ window.QUIZ_DATA = {
     "tatars": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1380,6 +1506,8 @@ window.QUIZ_DATA = {
     "teutons": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1393,6 +1521,8 @@ window.QUIZ_DATA = {
     "tupi": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1404,6 +1534,8 @@ window.QUIZ_DATA = {
     "turks": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1415,6 +1547,8 @@ window.QUIZ_DATA = {
     "vietnamese": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "tech-377"
      ],
      "missing": [
@@ -1426,6 +1560,8 @@ window.QUIZ_DATA = {
     "vikings": {
      "tier": "full",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -1436,6 +1572,8 @@ window.QUIZ_DATA = {
     "wei": {
      "tier": "partial",
      "has": [
+      "unit-1258",
+      "unit-422",
       "unit-548"
      ],
      "missing": [
@@ -1445,9 +1583,12 @@ window.QUIZ_DATA = {
      "why": []
     },
     "wu": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1258"
+     ],
      "missing": [
+      "unit-422",
       "unit-548",
       "tech-377"
      ],
@@ -7070,9 +7211,13 @@ window.QUIZ_DATA = {
     "unit-2552"
    ],
    "alts": {
+    "unit-473": [
+     "unit-473",
+     "unit-2554"
+    ],
     "unit-567": [
      "unit-567",
-     "unit-2554"
+     "unit-1793"
     ],
     "unit-77": [
      "unit-77",
@@ -7080,6 +7225,7 @@ window.QUIZ_DATA = {
     ]
    },
    "upgrades": [
+    "unit-473",
     "unit-567",
     "tech-875",
     "tech-215",
@@ -7100,16 +7246,28 @@ window.QUIZ_DATA = {
      "icon_index": 541
     },
     {
-     "id": "unit-567",
-     "name": "Champion",
-     "img": "img/topics/unit-567.png",
-     "icon_index": 72
+     "id": "unit-473",
+     "name": "Two-Handed Swordsman",
+     "img": "img/topics/unit-473.png",
+     "icon_index": 12
     },
     {
      "id": "unit-2554",
      "name": "Elite Champi Warrior",
      "img": "img/topics/unit-2554.png",
      "icon_index": 542
+    },
+    {
+     "id": "unit-567",
+     "name": "Champion",
+     "img": "img/topics/unit-567.png",
+     "icon_index": 72
+    },
+    {
+     "id": "unit-1793",
+     "name": "Legionary",
+     "img": "img/topics/unit-1793.png",
+     "icon_index": 139
     },
     {
      "id": "tech-875",
@@ -7159,8 +7317,10 @@ window.QUIZ_DATA = {
      "has": [
       "unit-77",
       "unit-2552",
-      "unit-567",
+      "unit-473",
       "unit-2554",
+      "unit-567",
+      "unit-1793",
       "tech-875",
       "tech-215",
       "tech-77",
@@ -7173,6 +7333,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7191,6 +7352,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7207,6 +7369,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7222,6 +7385,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7237,6 +7401,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7252,6 +7417,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7266,6 +7432,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-875",
       "tech-215",
       "tech-77",
@@ -7284,6 +7451,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7299,6 +7467,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7315,6 +7484,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7330,6 +7500,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-77",
@@ -7348,6 +7519,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7363,6 +7535,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7378,6 +7551,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7395,6 +7569,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-77",
       "tech-75"
@@ -7410,6 +7585,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7424,6 +7600,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7438,6 +7615,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-75"
@@ -7458,6 +7636,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-77"
      ],
      "missing": [
@@ -7473,6 +7652,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-75"
@@ -7488,6 +7668,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-75"
      ],
@@ -7509,6 +7690,7 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [
+      "unit-567",
       "tech-875"
      ],
      "bonus": true,
@@ -7521,6 +7703,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7536,6 +7719,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7556,6 +7740,7 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [
+      "unit-473",
       "unit-567",
       "tech-77"
      ],
@@ -7566,6 +7751,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7584,6 +7770,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-75"
      ],
      "missing": [
@@ -7599,6 +7786,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7616,6 +7804,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215"
      ],
@@ -7631,6 +7820,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-75"
      ],
@@ -7646,6 +7836,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-77",
       "tech-75"
@@ -7664,6 +7855,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77"
@@ -7686,6 +7878,7 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [
+      "unit-567",
       "tech-875",
       "tech-215"
      ],
@@ -7698,6 +7891,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-77",
       "tech-75"
@@ -7713,6 +7907,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7733,6 +7928,7 @@ window.QUIZ_DATA = {
       "tech-77"
      ],
      "missing": [
+      "unit-567",
       "tech-875",
       "tech-75"
      ],
@@ -7752,6 +7948,7 @@ window.QUIZ_DATA = {
       "tech-75"
      ],
      "missing": [
+      "unit-473",
       "unit-567"
      ],
      "bonus": false,
@@ -7761,6 +7958,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7776,6 +7974,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-77",
@@ -7791,11 +7990,12 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-1793",
       "tech-215",
       "tech-75"
      ],
      "missing": [
-      "unit-567",
+      "unit-473",
       "tech-875",
       "tech-77"
      ],
@@ -7809,6 +8009,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7823,6 +8024,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7838,6 +8040,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7852,6 +8055,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7869,6 +8073,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7883,6 +8088,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-75"
      ],
@@ -7898,6 +8104,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7920,6 +8127,7 @@ window.QUIZ_DATA = {
       "tech-77"
      ],
      "missing": [
+      "unit-567",
       "tech-875",
       "tech-75"
      ],
@@ -7933,6 +8141,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -7948,6 +8157,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77"
@@ -7963,6 +8173,7 @@ window.QUIZ_DATA = {
      "tier": "full",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-875",
       "tech-215",
@@ -7980,6 +8191,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "tech-215",
       "tech-75"
      ],
@@ -7995,6 +8207,7 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-77",
+      "unit-473",
       "unit-567",
       "tech-215",
       "tech-77",
@@ -13436,6 +13649,470 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": [
       "Red Cliffs Tactics (Demolition Ships and Fire Archers deal fire damage to ships and buildings)"
+     ]
+    }
+   },
+   "buildingLevels": {
+    "parts": [
+     {
+      "id": "building-79",
+      "name": "Watch Tower",
+      "img": "img/topics/building-79.png",
+      "icon_index": 25
+     },
+     {
+      "id": "building-234",
+      "name": "Guard Tower",
+      "img": "img/topics/building-234.png",
+      "icon_index": 27
+     },
+     {
+      "id": "building-235",
+      "name": "Keep",
+      "img": "img/topics/building-235.png",
+      "icon_index": 26
+     },
+     {
+      "id": "building-117",
+      "name": "Stone Wall",
+      "img": "img/topics/building-117.png",
+      "icon_index": 31
+     },
+     {
+      "id": "building-155",
+      "name": "Fortified Wall",
+      "img": "img/topics/building-155.png",
+      "icon_index": 32
+     },
+     {
+      "id": "building-1665",
+      "name": "Donjon",
+      "img": "img/topics/building-1665.png",
+      "icon_index": 84
+     },
+     {
+      "id": "tech-50",
+      "name": "Masonry",
+      "img": "img/topics/tech-50.png",
+      "icon_index": 13
+     },
+     {
+      "id": "tech-51",
+      "name": "Architecture",
+      "img": "img/topics/tech-51.png",
+      "icon_index": 14
+     }
+    ],
+    "civs": {
+     "armenians": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "aztecs": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155"
+     ],
+     "bengalis": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "berbers": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "bohemians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "britons": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "bulgarians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "tech-50",
+      "tech-51"
+     ],
+     "burgundians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "burmese": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "byzantines": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155"
+     ],
+     "celts": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "chinese": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "cumans": [
+      "building-79",
+      "tech-50"
+     ],
+     "dravidians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "ethiopians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "franks": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "georgians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "goths": [
+      "building-79",
+      "tech-50",
+      "tech-51"
+     ],
+     "gurjaras": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "hindustanis": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "huns": [
+      "building-79",
+      "building-117",
+      "tech-50"
+     ],
+     "incas": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "italians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "japanese": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "jurchens": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "khitans": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "khmer": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "koreans": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "lithuanians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "magyars": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "tech-50"
+     ],
+     "malay": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "tech-50"
+     ],
+     "malians": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "mapuche": [
+      "building-79",
+      "building-117",
+      "tech-50"
+     ],
+     "mayans": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "mongols": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "muisca": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "tech-50"
+     ],
+     "persians": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "tech-50",
+      "tech-51"
+     ],
+     "poles": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "portuguese": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "romans": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "saracens": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "shu": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "sicilians": [
+      "building-117",
+      "building-1665",
+      "tech-50"
+     ],
+     "slavs": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "spanish": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "tatars": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "teutons": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "tupi": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117"
+     ],
+     "turks": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "vietnamese": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155"
+     ],
+     "vikings": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
+     "wei": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50"
+     ],
+     "wu": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "tech-50",
+      "tech-51"
      ]
     }
    }

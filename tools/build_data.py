@@ -36,6 +36,9 @@ ROOT = Path(__file__).resolve().parent.parent
 # can never be missing -- they could only ever cost points in the picker.
 MAX_UPGRADES = 7
 
+DEFENSE_BUILDINGS = [79, 234, 235, 117, 155, 1665]
+DEFENSE_LEVEL_NODES = [("Building", item) for item in DEFENSE_BUILDINGS] + [("Tech", 50), ("Tech", 51)]
+
 # An upgrade is a tech id, or ("Unit", id) where the upgrade is a unit of its
 # own. `unit` may be left out: then the topic is the upgrades alone, and left
 # means the civ has none of them rather than "no unit".
@@ -80,12 +83,13 @@ TOPICS = [
     },
     {
         # Four civs field the Armored Elephant where everyone else has a ram,
-        # and the top of either line is the same question.
+        # paired with the first two ram levels in the unit selector.
         "id": "siege_ram",
         "group": "Siege",
         "name": "Siege Ram / Siege Elephant",
-        "below": ("Unit", 1258),
-        "upgrades": [[("Unit", 548), ("Unit", 1746)], 377],
+        "unit": [1258, 1744],
+        "icon": ("Unit", 548),
+        "upgrades": [[("Unit", 422), ("Unit", 1746)], ("Unit", 548), 377],
         "words": [r"rams?", r"siege", r"siege elephants?"],
     },
     {
@@ -188,8 +192,8 @@ TOPICS = [
         "name": "Long Swordsman / Champi Warrior",
         "unit": [77, 2552],
         "below": ("Unit", 75),
-        "upgrades": [[("Unit", 567), ("Unit", 2554)], 875, 215, 77, 75],
-        "words": [r"militia-line", r"champions?", r"champi\w*", r"infantry", r"barracks"],
+        "upgrades": [[("Unit", 473), ("Unit", 2554)], [("Unit", 567), ("Unit", 1793)], 875, 215, 77, 75],
+        "words": [r"militia-line", r"champions?", r"legionar\w*", r"champi\w*", r"infantry", r"barracks"],
         "veto": [r"villagers?"],
     },
     {
@@ -584,6 +588,10 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
     civs = {}
     for name, tree in sorted(techtree["civs"].items()):
         has = [part_id(kind, item) for kind, item in nodes_of(spec) if item in tree[kind]]
+        if spec.get("below"):
+            kind, item = spec["below"]
+            if item in tree[kind]:
+                has.append(part_id(kind, item))
         missing = [group[0] for group in groups if not any(alt in has for alt in group)]
         # without a gate unit, having none of the upgrades is what "none" means
         nothing = (
@@ -618,6 +626,13 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         "parts": parts,
         "tiers": tiers_for(gate_ids, [part for group in groups for part in group]),
         "civs": trim_to_owners(civs, gate_ids),
+        **({"buildingLevels": {
+            "parts": [{"id": part_id(kind, item), "name": icons[(kind, item)][1],
+                       "img": f"img/topics/{part_id(kind, item)}.png", "icon_index": icons[(kind, item)][0]}
+                      for kind, item in DEFENSE_LEVEL_NODES],
+            "civs": {name.lower(): [part_id(kind, item) for kind, item in DEFENSE_LEVEL_NODES if item in tree[kind]]
+                     for name, tree in techtree["civs"].items()},
+        }} if spec["id"] == "defense" else {}),
     }
 
 
@@ -673,8 +688,8 @@ def download_images(commit: str, data: dict) -> None:
     for civ in data["civs"].values():
         wanted[civ["img"]] = f"img/Civs/{Path(civ['img']).name}"
     for topic in data["topics"]:
-        for part in topic["parts"] + [p for p in [topic["below"]] if p]:
-            folder = "Unit" if part["id"].startswith("unit") else "Tech"
+        for part in topic["parts"] + [p for p in [topic["below"]] if p] + topic.get("buildingLevels", {}).get("parts", []):
+            folder = "Building" if part["id"].startswith("building") else "Unit" if part["id"].startswith("unit") else "Tech"
             wanted[part["img"]] = f"img/{folder}/{part['icon_index']}.png"
 
     for local, remote in sorted(wanted.items()):
@@ -710,6 +725,7 @@ def main() -> int:
 
     wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
     wanted_nodes |= {spec["below"] for spec in TOPICS if spec.get("below")}
+    wanted_nodes |= set(DEFENSE_LEVEL_NODES)
     icons = icon_indices(commit, techtree, wanted_nodes)
 
     strings = json.loads(

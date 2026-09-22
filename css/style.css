@@ -149,16 +149,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   mask-image: linear-gradient(#000 calc(100% - 26px), transparent);
 }
 
-.group h2 {
-  margin: 0 0 3px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: #8a7a64;
-}
-
-.group .tiles {
+.topic-grid > .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, 62px);
   gap: 7px;
@@ -718,7 +709,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
    the same question of every civilisation, so on the card it was a line you
    stop reading by the third one, saying the name the card has just said. */
 .ask-words {
-  margin: 0;
+  margin: 2px 0 0;
+  padding: 0 8px;
   font-size: 12px;
   color: #a8967f;
   text-align: center;
@@ -851,10 +843,192 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
    rows of them there are, so the board is one block whatever the topic. */
 .board {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   gap: 6px;
+  max-width: 100%;
+  padding: 6px;
+  border: 1px solid #ffffff0d;
+  border-radius: 13px;
+  background: #00000014;
   align-items: stretch;
 }
+
+.unit-states {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: calc(var(--cell) * .72);
+  align-self: center;
+  gap: 0;
+}
+
+.unit-state-pair {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.unit-state-pair .unit-states { flex: none; }
+
+.unit-state {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(var(--cell) * .72);
+  padding: 0;
+  border-radius: 0;
+  color: #a8967f;
+  background: var(--panel);
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+/* Keep the artwork flush while drawing selection above the images. */
+.unit-state::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px #ffffff12;
+}
+
+.unit-state.selected { z-index: 1; }
+.unit-state.selected::after { box-shadow: inset 0 0 0 2px var(--gold); }
+.unit-state.spotted::after { box-shadow: inset 0 0 0 2px var(--full); }
+.unit-state.falsely::after { box-shadow: inset 0 0 0 2px var(--none); }
+.unit-state:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; z-index: 3; }
+
+@media (hover: hover) {
+  .unit-state:not(.done):hover { border-color: var(--gold); }
+  .unit-state:not(.done):hover img { filter: grayscale(.3) brightness(.95); }
+}
+
+.unit-state + .unit-state { margin-top: -1px; }
+.unit-state:first-child { border-radius: 10px 10px 0 0; }
+.unit-state:last-child { border-radius: 0 0 10px 10px; }
+
+.unit-state img {
+  flex: none;
+  width: 100%;
+  height: calc(var(--cell) * .72 - 2px);
+  object-fit: cover;
+  border-radius: 0;
+  filter: grayscale(.7) brightness(.75);
+  transition: filter .15s ease;
+}
+
+.unit-state > .split {
+  flex: none;
+  display: grid !important;
+  width: 100%;
+  height: calc(var(--cell) * .72 - 2px);
+  border-radius: 0;
+}
+
+.unit-state > .split img {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(.7) brightness(.75);
+}
+
+/* Show both complete silhouettes, with a quiet divider between alternatives. */
+.unit-state > .split.n2 {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1px;
+  background: #15110d;
+}
+.unit-state > .split.n2 img {
+  position: static;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(.7) brightness(.9);
+}
+.unit-state > .split.n2::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - .5px);
+  width: 1px;
+  background: #e5c99266;
+  pointer-events: none;
+}
+
+.unit-state > .split.n3,
+.unit-state > .split.n4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: #e5c99244;
+}
+
+.unit-state > .split.n3 img,
+.unit-state > .split.n4 img {
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  background: #15110d;
+  filter: saturate(.7) brightness(.9);
+}
+
+.unit-state > .split.n3 img:first-child {
+  height: 100%;
+  grid-row: 1 / span 2;
+}
+
+.unit-state .missing-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--cell) * .42);
+  height: calc(var(--cell) * .42);
+  color: var(--none);
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 1px 2px #000d);
+}
+
+.unit-state span {
+  display: none;
+}
+
+.unit-state.selected {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--panel-2);
+  box-shadow: 0 0 0 2px #d9ab5233 inset;
+}
+
+.unit-state.selected img { filter: none; }
+.unit-state.selected > .split img { filter: none; }
+
+.unit-state .verdict {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--cell) * .3);
+  height: calc(var(--cell) * .3);
+  border-radius: 8px 0 0 0;
+  background: #15110dd9;
+  z-index: 3;
+}
+
+.unit-state .verdict svg { width: 70%; height: 70%; }
+.unit-state.spotted { border-color: var(--full); color: var(--full); }
+.unit-state.falsely { border-color: var(--none); color: var(--none); }
+.unit-state.done { cursor: default; }
 
 /* Flex and a width of exactly N tiles, not a grid of N columns: a last row with
    a tile missing centres under the others instead of hanging off the left. */
@@ -863,6 +1037,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
+  align-content: center;
   width: calc(var(--columns, 4) * var(--cell) + (var(--columns, 4) - 1) * 6px);
 }
 
@@ -984,6 +1159,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .claim-actions .act svg { width: calc(var(--cell) * .38); height: calc(var(--cell) * .38); }
 .claim-actions .act span { font-size: min(12px, calc(var(--cell) * .22)); opacity: 1; }
 .claim-actions .act.star { color: var(--bonus); border-color: #4a3a5e; background: #2a1f38; }
+.claim-actions .act.full { color: var(--full); border-color: #2f5233; background: #172a1a; }
 
 /* answered on the tap, and it outranks whatever the button wears at rest */
 .act.spotted { border-color: var(--full); color: var(--full); }
@@ -1178,7 +1354,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 @media (max-height: 820px) {
-  .group .tiles { grid-template-columns: repeat(auto-fill, 54px); }
+  .topic-grid > .tiles { grid-template-columns: repeat(auto-fill, 54px); }
   .topic { --tile-icon: 42px; }
 }
 

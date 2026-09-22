@@ -74,6 +74,7 @@ const AGAIN_AFTER = { wrong: [2, 5], half: [5, 12], right: [20, 50] };
 // of the answer; the other is a shortcut that says the answer is nothing.
 const BONUS_ID = "bonus";
 const NO_UNIT_ID = "no-unit";
+const UNIT_STATE_ID = "unit-state";
 
 // Naming every upgrade and nothing else is the question; the rest are worth
 // what they cost to find out. An upgrade you leave alone and the civ has is
@@ -145,6 +146,13 @@ function start() {
       '<p class="lede">data/topics.js did not load. Run <code>python tools/build_data.py</code>.</p>';
     return;
   }
+  mergeGunpowderTopics();
+  mergeSiegeTopics();
+  mergeArcherTopics();
+  normalizeChampionTopic();
+  mergeBarracksTopics();
+  mergeStableTopics();
+  prepareDefenseControls();
   restoreSelection();
   renderMenu();
 
@@ -166,6 +174,8 @@ function start() {
   el("pad").addEventListener("click", (event) => {
     if (event.target.closest("#picker-done")) return finishPicks();
     if (event.target.closest("#claim-all")) return claimAll();
+    const unitState = event.target.closest(".unit-state");
+    if (unitState) return chooseUnitState(unitState.dataset.unitState, unitState.dataset.unitKey || "");
     const act = event.target.closest(".act[data-claim]");
     if (act) return pick(act.dataset.claim);
     const upgrade = event.target.closest(".upgrade");
@@ -186,6 +196,190 @@ function start() {
   document.addEventListener("keydown", onKey);
 }
 
+function normalizeChampionTopic() {
+  const topic = state.data.topics.find((item) => item.id === "champion");
+  if (!topic || topic.parts.some((part) => part.id === "unit-473")) return;
+  const champion = topic.parts.find((part) => part.id === "unit-567");
+  const eliteChampi = topic.parts.find((part) => part.id === "unit-2554");
+  const twoHanded = {
+    id: "unit-473",
+    name: "Two-Handed Swordsman",
+    img: "img/topics/unit-two-handed.png",
+    icon_index: 12,
+  };
+  topic.parts.splice(topic.parts.indexOf(champion) + 1, 0, twoHanded);
+  topic.alts["unit-473"] = ["unit-473", "unit-2554"];
+  topic.upgrades = ["unit-473", "unit-567", ...topic.upgrades.filter((id) => id !== "unit-567")];
+  for (const fact of Object.values(topic.civs)) {
+    const hasChampion = fact.has.includes("unit-567") || fact.has.includes("unit-2554");
+    fact.has = fact.has.filter((id) => id !== "unit-473");
+    fact.missing = fact.missing.filter((id) => id !== "unit-473");
+    if (hasChampion) fact.has.push("unit-473");
+    else fact.missing.push("unit-473");
+  }
+}
+
+function mergeGunpowderTopics() {
+  const hand = state.data.topics.find((topic) => topic.id === "hand_cannoneer");
+  const bombard = state.data.topics.find((topic) => topic.id === "bombard_cannon");
+  if (!hand || !bombard || state.data.topics.some((topic) => topic.id === "gunpowder_units")) return;
+
+  const civs = {};
+  for (const civId of new Set([...Object.keys(hand.civs), ...Object.keys(bombard.civs)])) {
+    const facts = [hand.civs[civId], bombard.civs[civId]].filter(Boolean);
+    civs[civId] = {
+      tier: "partial",
+      has: facts.flatMap((fact) => fact.has),
+      missing: facts.flatMap((fact) => fact.missing),
+      bonus: facts.some((fact) => fact.bonus),
+      why: facts.flatMap((fact) => fact.why || []),
+      mergedFacts: {
+        hand_cannoneer: hand.civs[civId],
+        bombard_cannon: bombard.civs[civId],
+      },
+    };
+  }
+
+  const combined = {
+    id: "gunpowder_units",
+    name: "Hand Cannoneer + Bombard Cannon",
+    group: "Gunpowder",
+    icon: "img/topics/tech-chemistry.png",
+    below: null,
+    unit: null,
+    gate: [],
+    alts: { ...hand.alts, ...bombard.alts },
+    upgrades: [...new Set([...hand.upgrades, ...bombard.upgrades])],
+    parts: [...hand.parts, ...bombard.parts],
+    civs,
+    merged: [hand, bombard],
+  };
+  state.data.topics = state.data.topics.filter(
+    (topic) => topic.id !== hand.id && topic.id !== bombard.id
+  );
+  state.data.topics.push(combined);
+}
+
+function mergeSiegeTopics() {
+  mergeUnitTopics(["siege_ram", "onager", "scorpion"], {
+    id: "siege_units", name: "Ram / Onager / Scorpion", group: "Siege",
+    icon: "img/topics/building-siege-workshop.png",
+  });
+}
+
+function mergeArcherTopics() {
+  mergeUnitTopics(["arbalester", "skirmisher"], {
+    id: "archer_skirmisher", name: "Archer / Skirmisher", group: "Archery Range",
+    icon: "img/topics/building-archery-range.png",
+  });
+}
+
+function mergeUnitTopics(ids, presentation) {
+  const children = ids.map((id) => state.data.topics.find((topic) => topic.id === id));
+  if (children.some((topic) => !topic)) return;
+  const parts = [...new Map(children.flatMap((topic) => topic.parts).map((part) => [part.id, part])).values()];
+  const civs = {};
+  for (const civId of Object.keys(state.data.civs)) {
+    const facts = children.map((topic) => topic.civs[civId] || {
+      tier: "none", has: [], missing: topic.upgrades, bonus: false, why: [],
+    });
+    const has = [...new Set(facts.flatMap((fact) => fact.has))];
+    civs[civId] = {
+      tier: "partial",
+      has,
+      missing: [...new Set(facts.flatMap((fact) => fact.missing))].filter((id) => !has.includes(id)),
+      bonus: facts.some((fact) => fact.bonus),
+      why: [...new Set(facts.flatMap((fact) => fact.why || []))],
+      mergedFacts: Object.fromEntries(children.map((topic, index) => [topic.id, facts[index]])),
+    };
+  }
+  const combined = {
+    ...presentation, below: null, unit: null, gate: [],
+    alts: Object.assign({}, ...children.map((topic) => topic.alts)),
+    upgrades: [...new Set(children.flatMap((topic) => topic.upgrades))],
+    parts, civs, merged: children,
+  };
+  const index = state.data.topics.findIndex((topic) => ids.includes(topic.id));
+  state.data.topics = state.data.topics.filter((topic) => !ids.includes(topic.id));
+  state.data.topics.splice(index, 0, combined);
+}
+
+function mergeBarracksTopics() {
+  mergeUnitTopics(["champion", "halberdier", "eagle"], {
+    id: "barracks_units", name: "Long Swordsman / Halberdier / Eagle Warrior", group: "Barracks",
+    icon: "img/topics/building-barracks.png",
+  });
+}
+
+function mergeStableTopics() {
+  const knight = state.data.topics.find((topic) => topic.id === "paladin");
+  const elephant = state.data.topics.find((topic) => topic.id === "battle_elephant");
+  const steppe = state.data.topics.find((topic) => topic.id === "steppe_lancer");
+  if (!knight || !elephant || !steppe) return;
+  const riderIds = ["unit-1751", "unit-1753"];
+  const special = {
+    ...elephant, id: "regional_cavalry", name: "Battle Elephant / Steppe Lancer / Shrivamsha Rider",
+    alts: {
+      "unit-1132": ["unit-1132", "unit-1370", "unit-1751"],
+      "unit-1134": ["unit-1134", "unit-1372", "unit-1753"],
+    },
+    parts: [...new Map([...elephant.parts, ...steppe.parts, ...knight.parts.filter((part) => riderIds.includes(part.id))].map((part) => [part.id, part])).values()],
+    civs: {},
+  };
+  special.gate = special.alts[special.unit];
+  for (const civId of Object.keys(state.data.civs)) {
+    const knightFact = knight.civs[civId];
+    const rider = knightFact.has.some((id) => riderIds.includes(id));
+    const facts = [elephant.civs[civId], steppe.civs[civId], rider ? knightFact : null].filter(Boolean);
+    const allowed = new Set(special.parts.map((part) => part.id));
+    const has = [...new Set([...knightFact.has.filter((id) => id.startsWith("tech-")), ...facts.flatMap((fact) => fact.has)])].filter((id) => allowed.has(id));
+    const missing = special.upgrades.filter((id) => !(special.alts[id] || [id]).some((alt) => has.includes(alt)));
+    special.civs[civId] = {
+      tier: !special.gate.some((id) => has.includes(id)) ? "none" : missing.length ? "partial" : "full",
+      has, missing, bonus: facts.some((fact) => fact.bonus),
+      why: [...new Set(facts.flatMap((fact) => fact.why || []))],
+    };
+    knightFact.has = knightFact.has.filter((id) => !riderIds.includes(id));
+    knightFact.missing = knight.upgrades.filter((id) => !(knight.alts[id] || [id]).some((alt) => knightFact.has.includes(alt)));
+    if (!knight.gate.some((id) => knightFact.has.includes(id))) {
+      knightFact.tier = "none";
+      knightFact.bonus = false;
+      knightFact.why = [];
+    }
+  }
+  knight.name = "Knight / Hei Guang Cavalry";
+  knight.parts = knight.parts.filter((part) => !riderIds.includes(part.id));
+  knight.gate = knight.gate.filter((id) => !riderIds.includes(id));
+  knight.alts = Object.fromEntries(Object.entries(knight.alts).map(([id, alts]) => [id, alts.filter((alt) => !riderIds.includes(alt))]));
+  state.data.topics = state.data.topics.filter((topic) => ![elephant.id, steppe.id].includes(topic.id));
+  state.data.topics.push(special);
+  mergeUnitTopics(["hussar", "paladin", "camel", "regional_cavalry"], {
+    id: "stable_units", name: "Stable", group: "Stable", icon: "img/topics/building-stable.png",
+  });
+}
+
+function prepareDefenseControls() {
+  const topic = state.data.topics.find((topic) => topic.id === "defense");
+  if (!topic?.buildingLevels) return;
+  const levels = topic.buildingLevels;
+  const line = (id, ids, upgrades) => ({
+    id, unit: ids[1], below: ids[0] ? levels.parts.find((part) => part.id === ids[0]) : null,
+    parts: levels.parts.filter((part) => ids.includes(part.id)),
+    upgrades: [ids[2]], alts: {}, stateIds: ids, replacedUpgrades: upgrades,
+  });
+  topic.merged = [
+    line("defense_towers", ["building-79", "building-234", "building-235"], ["tech-63"]),
+    line("defense_walls", [null, "building-117", "building-155"], ["tech-194"]),
+    line("defense_masonry", [null, "tech-50", "tech-51"], ["tech-51"]),
+  ];
+  topic.merged[0].parts.push(levels.parts.find((part) => part.id === "building-1665"));
+  for (const [civId, fact] of Object.entries(topic.civs)) {
+    fact.mergedFacts = Object.fromEntries(topic.merged.map((child) => [child.id, {
+      has: levels.civs[civId], missing: [], tier: "partial",
+    }]));
+  }
+}
+
 /* ---------- menu ---------- */
 
 function restoreSelection() {
@@ -204,7 +398,14 @@ function restoreSelection() {
     saved = [];
   }
   const known = state.data.topics.map((t) => t.id);
-  const wanted = Array.isArray(saved) ? saved.filter((id) => known.includes(id)) : [];
+  const mergedIds = Object.fromEntries(state.data.topics.flatMap((topic) =>
+    (topic.merged || []).map((child) => [child.id, topic.id])
+  ));
+  if (known.includes("stable_units")) {
+    mergedIds.battle_elephant = "stable_units";
+    mergedIds.steppe_lancer = "stable_units";
+  }
+  const wanted = Array.isArray(saved) ? saved.map((id) => mergedIds[id] || id).filter((id) => known.includes(id)) : [];
   state.selected = new Set(wanted.length ? wanted : known.slice(0, 1));
   applyMode();
 }
@@ -368,20 +569,9 @@ function renderMenu() {
   const grid = el("topic-grid");
   grid.innerHTML = "";
 
-  // one section per building, in the order the topics are declared
-  const groups = [];
+  const tiles = document.createElement("div");
+  tiles.className = "tiles";
   for (const topic of state.data.topics) {
-    const group = groups.find((g) => g.name === topic.group);
-    if (group) group.topics.push(topic);
-    else groups.push({ name: topic.group, topics: [topic] });
-  }
-
-  for (const group of groups) {
-    const section = document.createElement("section");
-    section.className = "group";
-    section.innerHTML = `<h2>${group.name}</h2><div class="tiles"></div>`;
-    const tiles = section.querySelector(".tiles");
-    for (const topic of group.topics) {
       const tile = document.createElement("button");
       tile.className = "topic";
       tile.type = "button";
@@ -391,9 +581,8 @@ function renderMenu() {
       tile.innerHTML = tileHtml(topic);
       tile.addEventListener("click", () => chooseTopic(topic.id));
       tiles.append(tile);
-    }
-    grid.append(section);
   }
+  grid.append(tiles);
 
   for (const button of el("modes").querySelectorAll(".mode")) {
     button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
@@ -451,6 +640,8 @@ function splitHtml(images, alt = "") {
 /* The group the topic's own icon belongs to: that unit first, then whatever
    stands in for it. */
 function tileUnits(topic) {
+  if (topic.id === "monk") return ["img/topics/building-monastery.png"];
+  if (topic.images) return topic.images;
   const groups = Object.values(topic.alts || {}).filter((group) => group.length > 1);
   const icon = topic.parts.find((part) => part.img === topic.icon);
   // the icon's own group, or the icon alone: the Light Cavalry is one unit even
@@ -834,6 +1025,7 @@ function openBoard(card) {
   const { topic, civ } = truth(state.data, card);
   state.phase = "picking";
   state.picked = {};
+  state.unitState = topic.merged ? Object.fromEntries(topic.merged.map((child) => [child.id, defaultUnitStateId(child)])) : defaultUnitStateId(topic);
   state.results[state.index] = { card, right: false, clean: true, delta: 0, picks: null };
 
   const pad = el("pad");
@@ -843,18 +1035,9 @@ function openBoard(card) {
   pad.innerHTML = `
     <p class="ask-words">which upgrades do the <b>${civ.name}</b> have?</p>
     <div class="board">
-      <button class="act rail" data-claim="${NO_UNIT_ID}" title="${cannotTitle(topic)}">
-        ${
-          topic.below
-            ? `<span class="rail-art only">
-                 <img src="${topic.below.img}" alt="${topic.below.name}">
-               </span>`
-            : `<span class="rail-art struck">
-                 ${tileHtml(topic)}<svg><use href="#mark-none"/></svg>
-               </span>`
-        }
-        <span>missing</span><b class="verdict"></b>
-      </button>
+      ${topic.merged
+        ? `<div class="unit-state-pair">${topic.merged.map((unitTopic) => unitStatesHtml(unitTopic, unitTopic.id)).join("")}</div>`
+        : unitStatesHtml(topic)}
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
         ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
           .map(
@@ -864,10 +1047,6 @@ function openBoard(card) {
           )
           .join("")}
       </div>
-      <button id="claim-all" class="act rail" title="every upgrade is there">
-        <span class="rail-art lit">${fullHtml(topic)}<svg><use href="#mark-full"/></svg></span>
-        <span>full</span>
-      </button>
     </div>
     <div class="claim-actions">
       <button class="act star" data-claim="${BONUS_ID}"
@@ -877,7 +1056,121 @@ function openBoard(card) {
       <button id="picker-done" class="act primary" title="that is all of them">
         <svg><use href="#mark-right"/></svg><span>done</span>
       </button>
+      <button id="claim-all" class="act full" title="every upgrade and the highest unit state">
+        <svg><use href="#mark-full"/></svg><span>full</span>
+      </button>
     </div>`;
+}
+
+function unitStates(topic) {
+  const data = unitStateData(topic);
+  return data ? data.states : [];
+}
+
+function middleUnitId(topic) {
+  const data = unitStateData(topic);
+  return data && data.middle ? data.middle.id : "";
+}
+
+function defaultUnitStateId(topic) {
+  const data = unitStateData(topic);
+  return data ? data.default || data.middle.id : "";
+}
+
+function unitStatesHtml(topic, unitKey = "") {
+  const data = unitStateData(topic);
+  if (!data) return "";
+  return `<div class="unit-states" role="group" aria-label="unit level">
+    ${unitStates(topic).map((unit, index) => {
+      const label = !data.three && data.lower.id === NO_UNIT_ID && unit.id === data.middle.id
+        ? "Present"
+        : stateLabel(topic, unit, index);
+      return `
+      <button class="unit-state${unit.id === defaultUnitStateId(topic) ? " selected" : ""}"
+        data-unit-state="${unit.id}"${unitKey ? ` data-unit-key="${unitKey}"` : ""} title="${label}" aria-pressed="${unit.id === defaultUnitStateId(topic)}">
+        ${unit.id === NO_UNIT_ID ? '<svg class="missing-mark" aria-label="Missing"><use href="#mark-none"/></svg>' : stateArt(topic, unit, index, label)}<span>${label}</span><b class="verdict"></b>
+      </button>`;
+    }).join("")}
+  </div>`;
+}
+
+function stateLabel(topic, unit, index) {
+  if (["cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) return slotName(topic, unit);
+  if (topic.id === "siege_ram") return ["Battering Ram / Armored Elephant", "Capped Ram / Siege Elephant", "Siege Ram / Nothing"][index];
+  if (topic.id !== "champion") return unit.name;
+  return ["Long Swordsman / Champi Warrior", "Two-Handed Swordsman / Elite Champi Warrior", "Champion / Legionary"][index] || unit.name;
+}
+
+function stateArt(topic, unit, index, label) {
+  if (["champion", "siege_ram", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) {
+    const parts = slotGroup(topic, unit.id);
+    if (parts.length > 1) return `<span class="split n${parts.length}">${parts.map((part) => `<img src="${part.img}" alt="${part.name}" title="${part.name}">`).join("")}</span>`;
+  }
+  return `<img src="${unit.img}" alt="${label}">`;
+}
+
+function unitStateData(topic) {
+  if (topic.id === "monk") return null;
+  if (topic.stateIds) {
+    const [low, mid, top] = topic.stateIds;
+    const lowerId = topic.id === "defense_towers" && state.deck[state.index]?.civId === "sicilians" ? "building-1665" : low;
+    const lower = lowerId ? topic.parts.find((part) => part.id === lowerId)
+      : { id: NO_UNIT_ID, name: topic.id === "defense_walls" ? "No Stone Walls" : topic.id === "defense_masonry" ? "No Masonry" : "No tower" };
+    const middle = topic.parts.find((part) => part.id === mid);
+    const upper = topic.parts.find((part) => part.id === top);
+    return { lower, middle, upper, states: [lower, middle, upper], three: true };
+  }
+  if (!topic.unit) return null;
+  const middle = topic.parts.find((part) => part.id === topic.unit);
+  const upper = topic.parts.find((part) => part.id === topic.upgrades.find((id) => id.startsWith("unit-")));
+  if (!middle) return null;
+  const lower = topic.below || { id: NO_UNIT_ID, name: "Missing", img: topic.icon };
+  if (topic.id === "siege_ram") {
+    const second = topic.parts.find((part) => part.id === "unit-422");
+    const siege = topic.parts.find((part) => part.id === "unit-548");
+    return { lower, middle, second, upper: siege, states: [middle, second, siege], three: true, default: second.id };
+  }
+  if (topic.id === "champion") {
+    const second = topic.parts.find((part) => part.id === "unit-473");
+    const champion = topic.parts.find((part) => part.id === "unit-567");
+    return { lower, middle, second, upper: champion, states: [middle, second, champion], three: true, default: second.id };
+  }
+  if (!upper) return { lower, middle, states: [lower, middle], three: false };
+  return {
+    lower,
+    middle,
+    upper,
+    states: [lower, middle, upper],
+    three: true,
+  };
+}
+
+function chooseUnitState(id, unitKey = "") {
+  const topic = state.data.topics.find((item) => item.id === state.deck[state.index].topicId);
+  const unitTopic = topic.merged ? topic.merged.find((item) => item.id === unitKey) : topic;
+  const pickedKey = unitKey ? `${UNIT_STATE_ID}:${unitKey}` : UNIT_STATE_ID;
+  if (state.phase !== "picking" || !unitStateData(unitTopic) || state.picked[pickedKey]) return;
+  const { answer } = truth(state.data, state.deck[state.index]);
+  const fact = topic.merged ? answer.mergedFacts[unitKey] : answer;
+  if (unitKey) state.unitState[unitKey] = id;
+  else state.unitState = id;
+  const hit = id === unitStateFor(unitTopic, fact);
+  const outcome = hit ? "spotted" : "falsely";
+  state.picked[pickedKey] = outcome;
+  const worth = hit ? POINTS.spotted : POINTS.falsely;
+  state.results[state.index].delta += worth;
+  bumpScore(worth);
+  for (const button of el("pad").querySelectorAll(".unit-state")) {
+    if ((button.dataset.unitKey || "") !== unitKey) continue;
+    const selected = button.dataset.unitState === id && (button.dataset.unitKey || "") === unitKey;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  }
+  markUnitState(outcome, unitKey);
+  if (topic.merged) {
+    const allMissing = topic.merged.every((item) => state.picked[`${UNIT_STATE_ID}:${item.id}`] && state.unitState[item.id] === NO_UNIT_ID);
+    if (allMissing) finishPicks(true);
+  } else if (id === NO_UNIT_ID) finishPicks(hit);
 }
 
 function tileCount(topic) {
@@ -887,7 +1180,7 @@ function tileCount(topic) {
 /* Two even rows rather than a full one and a remainder: five upgrades are 3 and
    2, not 4 and 1. Four is the widest the rails leave room for. */
 function columnsFor(tiles) {
-  return tiles <= 4 ? tiles : Math.min(4, Math.ceil(tiles / 2));
+  return tiles <= 3 ? tiles : Math.ceil(tiles / 2);
 }
 
 /* "Full" is the top of the line, so it wears the unit the line ends at -- the
@@ -915,7 +1208,13 @@ function cannotTitle(topic) {
 /* The board itself is the upgrades. The bonus is a claim too, but it is not an
    upgrade, so it sits with the actions. */
 function claimables(topic) {
-  const tiles = topic.upgrades.map((id) => {
+  const unitData = unitStateData(topic);
+  const mergedUnits = new Set(topic.merged ? topic.merged.flatMap((item) => item.parts.filter((part) => part.id.startsWith("unit-")).map((part) => part.id)) : []);
+  for (const child of topic.merged || []) for (const id of child.replacedUpgrades || []) mergedUnits.add(id);
+  const stateIds = unitData?.three
+    ? new Set([unitData.middle.id, unitData.second?.id, unitData.upper.id])
+    : new Set();
+  const tiles = topic.upgrades.filter((id) => !mergedUnits.has(id) && !stateIds.has(id)).map((id) => {
     const part = topic.parts.find((p) => p.id === id);
     const name = slotName(topic, part);
     return { id, name, art: splitHtml(slotImages(topic, id), name) };
@@ -927,6 +1226,18 @@ function claimables(topic) {
    that is the answer -- the bonus is not an upgrade, so this does not claim it. */
 function claimAll() {
   if (state.phase !== "picking") return;
+  const card = state.deck[state.index];
+  const { topic } = truth(state.data, card);
+  const unitData = unitStateData(topic);
+  if (topic.merged) {
+    for (const child of topic.merged) {
+      const key = `${UNIT_STATE_ID}:${child.id}`;
+      const childData = unitStateData(child);
+      if (!state.picked[key]) chooseUnitState((childData.upper || childData.middle).id, child.id);
+    }
+  } else if (unitData && !state.picked[UNIT_STATE_ID]) {
+    chooseUnitState((unitData.upper || unitData.middle).id);
+  }
   for (const button of el("pad").querySelectorAll(".upgrade")) {
     if (!state.picked[button.dataset.id]) pick(button.dataset.id, true);
   }
@@ -998,6 +1309,36 @@ function finishPicks(answered, timedOut) {
   const { topic, answer: fact } = truth(state.data, card);
 
   let delta = 0;
+  const unitData = unitStateData(topic);
+  const mergedUnitKeys = topic.merged ? topic.merged.map((item) => item.id) : [];
+  const unitHit = topic.merged
+    ? mergedUnitKeys.every((key) => {
+        const child = topic.merged.find((item) => item.id === key);
+        const selected = state.unitState[key] || middleUnitId(child);
+        return state.picked[`${UNIT_STATE_ID}:${key}`] === "spotted" || selected === unitStateFor(child, fact.mergedFacts[key]);
+      })
+    : !unitData || state.picked[UNIT_STATE_ID] === "spotted" || state.unitState === unitStateFor(topic, fact);
+  if (topic.merged) {
+    for (const key of mergedUnitKeys) {
+      if (state.picked[`${UNIT_STATE_ID}:${key}`]) continue;
+      const child = topic.merged.find((item) => item.id === key);
+      const childFact = fact.mergedFacts[key];
+      const expected = unitStateFor(child, childFact);
+      const selected = state.unitState[key] || middleUnitId(child);
+      const outcome = selected === expected ? "spotted" : "falsely";
+      state.unitState[key] = selected;
+      state.picked[`${UNIT_STATE_ID}:${key}`] = outcome;
+      markUnitState(outcome, key);
+      delta += outcome === "spotted" ? POINTS.spotted : POINTS.falsely;
+    }
+  } else if (unitData) {
+    if (!state.picked[UNIT_STATE_ID]) {
+      const unitOutcome = unitHit ? "spotted" : "falsely";
+      state.picked[UNIT_STATE_ID] = unitOutcome;
+      markUnitState(unitOutcome);
+      delta += unitHit ? POINTS.spotted : POINTS.falsely;
+    }
+  }
   if (!answered) {
     for (const { id } of claimables(topic)) {
       if (id === BONUS_ID || state.picked[id] || !wanted(fact, id)) continue;
@@ -1026,11 +1367,14 @@ function finishPicks(answered, timedOut) {
   const owing = claimables(topic)
     .concat({ id: NO_UNIT_ID })
     .filter(({ id }) => id !== BONUS_ID && wanted(fact, id) && state.picked[id] !== "spotted");
-  const shortcut = state.picked[NO_UNIT_ID] === "spotted";
+  const unitShortcut = topic.merged
+    ? mergedUnitKeys.every((key) => state.picked[`${UNIT_STATE_ID}:${key}`] === "spotted" && state.unitState[key] === NO_UNIT_ID)
+    : state.picked[UNIT_STATE_ID] === "spotted" && state.unitState === NO_UNIT_ID;
   const clean =
     !timedOut &&
+    unitHit &&
     !outcomes.includes("falsely") &&
-    (shortcut || owing.length === 0);
+    (unitShortcut || owing.length === 0);
   const named = !timedOut && outcomes.some((outcome) => outcome === "spotted");
   let quick = 0;
   if (clean) {
@@ -1055,6 +1399,29 @@ function finishPicks(answered, timedOut) {
   if (delta) bumpScore(delta);
   learnFrom(card, verdictOf(result));
   reveal();
+}
+
+function unitStateFor(topic, fact) {
+  const data = unitStateData(topic);
+  if (!data) return null;
+  if (data.upper && slotGroup(topic, data.upper.id).some((part) => fact.has.includes(part.id))) return data.upper.id;
+  if (data.second && slotGroup(topic, data.second.id).some((part) => fact.has.includes(part.id))) return data.second.id;
+  if (slotGroup(topic, data.middle.id).some((part) => fact.has.includes(part.id))) return data.middle.id;
+  if (data.lower.id !== NO_UNIT_ID && (["onager", "arbalester", "skirmisher", "halberdier", "hussar"].includes(topic.id) || fact.has.includes(data.lower.id))) {
+    return data.lower.id;
+  }
+  return NO_UNIT_ID;
+}
+
+function markUnitState(outcome, unitKey = "") {
+  const selectedId = unitKey ? state.unitState[unitKey] : state.unitState;
+  const button = [...el("pad").querySelectorAll(".unit-state")].find(
+    (node) => node.dataset.unitState === selectedId && (node.dataset.unitKey || "") === unitKey
+  );
+  if (!button) return;
+  button.classList.add(outcome, "done");
+  const verdict = button.querySelector(".verdict");
+  if (verdict) verdict.innerHTML = `<svg><use href="#mark-${outcome === "spotted" ? "right" : "wrong"}"/></svg>`;
 }
 
 /* the civ's bonus, named on the reveal: it is why a civ a slot short can still
