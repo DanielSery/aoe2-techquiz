@@ -3010,7 +3010,8 @@ window.QUIZ_DATA = {
     "armenians": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3024,7 +3025,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": false,
@@ -3034,7 +3036,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3046,7 +3049,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3058,7 +3062,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3070,7 +3075,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3083,7 +3089,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3094,7 +3101,8 @@ window.QUIZ_DATA = {
     "burgundians": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3107,7 +3115,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3118,7 +3127,8 @@ window.QUIZ_DATA = {
     "byzantines": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3132,7 +3142,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3156,7 +3167,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "unit-588"
+      "unit-588",
+      "unit-280"
      ],
      "missing": [
       "tech-377"
@@ -3170,7 +3182,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "unit-588"
+      "unit-588",
+      "unit-280"
      ],
      "missing": [
       "tech-377"
@@ -3185,7 +3198,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3197,7 +3211,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3210,7 +3225,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": false,
@@ -3219,7 +3235,8 @@ window.QUIZ_DATA = {
     "goths": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3231,7 +3248,8 @@ window.QUIZ_DATA = {
     "gurjaras": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3244,7 +3262,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3254,7 +3273,9 @@ window.QUIZ_DATA = {
     },
     "huns": {
      "tier": "none",
-     "has": [],
+     "has": [
+      "unit-280"
+     ],
      "missing": [
       "unit-588",
       "tech-377"
@@ -3266,7 +3287,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3277,7 +3299,8 @@ window.QUIZ_DATA = {
     "italians": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3290,7 +3313,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3327,7 +3351,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3349,7 +3374,8 @@ window.QUIZ_DATA = {
     "lithuanians": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3362,7 +3388,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3374,7 +3401,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3386,7 +3414,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "unit-588"
+      "unit-588",
+      "unit-280"
      ],
      "missing": [
       "tech-377"
@@ -3398,7 +3427,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3409,7 +3439,8 @@ window.QUIZ_DATA = {
     "mayans": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3423,7 +3454,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3436,7 +3468,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": false,
@@ -3445,7 +3478,8 @@ window.QUIZ_DATA = {
     "persians": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3458,7 +3492,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3470,7 +3505,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3482,7 +3518,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3495,7 +3532,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3507,7 +3545,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3522,7 +3561,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": false,
@@ -3533,7 +3573,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3544,7 +3585,8 @@ window.QUIZ_DATA = {
     "spanish": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3557,7 +3599,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3570,7 +3613,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-550",
       "unit-588",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [],
      "bonus": true,
@@ -3581,7 +3625,8 @@ window.QUIZ_DATA = {
     "tupi": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3592,7 +3637,9 @@ window.QUIZ_DATA = {
     },
     "turks": {
      "tier": "none",
-     "has": [],
+     "has": [
+      "unit-280"
+     ],
      "missing": [
       "unit-588",
       "tech-377"
@@ -3604,7 +3651,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3616,7 +3664,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-550",
-      "tech-377"
+      "tech-377",
+      "unit-280"
      ],
      "missing": [
       "unit-588"
@@ -3627,7 +3676,8 @@ window.QUIZ_DATA = {
     "wei": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3639,7 +3689,8 @@ window.QUIZ_DATA = {
     "wu": {
      "tier": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-280"
      ],
      "missing": [
       "unit-588",
@@ -3743,7 +3794,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -3756,7 +3808,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "unit-492",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "tech-219",
@@ -3771,7 +3824,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -3785,7 +3839,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -3799,7 +3854,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -3813,7 +3869,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -3829,7 +3886,8 @@ window.QUIZ_DATA = {
      "tier": "none",
      "has": [
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3842,7 +3900,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3856,7 +3915,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3873,7 +3933,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -3883,7 +3944,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3900,7 +3962,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -3911,7 +3974,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3929,7 +3993,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -3942,7 +4007,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -3953,7 +4019,8 @@ window.QUIZ_DATA = {
     "franks": {
      "tier": "partial",
      "has": [
-      "unit-24"
+      "unit-24",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3968,7 +4035,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3983,7 +4051,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -3997,7 +4066,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4012,7 +4082,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4025,7 +4096,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4041,7 +4113,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -4054,7 +4127,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4069,7 +4143,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -4080,7 +4155,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4095,7 +4171,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4109,7 +4186,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -4124,7 +4202,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4139,7 +4218,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4154,7 +4234,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -4167,7 +4248,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -4179,7 +4261,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "tech-201"
@@ -4191,7 +4274,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4208,7 +4292,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4222,7 +4307,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "tech-219"
@@ -4236,7 +4322,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "tech-219"
@@ -4252,7 +4339,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4269,7 +4357,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "tech-219"
@@ -4284,7 +4373,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": false,
@@ -4294,7 +4384,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4311,7 +4402,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4326,7 +4418,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4341,7 +4434,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "unit-492",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "tech-219",
@@ -4354,7 +4448,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4369,7 +4464,8 @@ window.QUIZ_DATA = {
      "has": [
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4383,7 +4479,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4397,7 +4494,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-24",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "unit-492",
@@ -4413,7 +4511,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -4430,7 +4529,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4445,7 +4545,8 @@ window.QUIZ_DATA = {
       "unit-492",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [],
      "bonus": true,
@@ -4459,7 +4560,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "unit-492",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-4"
      ],
      "missing": [
       "tech-437"
@@ -4475,7 +4577,8 @@ window.QUIZ_DATA = {
       "unit-24",
       "tech-201",
       "tech-219",
-      "tech-437"
+      "tech-437",
+      "unit-4"
      ],
      "missing": [
       "unit-492"
@@ -4488,7 +4591,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-24",
       "unit-492",
-      "tech-201"
+      "tech-201",
+      "unit-4"
      ],
      "missing": [
       "tech-219",
@@ -4575,7 +4679,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4585,7 +4690,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4600,7 +4706,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4611,7 +4718,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4622,7 +4730,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4633,7 +4742,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4647,7 +4757,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4659,7 +4770,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4671,7 +4783,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4684,7 +4797,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4696,7 +4810,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -4709,7 +4824,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4719,7 +4835,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -4734,7 +4851,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4747,7 +4865,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4758,7 +4877,8 @@ window.QUIZ_DATA = {
     "franks": {
      "tier": "partial",
      "has": [
-      "unit-6"
+      "unit-6",
+      "unit-7"
      ],
      "missing": [
       "tech-201",
@@ -4771,7 +4891,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4784,7 +4905,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4794,7 +4916,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4807,7 +4930,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4817,7 +4941,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -4830,7 +4955,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4843,7 +4969,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4856,7 +4983,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4867,7 +4995,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4878,7 +5007,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4892,7 +5022,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4903,7 +5034,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4917,7 +5049,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4931,7 +5064,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4942,7 +5076,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -4952,7 +5087,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -4964,7 +5100,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -4982,7 +5119,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -4995,7 +5133,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -5007,7 +5146,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -5021,7 +5161,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -5033,7 +5174,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -5046,7 +5188,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5056,7 +5199,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -5069,7 +5213,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -5082,7 +5227,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -5095,7 +5241,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -5107,7 +5254,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -5120,7 +5268,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5131,7 +5280,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5141,7 +5291,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [
       "tech-201"
@@ -5154,7 +5305,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -5167,7 +5319,8 @@ window.QUIZ_DATA = {
      "tier": "none",
      "has": [
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5178,7 +5331,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": true,
@@ -5192,7 +5346,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5203,7 +5358,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-6",
       "tech-201",
-      "tech-219"
+      "tech-219",
+      "unit-7"
      ],
      "missing": [],
      "bonus": false,
@@ -5213,7 +5369,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-6",
-      "tech-201"
+      "tech-201",
+      "unit-7"
      ],
      "missing": [
       "tech-219"
@@ -6419,7 +6576,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6435,7 +6593,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -6451,7 +6610,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -6465,7 +6625,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -6480,7 +6641,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6495,7 +6657,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6508,7 +6671,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6521,7 +6685,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6534,7 +6699,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6548,7 +6714,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-75"
@@ -6564,7 +6731,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-93"
      ],
      "missing": [
       "tech-215"
@@ -6582,7 +6750,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6595,7 +6764,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6608,7 +6778,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6624,7 +6795,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6639,7 +6811,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6652,7 +6825,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6664,7 +6838,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -6680,7 +6855,8 @@ window.QUIZ_DATA = {
     "gurjaras": {
      "tier": "none",
      "has": [
-      "tech-77"
+      "tech-77",
+      "unit-93"
      ],
      "missing": [
       "unit-359",
@@ -6695,7 +6871,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359",
@@ -6710,7 +6887,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -6725,7 +6903,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6739,7 +6918,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -6754,7 +6934,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6768,7 +6949,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -6781,7 +6963,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359",
@@ -6799,7 +6982,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "unit-359",
-      "tech-75"
+      "tech-75",
+      "unit-93"
      ],
      "missing": [
       "tech-77",
@@ -6814,7 +6998,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-75"
@@ -6829,7 +7014,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "unit-359",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77",
@@ -6846,7 +7032,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "unit-359",
-      "tech-75"
+      "tech-75",
+      "unit-93"
      ],
      "missing": [
       "tech-77",
@@ -6862,7 +7049,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -6875,7 +7063,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359",
@@ -6892,7 +7081,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-93"
      ],
      "missing": [
       "tech-215"
@@ -6911,7 +7101,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6923,7 +7114,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -6936,7 +7128,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-358",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359",
@@ -6952,7 +7145,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -6964,7 +7158,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -6978,7 +7173,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-93"
      ],
      "missing": [
       "tech-215"
@@ -6992,7 +7188,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -7008,7 +7205,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -7022,7 +7220,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-75"
@@ -7039,7 +7238,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -7052,7 +7252,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -7067,7 +7268,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": false,
@@ -7079,7 +7281,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -7094,7 +7297,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -7109,7 +7313,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-75"
@@ -7124,7 +7329,8 @@ window.QUIZ_DATA = {
      "has": [
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -7138,7 +7344,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-77",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-75"
@@ -7152,7 +7359,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "unit-359"
@@ -7169,7 +7377,8 @@ window.QUIZ_DATA = {
       "unit-358",
       "unit-359",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [
       "tech-77"
@@ -7184,7 +7393,8 @@ window.QUIZ_DATA = {
       "unit-359",
       "tech-77",
       "tech-75",
-      "tech-215"
+      "tech-215",
+      "unit-93"
      ],
      "missing": [],
      "bonus": true,
@@ -7338,7 +7548,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -7357,7 +7568,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -7373,7 +7585,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-77"
@@ -7389,7 +7602,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7405,7 +7619,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7422,7 +7637,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -7436,7 +7652,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567"
@@ -7455,7 +7672,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7472,7 +7690,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -7488,7 +7707,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-75"
@@ -7504,7 +7724,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-215"
@@ -7523,7 +7744,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7539,7 +7761,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7556,7 +7779,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -7572,7 +7796,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7590,7 +7815,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -7605,7 +7831,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -7618,7 +7845,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "unit-567",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -7637,7 +7865,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-77",
       "unit-473",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7655,7 +7884,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "unit-567",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -7670,7 +7900,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7707,7 +7938,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7724,7 +7956,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -7737,7 +7970,8 @@ window.QUIZ_DATA = {
      "has": [
       "tech-875",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-473",
@@ -7755,7 +7989,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-75"
@@ -7771,7 +8006,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-77",
       "unit-473",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7790,7 +8026,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-75"
@@ -7806,7 +8043,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "unit-567",
-      "tech-215"
+      "tech-215",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -7822,7 +8060,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "unit-567",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -7839,7 +8078,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7858,7 +8098,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "unit-567",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -7894,7 +8135,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -7911,7 +8153,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7945,7 +8188,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-473",
@@ -7962,7 +8206,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -7978,7 +8223,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-215"
@@ -7992,7 +8238,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-1793",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-473",
@@ -8014,7 +8261,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -8028,7 +8276,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-875",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-75"
@@ -8045,7 +8294,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -8060,7 +8310,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -8078,7 +8329,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": false,
@@ -8090,7 +8342,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -8109,7 +8362,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -8145,7 +8399,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -8160,7 +8415,8 @@ window.QUIZ_DATA = {
       "unit-473",
       "unit-567",
       "tech-215",
-      "tech-77"
+      "tech-77",
+      "unit-75"
      ],
      "missing": [
       "tech-875",
@@ -8178,7 +8434,8 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [],
      "bonus": true,
@@ -8193,7 +8450,8 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "tech-215",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "unit-567",
@@ -8211,7 +8469,8 @@ window.QUIZ_DATA = {
       "unit-567",
       "tech-215",
       "tech-77",
-      "tech-75"
+      "tech-75",
+      "unit-75"
      ],
      "missing": [
       "tech-875"
@@ -8600,7 +8859,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8630,7 +8890,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441"
@@ -8648,7 +8909,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8661,7 +8923,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-546",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8677,7 +8940,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8694,7 +8958,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8709,7 +8974,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-435"
@@ -8727,7 +8993,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8741,7 +9008,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "unit-441",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "tech-435",
@@ -8756,7 +9024,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "unit-441",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-435",
@@ -8772,7 +9041,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441"
@@ -8787,7 +9057,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-435",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-39"
@@ -8804,7 +9075,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-546",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8822,7 +9094,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "unit-441",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-435",
@@ -8837,7 +9110,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8857,7 +9131,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8873,7 +9148,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-80"
@@ -8888,7 +9164,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-435",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "tech-75"
@@ -8906,7 +9183,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8922,7 +9200,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8952,7 +9231,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -8964,7 +9244,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -8981,7 +9262,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -8995,7 +9277,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "unit-441",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "tech-435",
@@ -9015,7 +9298,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -9026,7 +9310,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-546",
       "unit-441",
-      "tech-39"
+      "tech-39",
+      "unit-448"
      ],
      "missing": [
       "tech-435",
@@ -9043,7 +9328,8 @@ window.QUIZ_DATA = {
       "unit-1707",
       "tech-435",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "tech-75"
@@ -9059,7 +9345,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -9072,7 +9359,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-546",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9088,7 +9376,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-435",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9136,7 +9425,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-80"
@@ -9168,7 +9458,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -9181,7 +9472,8 @@ window.QUIZ_DATA = {
       "unit-1707",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-80"
@@ -9200,7 +9492,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441"
@@ -9215,7 +9508,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441"
@@ -9231,7 +9525,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -9242,7 +9537,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-546",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9259,7 +9555,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441"
@@ -9275,7 +9572,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -9289,7 +9587,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,
@@ -9303,7 +9602,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -9316,7 +9616,8 @@ window.QUIZ_DATA = {
      "has": [
       "tech-435",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9348,7 +9649,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": true,
@@ -9362,7 +9664,8 @@ window.QUIZ_DATA = {
       "unit-546",
       "tech-435",
       "tech-39",
-      "tech-80"
+      "tech-80",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9375,7 +9678,8 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-546",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "unit-441",
@@ -9393,7 +9697,8 @@ window.QUIZ_DATA = {
       "unit-441",
       "tech-435",
       "tech-39",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [
       "tech-80"
@@ -9412,7 +9717,8 @@ window.QUIZ_DATA = {
       "tech-435",
       "tech-39",
       "tech-80",
-      "tech-75"
+      "tech-75",
+      "unit-448"
      ],
      "missing": [],
      "bonus": false,

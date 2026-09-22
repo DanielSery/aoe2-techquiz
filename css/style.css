@@ -509,7 +509,15 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   box-shadow: 0 10px 24px #0008;
 }
 
-.face.back { transform: rotateY(180deg); gap: clamp(3px, 2cqh, 8px); }
+.face.back {
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  gap: clamp(3px, 2cqh, 8px);
+}
+
+.face.back > :not(.configuration-neighbors) { flex-shrink: 0; }
+.face.back .card-note:empty,
+.face.back .bonus-slot:empty { display: none; }
 
 /* right or wrong is the whole card, not a badge on it */
 .face.back.right {
@@ -724,7 +732,10 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .parts.configuration-neighbors {
   display: flex;
+  flex: 1;
   flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   align-items: stretch;
   gap: 5px;
   width: 100%;
@@ -738,6 +749,10 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .configuration-block.exact {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
   background: #d8b35a18;
   border-color: #d8b35a55;
 }
@@ -746,6 +761,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .configuration-summary {
   display: flex;
+  flex-shrink: 0;
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
@@ -770,8 +786,15 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .configuration-civs.closest { grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
-.configuration-civs.exact { display: flex; flex-wrap: wrap; justify-content: center; max-height: 58px; }
-.configuration-civs.exact .configuration-civ { width: clamp(32px, 13cqw, 44px); }
+/* Grow into the card's available height before scrolling. Fixed grid tracks
+   keep short groups compact and make large groups easy to scan. */
+.configuration-civs.exact {
+  grid-template-columns: repeat(auto-fit, clamp(32px, 13cqw, 44px));
+  justify-content: center;
+  align-content: start;
+  min-height: 0;
+  max-height: none;
+}
 
 .configuration-civ {
   position: relative;
