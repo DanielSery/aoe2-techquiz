@@ -1,12 +1,14 @@
 """Generate data/topics.js and download the icons it points at.
 
-Source of truth is SiegeEngineers/aoe2techtree's data/data.json, pinned to a
-commit. Optionally cross-checked against an Aoe2Planner civdata.json, which is
-extracted from the game's own empires2_x2_p1.dat -- a disagreement there means
-one of the two is from a different patch, so it fails the build rather than
-picking a winner.
+Source of truth is either SiegeEngineers/aoe2techtree's data/data.json, pinned
+to a commit, or a local aoe2techtree extraction from the installed game.
+Optionally cross-checked against an Aoe2Planner civdata.json, which is extracted
+from the game's own empires2_x2_p1.dat -- a disagreement there means one of the
+two is from a different patch, so it fails the build rather than picking a
+winner.
 
     python tools/build_data.py
+    python tools/build_data.py --local-tree c:/src/aoe2techtree
     python tools/build_data.py --civdata c:/Repos/Aoe2Planner/001/aoe2planner/gamedata/civdata.json
 """
 
@@ -162,12 +164,13 @@ TOPICS = [
         # does not exist.
         "id": "cavalry_archer",
         "group": "Archery Range",
-        "name": "Cavalry Archer / Elephant Archer / Bolas Rider / Xianbei Raider",
-        "unit": [39, 873, 2569, 1952],
-        "upgrades": [[("Unit", 474), ("Unit", 875), ("Unit", 2571), ("Unit", 1952)],
-                     201, 219, 437, 435, 39, 436],
+        "name": "Cavalry Archer / Mounted Crossbowman / Elephant Archer / Bolas Rider / Xianbei Raider",
+        "unit": [39, 2700, 873, 2569, 1952],
+        "upgrades": [[("Unit", 474), ("Unit", 2701), ("Unit", 875), ("Unit", 2571), ("Unit", 1952)],
+                     201, 219, 437, 435, 39, [436, 1452]],
         "words": [r"cavalry archers?", r"mounted archers?", r"archery ranges?",
-                  r"elephant archers?", r"bolas riders?", r"xianbei raiders?",
+                  r"mounted crossbowmen?", r"cranequins?", r"elephant archers?",
+                  r"bolas riders?", r"xianbei raiders?",
                   r"ranged soldiers?", r"archer armou?r", r"mounted units?"],
         "veto": [r"genitour", r"foot archers?"],
     },
@@ -202,11 +205,11 @@ TOPICS = [
         # Muisca. It is one question, asked of each civ about its own.
         "id": "eagle",
         "group": "Barracks",
-        "name": "Eagle Scout / Fire Lancer / Temple Guard",
-        "unit": [751, 1901, 2586],
-        "upgrades": [[("Unit", 752), ("Unit", 1903), ("Unit", 2587)], 875, 215, 77, 75],
+        "name": "Eagle Scout / Fire Lancer / Temple Guard / Varangian Guard",
+        "unit": [751, 1901, 2586, 2703],
+        "upgrades": [[("Unit", 752), ("Unit", 1903), ("Unit", 2587), ("Unit", 2704)], 875, 215, 77, 75],
         "words": [r"eagles?", r"eagle warriors?", r"fire lancers?", r"temple guards?",
-                  r"infantry", r"barracks"],
+                  r"varangian guards?", r"infantry", r"barracks"],
         "veto": [r"villagers?"],
     },
     {
@@ -354,6 +357,7 @@ CIV_ID = {
     "Poles": 38, "Bohemians": 39, "Dravidians": 40, "Bengalis": 41, "Gurjaras": 42,
     "Romans": 43, "Armenians": 44, "Georgians": 45, "Shu": 49, "Wu": 50, "Wei": 51,
     "Jurchens": 52, "Khitans": 53, "Muisca": 57, "Mapuche": 58, "Tupi": 59,
+    "Saxons": 60, "Varangians": 61, "Danes": 62,
 }
 
 
@@ -411,6 +415,7 @@ UNIT_ENABLER = {
     1134: None, 1258: 162, 1370: None, 1372: None, 1707: None, 1744: 837, 1746: None, 1813: None,
     873: None, 875: None, 1751: None, 1753: None, 1944: None, 1946: None, 1901: None, 1903: None, 1942: None,
     1952: None, 2552: None, 2554: None, 2569: None, 2571: None, 2586: None, 2587: None,
+    2700: None, 2701: None, 2703: None, 2704: None,
 }
 
 # The same blind spot on the tech side. The .dat extraction on this machine has
@@ -437,7 +442,7 @@ def head_commit() -> str:
     return json.loads(fetch(f"{API}/commits/master"))["sha"]
 
 
-def icon_indices(commit: str, techtree: dict, wanted: set) -> dict:
+def icon_indices(commit: str, techtree: dict, wanted: set, local_tree: Path | None = None) -> dict:
     """Resolve ("Unit", 5) -> picture_index, which is what img/Unit/<n>.png is keyed by.
 
     data.json carries no icon id; the per-civ tree files do, so read them until
@@ -447,8 +452,13 @@ def icon_indices(commit: str, techtree: dict, wanted: set) -> dict:
     for name in sorted(techtree["civs"]):
         if len(found) == len(wanted):
             break
-        url = f"https://raw.githubusercontent.com/{REPO}/{commit}/data/trees/{name.upper()}.json"
-        for node in walk(json.loads(fetch(url))):
+        if local_tree:
+            tree_path = local_tree / "data" / "trees" / f"{name.upper()}.json"
+            raw = tree_path.read_bytes()
+        else:
+            url = f"https://raw.githubusercontent.com/{REPO}/{commit}/data/trees/{name.upper()}.json"
+            raw = fetch(url)
+        for node in walk(json.loads(raw)):
             key = (node.get("use_type"), node.get("node_id"))
             if key in wanted and key not in found:
                 found[key] = (node["picture_index"], node["name"])
@@ -726,6 +736,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--civdata", type=Path, help="Aoe2Planner civdata.json to cross-check against")
     parser.add_argument("--commit", help="pin to this aoe2techtree commit instead of master")
+    parser.add_argument("--local-tree", type=Path,
+                        help="use an aoe2techtree checkout generated from local game files")
     args = parser.parse_args()
 
     for spec in TOPICS:
@@ -733,9 +745,12 @@ def main() -> int:
             print(f"{spec['id']}: more than {MAX_UPGRADES} upgrades", file=sys.stderr)
             return 1
 
-    commit = args.commit or head_commit()
+    commit = args.commit or ("local-game-data" if args.local_tree else head_commit())
     print(f"aoe2techtree @ {commit}")
-    techtree = json.loads(fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/data.json"))
+    if args.local_tree:
+        techtree = json.loads((args.local_tree / "data" / "data.json").read_bytes())
+    else:
+        techtree = json.loads(fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/data.json"))
 
     if args.civdata:
         problems = cross_check(techtree, args.civdata)
@@ -746,10 +761,12 @@ def main() -> int:
     wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
     wanted_nodes |= {spec["below"] for spec in TOPICS if spec.get("below")}
     wanted_nodes |= set(DEFENSE_LEVEL_NODES)
-    icons = icon_indices(commit, techtree, wanted_nodes)
+    icons = icon_indices(commit, techtree, wanted_nodes, args.local_tree)
 
     strings = json.loads(
-        fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/locales/en/strings.json")
+        (args.local_tree / "data" / "locales" / "en" / "strings.json").read_bytes()
+        if args.local_tree
+        else fetch(f"https://raw.githubusercontent.com/{REPO}/{commit}/data/locales/en/strings.json")
     )
     unknown = [name for name in techtree["civs"] if name not in CIV_ID]
     if unknown:
@@ -764,7 +781,9 @@ def main() -> int:
         "source": {
             "repo": REPO,
             "commit": commit,
-            "note": "civ availability extracted from the game's .dat by aoe2techtree",
+            "note": ("civ availability extracted from the September 22, 2026 game data"
+                     if args.local_tree else
+                     "civ availability extracted from the game's .dat by aoe2techtree"),
         },
         "civs": {
             name.lower(): {"name": name, "img": f"img/civs/{name.lower()}.png"}
@@ -781,7 +800,8 @@ def main() -> int:
     out.write_text(f"window.QUIZ_DATA = {body};\n", encoding="utf-8")
     print(f"{out.relative_to(ROOT)}: {len(data['civs'])} civs, {len(data['topics'])} topics")
 
-    download_images(commit, data)
+    if not args.local_tree:
+        download_images(commit, data)
     for topic in data["topics"]:
         counts = {}
         for civ in topic["civs"].values():

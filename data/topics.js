@@ -1,8 +1,8 @@
 window.QUIZ_DATA = {
  "source": {
   "repo": "SiegeEngineers/aoe2techtree",
-  "commit": "b9d494df6921d4080df69b22f9dbb7a4d1dcd9f0",
-  "note": "civ availability extracted from the game's .dat by aoe2techtree"
+  "commit": "local-game-data",
+  "note": "civ availability extracted from the September 22, 2026 game data"
  },
  "civs": {
   "armenians": {
@@ -56,6 +56,10 @@ window.QUIZ_DATA = {
   "cumans": {
    "name": "Cumans",
    "img": "img/civs/cumans.png"
+  },
+  "danes": {
+   "name": "Danes",
+   "img": "img/civs/danes.png"
   },
   "dravidians": {
    "name": "Dravidians",
@@ -169,6 +173,10 @@ window.QUIZ_DATA = {
    "name": "Saracens",
    "img": "img/civs/saracens.png"
   },
+  "saxons": {
+   "name": "Saxons",
+   "img": "img/civs/saxons.png"
+  },
   "shu": {
    "name": "Shu",
    "img": "img/civs/shu.png"
@@ -200,6 +208,10 @@ window.QUIZ_DATA = {
   "turks": {
    "name": "Turks",
    "img": "img/civs/turks.png"
+  },
+  "varangians": {
+   "name": "Varangians",
+   "img": "img/civs/varangians.png"
   },
   "vietnamese": {
    "name": "Vietnamese",
@@ -324,7 +336,7 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Chemistry and Hand Cannoneer available in Castle Age",
-      "Wagenburg Tactics (Gunpowder Units move +15% faster)"
+      "Wagenburg Tactics (Gunpowder Units move +10% faster)"
      ]
     },
     "britons": {
@@ -396,6 +408,15 @@ window.QUIZ_DATA = {
      "why": []
     },
     "cumans": {
+     "tier": "none",
+     "has": [
+      "tech-219"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "danes": {
      "tier": "none",
      "has": [
       "tech-219"
@@ -686,6 +707,15 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "none",
+     "has": [
+      "tech-219"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "none",
      "has": [
@@ -767,6 +797,15 @@ window.QUIZ_DATA = {
       "Gunpowder Units +25% HP",
       "Gunpowder Units train +25% faster"
      ]
+    },
+    "varangians": {
+     "tier": "none",
+     "has": [
+      "tech-219"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
      "tier": "none",
@@ -1073,6 +1112,22 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
+     ]
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-1258",
+      "unit-422",
+      "unit-548",
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)",
+      "Siege Weapons +2 line of sight"
      ]
     },
     "dravidians": {
@@ -1438,6 +1493,18 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "full",
+     "has": [
+      "unit-1258",
+      "unit-422",
+      "unit-548",
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "full",
      "has": [
@@ -1541,6 +1608,18 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-377"
      ],
+     "bonus": false,
+     "why": []
+    },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-1258",
+      "unit-422",
+      "unit-548",
+      "tech-377"
+     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -1711,7 +1790,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Wagenburg Tactics (Gunpowder Units move +15% faster)"
+      "Wagenburg Tactics (Gunpowder Units move +10% faster)"
      ]
     },
     "britons": {
@@ -1799,6 +1878,19 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": [
       "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
+     ]
+    },
+    "danes": {
+     "tier": "none",
+     "has": [
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)",
+      "Siege Weapons +2 line of sight"
      ]
     },
     "dravidians": {
@@ -2092,6 +2184,15 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "none",
+     "has": [
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "full",
      "has": [
@@ -2182,6 +2283,15 @@ window.QUIZ_DATA = {
       "Artillery (Bombard Towers, Bombard Cannons, Cannon Galleons +2 range)",
       "Gunpowder Units train +25% faster"
      ]
+    },
+    "varangians": {
+     "tier": "none",
+     "has": [
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
      "tier": "full",
@@ -2449,6 +2559,21 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
+     ]
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-279",
+      "unit-542",
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)",
+      "Siege Weapons +2 line of sight"
      ]
     },
     "dravidians": {
@@ -2790,6 +2915,17 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "full",
+     "has": [
+      "unit-279",
+      "unit-542",
+      "tech-377"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "none",
      "has": [
@@ -2884,6 +3020,17 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-377"
      ],
+     "bonus": false,
+     "why": []
+    },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-279",
+      "unit-542",
+      "tech-377"
+     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -3176,6 +3323,22 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Siege Workshop and Battering Ram available in Feudal Age; Capped Ram available in Castle Age"
+     ]
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-550",
+      "unit-588",
+      "tech-377",
+      "unit-280"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)",
+      "Siege Weapons +2 line of sight"
      ]
     },
     "dravidians": {
@@ -3541,6 +3704,19 @@ window.QUIZ_DATA = {
       "Counterweights (Trebuchets and Mangonel-line +15% attack)"
      ]
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-550",
+      "tech-377",
+      "unit-280"
+     ],
+     "missing": [
+      "unit-588"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -3643,6 +3819,19 @@ window.QUIZ_DATA = {
      "missing": [
       "unit-588",
       "tech-377"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-550",
+      "tech-377",
+      "unit-280"
+     ],
+     "missing": [
+      "unit-588"
      ],
      "bonus": false,
      "why": []
@@ -3986,6 +4175,21 @@ window.QUIZ_DATA = {
       "Archery Ranges and Stables cost -75 wood"
      ]
     },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "unit-24",
+      "tech-201",
+      "tech-219",
+      "tech-437",
+      "unit-4"
+     ],
+     "missing": [
+      "unit-492"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "dravidians": {
      "tier": "full",
      "has": [
@@ -4028,8 +4232,10 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Ordonnance Companies (Mounted Crossbowmen cost -40% gold)"
+     ]
     },
     "georgians": {
      "tier": "partial",
@@ -4411,6 +4617,20 @@ window.QUIZ_DATA = {
       "Foot Archers and Skirmishers +2 attack vs. buildings"
      ]
     },
+    "saxons": {
+     "tier": "full",
+     "has": [
+      "unit-24",
+      "unit-492",
+      "tech-201",
+      "tech-219",
+      "tech-437",
+      "unit-4"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "full",
      "has": [
@@ -4538,6 +4758,21 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-24",
+      "tech-201",
+      "tech-219",
+      "unit-4"
+     ],
+     "missing": [
+      "unit-492",
+      "tech-437"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "full",
      "has": [
@@ -4551,7 +4786,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Archery Range units and Fire Lancers +20% HP"
+      "Foot Archers and Skirmishers +20% HP"
      ]
     },
     "vikings": {
@@ -4568,7 +4803,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Bogsveigar (Archer-line and Longboats +1 attack)"
+      "Bogsveigar (Archer-line and Longships +1 attack)"
      ]
     },
     "wei": {
@@ -4846,6 +5081,18 @@ window.QUIZ_DATA = {
       "Archery Ranges and Stables cost -75 wood"
      ]
     },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-6",
+      "tech-201",
+      "tech-219",
+      "unit-7"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "dravidians": {
      "tier": "full",
      "has": [
@@ -5110,7 +5357,7 @@ window.QUIZ_DATA = {
      "why": [
       "Settlements can train Spearman-line and Skirmishers",
       "Infantry, Slingers and Skirmishers +5/10/15 HP in Feudal/Castle/Imperial Age",
-      "Malon (Bolas Riders, Slingers and Skirmishers deal pass through damage)",
+      "Malon (Bolas Riders, Slingers, and Skirmishers deal pass through damage)",
       "Spearman-line and Skirmishers +2 line of sight"
      ]
     },
@@ -5222,6 +5469,18 @@ window.QUIZ_DATA = {
       "Foot Archers and Skirmishers +2 attack vs. buildings"
      ]
     },
+    "saxons": {
+     "tier": "full",
+     "has": [
+      "unit-6",
+      "tech-201",
+      "tech-219",
+      "unit-7"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "full",
      "has": [
@@ -5326,6 +5585,18 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-6",
+      "tech-201",
+      "tech-219",
+      "unit-7"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "full",
      "has": [
@@ -5337,7 +5608,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Archery Range units and Fire Lancers +20% HP",
+      "Foot Archers and Skirmishers +20% HP",
       "Imperial Skirmisher upgrade available in Imperial Age"
      ]
     },
@@ -5382,13 +5653,14 @@ window.QUIZ_DATA = {
   },
   {
    "id": "cavalry_archer",
-   "name": "Cavalry Archer / Elephant Archer / Bolas Rider / Xianbei Raider",
+   "name": "Cavalry Archer / Mounted Crossbowman / Elephant Archer / Bolas Rider / Xianbei Raider",
    "group": "Archery Range",
    "icon": "img/topics/unit-39.png",
    "below": null,
    "unit": "unit-39",
    "gate": [
     "unit-39",
+    "unit-2700",
     "unit-873",
     "unit-2569",
     "unit-1952"
@@ -5396,12 +5668,18 @@ window.QUIZ_DATA = {
    "alts": {
     "unit-474": [
      "unit-474",
+     "unit-2701",
      "unit-875",
      "unit-2571",
      "unit-1952"
     ],
+    "tech-436": [
+     "tech-436",
+     "tech-1452"
+    ],
     "unit-39": [
      "unit-39",
+     "unit-2700",
      "unit-873",
      "unit-2569",
      "unit-1952"
@@ -5422,6 +5700,12 @@ window.QUIZ_DATA = {
      "name": "Cavalry Archer",
      "img": "img/topics/unit-39.png",
      "icon_index": 19
+    },
+    {
+     "id": "unit-2700",
+     "name": "Mounted Crossbowman",
+     "img": "img/topics/unit-2700.png",
+     "icon_index": 900
     },
     {
      "id": "unit-873",
@@ -5446,6 +5730,12 @@ window.QUIZ_DATA = {
      "name": "Heavy Cavalry Archer",
      "img": "img/topics/unit-474.png",
      "icon_index": 71
+    },
+    {
+     "id": "unit-2701",
+     "name": "Heavy Mounted Crossbowman",
+     "img": "img/topics/unit-2701.png",
+     "icon_index": 901
     },
     {
      "id": "unit-875",
@@ -5494,6 +5784,12 @@ window.QUIZ_DATA = {
      "name": "Parthian Tactics",
      "img": "img/topics/tech-436.png",
      "icon_index": 111
+    },
+    {
+     "id": "tech-1452",
+     "name": "Cranequins",
+     "img": "img/topics/tech-1452.png",
+     "icon_index": 56
     }
    ],
    "tiers": [
@@ -5509,6 +5805,7 @@ window.QUIZ_DATA = {
      "mark": "partial",
      "has": [
       "unit-39",
+      "unit-2700",
       "unit-873",
       "unit-2569",
       "unit-1952"
@@ -5520,10 +5817,12 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-39",
+      "unit-2700",
       "unit-873",
       "unit-2569",
       "unit-1952",
       "unit-474",
+      "unit-2701",
       "unit-875",
       "unit-2571",
       "tech-201",
@@ -5531,7 +5830,8 @@ window.QUIZ_DATA = {
       "tech-437",
       "tech-435",
       "tech-39",
-      "tech-436"
+      "tech-436",
+      "tech-1452"
      ]
     }
    ],
@@ -5604,8 +5904,9 @@ window.QUIZ_DATA = {
      "why": []
     },
     "bohemians": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
+      "unit-2700",
       "tech-201",
       "tech-219",
       "tech-39"
@@ -5622,16 +5923,16 @@ window.QUIZ_DATA = {
     "britons": {
      "tier": "partial",
      "has": [
-      "unit-39",
-      "unit-474",
+      "unit-2700",
+      "unit-2701",
       "tech-201",
       "tech-219",
-      "tech-39"
+      "tech-39",
+      "tech-1452"
      ],
      "missing": [
       "tech-437",
-      "tech-435",
-      "tech-436"
+      "tech-435"
      ],
      "bonus": true,
      "why": [
@@ -5658,7 +5959,7 @@ window.QUIZ_DATA = {
     "burgundians": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
       "tech-201",
       "tech-39"
      ],
@@ -5709,8 +6010,8 @@ window.QUIZ_DATA = {
     "celts": {
      "tier": "partial",
      "has": [
-      "unit-39",
-      "unit-474",
+      "unit-2700",
+      "unit-2701",
       "tech-219",
       "tech-39"
      ],
@@ -5727,7 +6028,6 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-39",
-      "unit-474",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -5735,6 +6035,7 @@ window.QUIZ_DATA = {
       "tech-39"
      ],
      "missing": [
+      "unit-474",
       "tech-436"
      ],
      "bonus": false,
@@ -5760,6 +6061,22 @@ window.QUIZ_DATA = {
       "Archery Ranges and Stables cost -75 wood",
       "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)"
      ]
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-2700",
+      "unit-2701",
+      "tech-201",
+      "tech-219",
+      "tech-437",
+      "tech-435",
+      "tech-39",
+      "tech-1452"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
     },
     "dravidians": {
      "tier": "partial",
@@ -5800,20 +6117,21 @@ window.QUIZ_DATA = {
     "franks": {
      "tier": "partial",
      "has": [
-      "unit-39",
-      "unit-474",
-      "tech-39"
+      "unit-2700",
+      "unit-2701",
+      "tech-39",
+      "tech-1452"
      ],
      "missing": [
       "tech-201",
       "tech-219",
       "tech-437",
-      "tech-435",
-      "tech-436"
+      "tech-435"
      ],
      "bonus": true,
      "why": [
-      "Mounted Units +20% HP starting in Feudal Age"
+      "Mounted Units +20% HP starting in Feudal Age",
+      "Ordonnance Companies (Mounted Crossbowmen cost -40% gold)"
      ]
     },
     "georgians": {
@@ -5928,7 +6246,7 @@ window.QUIZ_DATA = {
     "italians": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -6122,7 +6440,7 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Mounted Units generate +3 gold when defeating military units",
-      "Malon (Bolas Riders, Slingers and Skirmishers deal pass through damage)"
+      "Malon (Bolas Riders, Slingers, and Skirmishers deal pass through damage)"
      ]
     },
     "mayans": {
@@ -6200,8 +6518,8 @@ window.QUIZ_DATA = {
     "poles": {
      "tier": "partial",
      "has": [
-      "unit-39",
-      "unit-474",
+      "unit-2700",
+      "unit-2701",
       "tech-201",
       "tech-437",
       "tech-435",
@@ -6219,7 +6537,7 @@ window.QUIZ_DATA = {
     "portuguese": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -6266,6 +6584,22 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "full",
+     "has": [
+      "unit-2700",
+      "unit-2701",
+      "tech-201",
+      "tech-219",
+      "tech-437",
+      "tech-435",
+      "tech-39",
+      "tech-1452"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -6288,16 +6622,16 @@ window.QUIZ_DATA = {
     "sicilians": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
+      "unit-2701",
       "tech-201",
       "tech-435",
-      "tech-39"
+      "tech-39",
+      "tech-1452"
      ],
      "missing": [
-      "unit-474",
       "tech-219",
-      "tech-437",
-      "tech-436"
+      "tech-437"
      ],
      "bonus": false,
      "why": []
@@ -6322,8 +6656,8 @@ window.QUIZ_DATA = {
     "spanish": {
      "tier": "partial",
      "has": [
-      "unit-39",
-      "unit-474",
+      "unit-2700",
+      "unit-2701",
       "tech-201",
       "tech-219",
       "tech-437",
@@ -6359,19 +6693,21 @@ window.QUIZ_DATA = {
     "teutons": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
+      "unit-2701",
       "tech-219",
       "tech-435"
      ],
      "missing": [
-      "unit-474",
       "tech-201",
       "tech-437",
       "tech-39",
       "tech-436"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age"
+     ]
     },
     "tupi": {
      "tier": "none",
@@ -6409,6 +6745,25 @@ window.QUIZ_DATA = {
       "Sipahi (Mounted Archers +20 HP)"
      ]
     },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-2700",
+      "unit-2701",
+      "tech-201",
+      "tech-219",
+      "tech-435",
+      "tech-39",
+      "tech-1452"
+     ],
+     "missing": [
+      "tech-437"
+     ],
+     "bonus": true,
+     "why": [
+      "Bloodlines and Caravan effects +50%"
+     ]
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -6423,15 +6778,13 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-436"
      ],
-     "bonus": true,
-     "why": [
-      "Archery Range units and Fire Lancers +20% HP"
-     ]
+     "bonus": false,
+     "why": []
     },
     "vikings": {
      "tier": "partial",
      "has": [
-      "unit-39",
+      "unit-2700",
       "tech-201",
       "tech-219"
      ],
@@ -6770,6 +7123,23 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": false,
      "why": []
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-358",
+      "unit-359",
+      "tech-77",
+      "tech-75",
+      "tech-215",
+      "unit-93"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Hamask (Infantry deal more damage as they lose HP)"
+     ]
     },
     "dravidians": {
      "tier": "full",
@@ -7214,6 +7584,23 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-358",
+      "unit-359",
+      "tech-77",
+      "tech-215",
+      "unit-93"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Shield Wall (Infantry gain additional armor when massed)"
+     ]
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -7303,7 +7690,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age",
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age",
       "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
      ]
     },
@@ -7338,6 +7725,20 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-358",
+      "unit-359",
+      "tech-77",
+      "tech-75",
+      "tech-215",
+      "unit-93"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -7368,7 +7769,7 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Infantry +20% HP starting in Feudal Age",
-      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
+      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units)"
      ]
     },
     "wei": {
@@ -7770,6 +8171,25 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-77",
+      "unit-473",
+      "unit-567",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75",
+      "unit-75"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Hamask (Infantry deal more damage as they lose HP)"
+     ]
+    },
     "dravidians": {
      "tier": "full",
      "has": [
@@ -8024,12 +8444,12 @@ window.QUIZ_DATA = {
       "unit-77",
       "unit-473",
       "unit-567",
-      "tech-875",
       "tech-215",
       "tech-77",
       "unit-75"
      ],
      "missing": [
+      "tech-875",
       "tech-75"
      ],
      "bonus": true,
@@ -8268,6 +8688,25 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-77",
+      "unit-473",
+      "unit-567",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "unit-75"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Shield Wall (Infantry gain additional armor when massed)"
+     ]
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -8368,7 +8807,7 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": true,
      "why": [
-      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age",
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age",
       "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
      ]
     },
@@ -8408,6 +8847,23 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-77",
+      "unit-473",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75",
+      "unit-75"
+     ],
+     "missing": [
+      "unit-567"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -8426,22 +8882,23 @@ window.QUIZ_DATA = {
      "why": []
     },
     "vikings": {
-     "tier": "full",
+     "tier": "partial",
      "has": [
       "unit-77",
       "unit-473",
       "unit-567",
-      "tech-875",
       "tech-215",
       "tech-77",
       "tech-75",
       "unit-75"
      ],
-     "missing": [],
+     "missing": [
+      "tech-875"
+     ],
      "bonus": true,
      "why": [
       "Infantry +20% HP starting in Feudal Age",
-      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
+      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units)"
      ]
     },
     "wei": {
@@ -8484,7 +8941,7 @@ window.QUIZ_DATA = {
   },
   {
    "id": "eagle",
-   "name": "Eagle Scout / Fire Lancer / Temple Guard",
+   "name": "Eagle Scout / Fire Lancer / Temple Guard / Varangian Guard",
    "group": "Barracks",
    "icon": "img/topics/unit-751.png",
    "below": null,
@@ -8492,18 +8949,21 @@ window.QUIZ_DATA = {
    "gate": [
     "unit-751",
     "unit-1901",
-    "unit-2586"
+    "unit-2586",
+    "unit-2703"
    ],
    "alts": {
     "unit-752": [
      "unit-752",
      "unit-1903",
-     "unit-2587"
+     "unit-2587",
+     "unit-2704"
     ],
     "unit-751": [
      "unit-751",
      "unit-1901",
-     "unit-2586"
+     "unit-2586",
+     "unit-2703"
     ]
    },
    "upgrades": [
@@ -8533,6 +8993,12 @@ window.QUIZ_DATA = {
      "icon_index": 553
     },
     {
+     "id": "unit-2703",
+     "name": "Varangian Guard",
+     "img": "img/topics/unit-2703.png",
+     "icon_index": 902
+    },
+    {
      "id": "unit-752",
      "name": "Elite Eagle Warrior",
      "img": "img/topics/unit-752.png",
@@ -8549,6 +9015,12 @@ window.QUIZ_DATA = {
      "name": "Elite Temple Guard",
      "img": "img/topics/unit-2587.png",
      "icon_index": 554
+    },
+    {
+     "id": "unit-2704",
+     "name": "Elite Varangian Guard",
+     "img": "img/topics/unit-2704.png",
+     "icon_index": 903
     },
     {
      "id": "tech-875",
@@ -8589,7 +9061,8 @@ window.QUIZ_DATA = {
      "has": [
       "unit-751",
       "unit-1901",
-      "unit-2586"
+      "unit-2586",
+      "unit-2703"
      ]
     },
     {
@@ -8600,9 +9073,11 @@ window.QUIZ_DATA = {
       "unit-751",
       "unit-1901",
       "unit-2586",
+      "unit-2703",
       "unit-752",
       "unit-1903",
       "unit-2587",
+      "unit-2704",
       "tech-875",
       "tech-215",
       "tech-77",
@@ -8611,6 +9086,23 @@ window.QUIZ_DATA = {
     }
    ],
    "civs": {
+    "armenians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Fereters (Infantry (except Spearman-line) +30 HP; Warrior Priests heal +100% faster)",
+      "Infantry +2 line of sight"
+     ]
+    },
     "aztecs": {
      "tier": "full",
      "has": [
@@ -8625,6 +9117,140 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Garland Wars (Infantry +4 attack)"
+     ]
+    },
+    "bengalis": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "berbers": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bohemians": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "britons": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "bulgarians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "burgundians": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "burmese": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry +1/+2/+3 attack in Feudal/Castle/Imperial Age"
+     ]
+    },
+    "byzantines": {
+     "tier": "partial",
+     "has": [
+      "unit-2703",
+      "unit-2704",
+      "tech-875",
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Logistica (Cataphracts and Varangian Guards deal trample damage)"
+     ]
+    },
+    "celts": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-215"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry moves +5/10/15/20% faster in Dark/Feudal/Castle/Imperial Age",
+      "Stronghold (Castles and Watch Tower-line attack +33% faster; Castles heal allied Infantry in a 7 tile radius)"
      ]
     },
     "chinese": {
@@ -8642,6 +9268,204 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Fire Lancers and Fire Ships move +5/10% faster in Castle/Imperial Age"
+     ]
+    },
+    "cumans": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "unit-2703",
+      "unit-2704",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Barracks and Siege Workshop upgrades cost -66% gold",
+      "Varangian Guards and Longships move +10% faster",
+      "Hamask (Infantry deal more damage as they lose HP)"
+     ]
+    },
+    "dravidians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Barracks technologies cost -50%",
+      "Wootz Steel (Infantry and Cavalry attacks ignore armor)"
+     ]
+    },
+    "ethiopians": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "franks": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "georgians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "goths": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry costs -15/20/25/30% in Dark/Feudal/Castle/Imperial Age",
+      "Infantry +1/+2/+3 attack vs. buildings in Feudal/Castle/Imperial Age",
+      "Perfusion (Barracks work +100% faster)",
+      "Barracks work +20% faster"
+     ]
+    },
+    "gurjaras": {
+     "tier": "none",
+     "has": [
+      "tech-77"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-215",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "hindustanis": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "huns": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "incas": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": [
+      "Villagers affected by Infantry Blacksmith upgrades starting in Castle Age"
+     ]
+    },
+    "italians": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "japanese": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry attacks +33% faster starting in Feudal Age"
      ]
     },
     "jurchens": {
@@ -8679,21 +9503,111 @@ window.QUIZ_DATA = {
       "Infantry +2 attack vs. Ranged Soldiers"
      ]
     },
+    "khmer": {
+     "tier": "none",
+     "has": [
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-215",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "koreans": {
      "tier": "partial",
      "has": [
       "unit-1901",
       "unit-1903",
-      "tech-875",
       "tech-215",
       "tech-77"
      ],
      "missing": [
+      "tech-875",
       "tech-75"
      ],
      "bonus": true,
      "why": [
       "Ranged Soldiers and Infantry cost -50% wood"
+     ]
+    },
+    "lithuanians": {
+     "tier": "none",
+     "has": [
+      "tech-215"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "magyars": {
+     "tier": "none",
+     "has": [
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-215",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "malay": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry armor upgrades free"
+     ]
+    },
+    "malians": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": [
+      "Barracks Units +1/+2/+3 pierce armor in Feudal/Castle/Imperial Age"
+     ]
+    },
+    "mapuche": {
+     "tier": "none",
+     "has": [
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-215"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry, Slingers and Skirmishers +5/10/15 HP in Feudal/Castle/Imperial Age"
      ]
     },
     "mayans": {
@@ -8713,6 +9627,20 @@ window.QUIZ_DATA = {
       "Holcans (Eagle Warriors +40 HP)"
      ]
     },
+    "mongols": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "muisca": {
      "tier": "partial",
      "has": [
@@ -8728,6 +9656,232 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "persians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "poles": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "portuguese": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-215"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "romans": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry armor upgrade effects are doubled"
+     ]
+    },
+    "saracens": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-2703",
+      "unit-2704",
+      "tech-875",
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "tech-75"
+     ],
+     "bonus": true,
+     "why": [
+      "Shield Wall (Infantry gain additional armor when massed)"
+     ]
+    },
+    "shu": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "sicilians": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "slavs": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Arson, Gambesons free",
+      "Druzhina (Infantry deals trample damage)"
+     ]
+    },
+    "spanish": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "tatars": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "teutons": {
+     "tier": "none",
+     "has": [
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age",
+      "Crenellations (Castles +3 range, garrisoned Infantry fires arrows)"
+     ]
+    },
+    "tupi": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": [
+      "Archery Range and Barracks upgrades cost -50% food"
+     ]
+    },
+    "turks": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-2703",
+      "unit-2704",
+      "tech-875",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Varangian Guards attack +25% faster and generate +50% gold",
+      "Gothikon (Varangian Guards throw axes periodically)"
+     ]
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -8740,9 +9894,55 @@ window.QUIZ_DATA = {
       "tech-875",
       "tech-75"
      ],
+     "bonus": false,
+     "why": []
+    },
+    "vikings": {
+     "tier": "partial",
+     "has": [
+      "unit-2703",
+      "unit-2704",
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "tech-875"
+     ],
      "bonus": true,
      "why": [
-      "Archery Range units and Fire Lancers +20% HP"
+      "Infantry +20% HP starting in Feudal Age",
+      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units)"
+     ]
+    },
+    "wei": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875",
+      "tech-77"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "wu": {
+     "tier": "none",
+     "has": [
+      "tech-215",
+      "tech-77",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-752",
+      "tech-875"
+     ],
+     "bonus": false,
+     "why": [
+      "Infantry regenerates 10/15/30 HP per minute in Feudal/Castle/Imperial Age"
      ]
     }
    }
@@ -9069,6 +10269,22 @@ window.QUIZ_DATA = {
       "Archery Ranges and Stables cost -75 wood",
       "Steppe Husbandry (Scout Cavalry-line, Steppe Lancers and Cavalry Archers train +100% faster)"
      ]
+    },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "unit-546",
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75",
+      "unit-448"
+     ],
+     "missing": [
+      "unit-441"
+     ],
+     "bonus": false,
+     "why": []
     },
     "dravidians": {
      "tier": "partial",
@@ -9532,6 +10748,22 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-546",
+      "unit-441",
+      "tech-435",
+      "tech-39",
+      "unit-448"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -9625,7 +10857,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": false,
      "why": [
-      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age"
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age"
      ]
     },
     "tupi": {
@@ -9656,6 +10888,23 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Scout Cavalry-line +1 pierce armor and upgrades free"
+     ]
+    },
+    "varangians": {
+     "tier": "full",
+     "has": [
+      "unit-546",
+      "unit-441",
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75",
+      "unit-448"
+     ],
+     "missing": [],
+     "bonus": true,
+     "why": [
+      "Bloodlines and Caravan effects +50%"
      ]
     },
     "vietnamese": {
@@ -10068,6 +11317,21 @@ window.QUIZ_DATA = {
       "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age",
       "Archery Ranges and Stables cost -75 wood"
      ]
+    },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "unit-38",
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-569"
+     ],
+     "bonus": false,
+     "why": []
     },
     "dravidians": {
      "tier": "none",
@@ -10507,6 +11771,21 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-38",
+      "tech-435",
+      "tech-39"
+     ],
+     "missing": [
+      "unit-569",
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -10597,7 +11876,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": true,
      "why": [
-      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age"
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age"
      ]
     },
     "tupi": {
@@ -10627,6 +11906,25 @@ window.QUIZ_DATA = {
      ],
      "bonus": false,
      "why": []
+    },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-38",
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-569"
+     ],
+     "bonus": true,
+     "why": [
+      "Bloodlines and Caravan effects +50%",
+      "Vendel Legacy (Knight-line deals trample damage)",
+      "Knight-line +1 attack vs. Infantry"
+     ]
     },
     "vietnamese": {
      "tier": "partial",
@@ -10975,6 +12273,20 @@ window.QUIZ_DATA = {
      "why": [
       "Mounted Units move +5/10/15% faster in Feudal/Castle/Imperial Age"
      ]
+    },
+    "danes": {
+     "tier": "none",
+     "has": [
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-330"
+     ],
+     "bonus": false,
+     "why": []
     },
     "dravidians": {
      "tier": "none",
@@ -11394,6 +12706,20 @@ window.QUIZ_DATA = {
       "Camel Units +25% HP"
      ]
     },
+    "saxons": {
+     "tier": "none",
+     "has": [
+      "tech-435",
+      "tech-39"
+     ],
+     "missing": [
+      "unit-330",
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "none",
      "has": [
@@ -11477,7 +12803,7 @@ window.QUIZ_DATA = {
      ],
      "bonus": false,
      "why": [
-      "Barracks and Stable Units +1/+2 melee armor in Castle/Imperial Age"
+      "Infantry and Mounted Units +1/+2 melee armor in Castle/Imperial Age"
      ]
     },
     "tupi": {
@@ -11506,6 +12832,22 @@ window.QUIZ_DATA = {
      "missing": [],
      "bonus": false,
      "why": []
+    },
+    "varangians": {
+     "tier": "none",
+     "has": [
+      "tech-435",
+      "tech-39",
+      "tech-80",
+      "tech-75"
+     ],
+     "missing": [
+      "unit-330"
+     ],
+     "bonus": false,
+     "why": [
+      "Bloodlines and Caravan effects +50%"
+     ]
     },
     "vietnamese": {
      "tier": "none",
@@ -12276,6 +13618,23 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "unit-125",
+      "tech-316",
+      "tech-230",
+      "tech-252",
+      "tech-438",
+      "tech-233",
+      "tech-231"
+     ],
+     "missing": [
+      "tech-319"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "dravidians": {
      "tier": "partial",
      "has": [
@@ -12708,7 +14067,6 @@ window.QUIZ_DATA = {
      "tier": "partial",
      "has": [
       "unit-125",
-      "tech-316",
       "tech-230",
       "tech-252",
       "tech-438",
@@ -12716,6 +14074,7 @@ window.QUIZ_DATA = {
       "tech-231"
      ],
      "missing": [
+      "tech-316",
       "tech-233"
      ],
      "bonus": false,
@@ -12754,6 +14113,25 @@ window.QUIZ_DATA = {
      "bonus": true,
      "why": [
       "Bimaristan (Monks passively heal multiple nearby units)"
+     ]
+    },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "unit-125",
+      "tech-316",
+      "tech-230",
+      "tech-438",
+      "tech-319",
+      "tech-233",
+      "tech-231"
+     ],
+     "missing": [
+      "tech-252"
+     ],
+     "bonus": true,
+     "why": [
+      "Clerical Recruitment (Monks +1 conversion range; train +33% faster)"
      ]
     },
     "shu": {
@@ -12896,6 +14274,23 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "unit-125",
+      "tech-252",
+      "tech-438",
+      "tech-319",
+      "tech-233"
+     ],
+     "missing": [
+      "tech-316",
+      "tech-230",
+      "tech-231"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "vietnamese": {
      "tier": "partial",
      "has": [
@@ -12928,9 +14323,7 @@ window.QUIZ_DATA = {
       "tech-231"
      ],
      "bonus": false,
-     "why": [
-      "Chieftains (Infantry +5 attack vs. Cavalry, +4 vs. Camel Units; generate +5 gold when defeating Villagers, Trade Units and Monks)"
-     ]
+     "why": []
     },
     "wei": {
      "tier": "partial",
@@ -13408,6 +14801,29 @@ window.QUIZ_DATA = {
      "missing": [
       "tech-201"
      ],
+     "bonus": false,
+     "why": []
+    },
+    "danes": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
      "bonus": false,
      "why": []
     },
@@ -14083,6 +15499,30 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "tech-77",
+      "tech-219",
+      "tech-201",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [
+      "tech-80",
+      "tech-75"
+     ],
+     "bonus": false,
+     "why": []
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -14251,6 +15691,29 @@ window.QUIZ_DATA = {
      "why": []
     },
     "turks": {
+     "tier": "full",
+     "has": [
+      "tech-77",
+      "tech-80",
+      "tech-219",
+      "tech-201",
+      "tech-75",
+      "tech-74",
+      "tech-76",
+      "tech-81",
+      "tech-82",
+      "tech-211",
+      "tech-212",
+      "tech-199",
+      "tech-200",
+      "tech-67",
+      "tech-68"
+     ],
+     "missing": [],
+     "bonus": false,
+     "why": []
+    },
+    "varangians": {
      "tier": "full",
      "has": [
       "tech-77",
@@ -14711,6 +16174,25 @@ window.QUIZ_DATA = {
       "Cuman Mercenaries (All team members can train 5 free Elite Kipchaks per Castle)"
      ]
     },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-51",
+      "tech-194",
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Loot 25% of the resource cost of each destroyed building",
+      "Northmen's Fury (Mangonel-line and Catapult Galleons +1 range; Siege Weapons and Siege Warships +40% attack vs buildings)"
+     ]
+    },
     "dravidians": {
      "tier": "partial",
      "has": [
@@ -15037,12 +16519,12 @@ window.QUIZ_DATA = {
     "mapuche": {
      "tier": "partial",
      "has": [
+      "tech-51",
       "tech-608",
       "tech-379",
       "tech-64"
      ],
      "missing": [
-      "tech-51",
       "tech-63",
       "tech-201",
       "tech-194"
@@ -15182,6 +16664,26 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-63",
+      "tech-608",
+      "tech-201",
+      "tech-194",
+      "tech-379"
+     ],
+     "missing": [
+      "tech-64"
+     ],
+     "bonus": true,
+     "why": [
+      "Foot Soldiers cost -5% per Town Center or Castle controlled (maximum -20%)",
+      "Towers and Castles fire +100% base arrows starting in Castle Age",
+      "Shield Wall (Infantry gain additional armor when massed)"
+     ]
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -15320,6 +16822,22 @@ window.QUIZ_DATA = {
      "why": [
       "Artillery (Bombard Towers, Bombard Cannons, Cannon Galleons +2 range)"
      ]
+    },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "tech-51",
+      "tech-201",
+      "tech-194"
+     ],
+     "missing": [
+      "tech-63",
+      "tech-608",
+      "tech-379",
+      "tech-64"
+     ],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
      "tier": "partial",
@@ -15541,6 +17059,13 @@ window.QUIZ_DATA = {
       "building-79",
       "tech-50"
      ],
+     "danes": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "tech-50"
+     ],
      "dravidians": [
       "building-79",
       "building-234",
@@ -15694,7 +17219,8 @@ window.QUIZ_DATA = {
      "mapuche": [
       "building-79",
       "building-117",
-      "tech-50"
+      "tech-50",
+      "tech-51"
      ],
      "mayans": [
       "building-79",
@@ -15760,6 +17286,15 @@ window.QUIZ_DATA = {
       "building-155",
       "tech-50"
      ],
+     "saxons": [
+      "building-79",
+      "building-234",
+      "building-235",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
      "shu": [
       "building-79",
       "building-234",
@@ -15819,12 +17354,21 @@ window.QUIZ_DATA = {
       "tech-50",
       "tech-51"
      ],
+     "varangians": [
+      "building-79",
+      "building-234",
+      "building-117",
+      "building-155",
+      "tech-50",
+      "tech-51"
+     ],
      "vietnamese": [
       "building-79",
       "building-234",
       "building-235",
       "building-117",
-      "building-155"
+      "building-155",
+      "tech-50"
      ],
      "vikings": [
       "building-79",
@@ -16106,6 +17650,19 @@ window.QUIZ_DATA = {
      ],
      "missing": [
       "tech-279"
+     ],
+     "bonus": false,
+     "why": []
+    },
+    "danes": {
+     "tier": "partial",
+     "has": [
+      "tech-182",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-12",
+      "tech-221"
      ],
      "bonus": false,
      "why": []
@@ -16486,6 +18043,21 @@ window.QUIZ_DATA = {
      "bonus": false,
      "why": []
     },
+    "saxons": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-182"
+     ],
+     "missing": [
+      "tech-279"
+     ],
+     "bonus": true,
+     "why": [
+      "Mills, Lumber- and Mining Camps provide +35 food and +10 stone when built"
+     ]
+    },
     "shu": {
      "tier": "partial",
      "has": [
@@ -16599,6 +18171,19 @@ window.QUIZ_DATA = {
      "why": [
       "Gold miners work +25% faster"
      ]
+    },
+    "varangians": {
+     "tier": "partial",
+     "has": [
+      "tech-12",
+      "tech-221",
+      "tech-279"
+     ],
+     "missing": [
+      "tech-182"
+     ],
+     "bonus": false,
+     "why": []
     },
     "vietnamese": {
      "tier": "partial",

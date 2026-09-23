@@ -326,7 +326,7 @@ function mergeUnitTopics(ids, presentation) {
 
 function mergeBarracksTopics() {
   mergeUnitTopics(["champion", "halberdier", "eagle"], {
-    id: "barracks_units", name: "Long Swordsman / Halberdier / Eagle Warrior", group: "Barracks",
+    id: "barracks_units", name: "Long Swordsman / Halberdier / Regional Barracks units", group: "Barracks",
     icon: "img/topics/building-barracks.png",
   });
 }

@@ -124,7 +124,7 @@ means three cards.
 
 That order is the whole of it, and the first version had it wrong: letting due
 cards back into the general draw instead of taking them put a card answered
-wrong **26 cards** later, because it was one of 53 the draw could equally have
+wrong **28 cards** later, because it was one of 56 the draw could equally have
 picked.
 
 **Every third card is a new one** while any card is still unseen, whatever is
@@ -168,7 +168,7 @@ draw, because there is nothing else to deal — rare is not impossible.
 
 **Never answered is its own state**, not 0% — the entry is kept even when a card
 falls to nothing, so "keeps failing" and "never seen" are different things. The
-menu and the bar count the second sort: *53 cards, 8% known, 43 new*. The
+menu and the bar count the second sort: *56 cards, 8% known, 46 new*. The
 appointments themselves are for the session only; the percentages are what
 learning remembers, and a spacing from yesterday means nothing today.
 
@@ -210,7 +210,7 @@ record.
 
 Those percentages live in `localStorage` (`aoe2-techquiz.known`), **not** in a
 cookie: a cookie is capped around 4KB and is sent to the server on every
-request, and 19 topics × 53 civilisations do not fit in one. Nothing leaves the
+request, and 20 topics × 56 civilisations do not fit in one. Nothing leaves the
 browser either way. Cards at nothing are dropped rather than stored, so a fresh
 start is an empty object.
 
@@ -231,7 +231,7 @@ cleared store is another board.
 ## How a round is dealt
 
 A civilisation comes up **once** per topic, so the pool is one pass over the
-civilisations — 53 cards on a topic every civ can be asked about. Every civ is
+civilisations — 56 cards on a topic every civ can be asked about. Every civ is
 worth asking, including the ones with no unit at all: "what does it have",
 answered with a ✗ and the techs it owns anyway, is exactly the fact worth
 knowing.
@@ -306,7 +306,7 @@ the card asks for one of them rather than marking the other as missing.
 **A slot wears every unit that can fill it, everywhere it is drawn**: the menu
 tile, the corner of the card, the board and the card back all show
 the same split. A board drawn with the civ's own Winged Hussar on it would have
-answered the card before you did, so every card looks the same for all 53 and
+answered the card before you did, so every card looks the same for all 56 and
 the tick on the back says only that the civ has *one* of them. The units that
 stand in for each other are the Gurjaras' **Elephant Archer**, the Mapuche's
 **Bolas Rider**, the Muisca's **Temple Guard**, the Champi Warrior, the Fire
@@ -373,17 +373,24 @@ on screen — `svh`, the height with the browser's toolbars *out*.
 
 `data/topics.js` is generated, not written by hand. Its source is
 [SiegeEngineers/aoe2techtree](https://github.com/SiegeEngineers/aoe2techtree),
-which extracts the tech tree from the game's own `.dat` file, pinned to a commit.
+which extracts the tech tree from the game's own `.dat` file. The committed data
+was generated from the September 22, 2026 game data so the Viking Sagas civs,
+regional units, and Cranequins are available before the upstream snapshot is
+updated.
 
 ```powershell
 python tools/build_data.py
+python tools/build_data.py --local-tree <path>/aoe2techtree
 python tools/build_data.py --civdata <path>/aoe2planner/gamedata/civdata.json
 ```
+
+The local form reads `data/data.json`, `data/trees`, and the English strings
+created by aoe2techtree's extraction scripts.
 
 The second form cross-checks every civ against a second, independent extraction
 of the same `.dat` and refuses to write anything if the two disagree — that
 disagreement would mean one of them is from a different patch. Forty-one of the
-gates pass for all 53 civilisations.
+gates pass for all 56 civilisations.
 
 Twenty-five do not, and all twenty-five are *regional* or *unique* units — the
 Savar, the Shrivamsha Rider, the Eagle, the Battle Elephant, the Steppe Lancer,
@@ -391,14 +398,14 @@ the Champi, the Fire Lancer, the Temple Guard, the Winged Hussar, the Camel
 Rider, the Elephant Archer, the Bolas Rider, the Xianbei Raider, the Traction
 Trebuchet, the Siege Elephant and their
 elites. Their enabling techs sit in no civilisation's disabled list, so reading
-the `.dat`'s enable side hands each of them to all 53; each disagreed for 40 to
-52 civs, where every other gate agreed for all 53. Those are marked `None` in
+the `.dat`'s enable side hands each of them to all 56; each disagreed for many
+civs, where every other gate agreed for all 56. Those are marked `None` in
 `UNIT_ENABLER` and rest on aoe2techtree alone.
 
 One *tech* is the same story and is listed in `UNSETTLED_TECHS`: the Khitans farm
 from Pastures, and the `.dat` extraction on this machine has never heard of that
 line, so nothing turns **Transhumance** off for anybody and the enable side hands
-it to all 53 -- it disagreed for exactly the 52 civs that do not have it. Its
+it to all 56 -- it disagreed for exactly the civs that do not have it. Its
 name is worth knowing twice: `data.json` calls it *Grazing Grasslands* and only
 the per-civ tree files carry the name the game shows.
 
