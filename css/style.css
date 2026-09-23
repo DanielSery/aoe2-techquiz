@@ -182,6 +182,52 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   padding-bottom: max(6px, env(safe-area-inset-bottom));
 }
 
+.menu-actions .player-name {
+  min-width: 0;
+  max-width: 150px;
+  padding-inline: 12px;
+}
+
+.player-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-dialog {
+  width: min(360px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  background: var(--panel);
+  color: inherit;
+  box-shadow: 0 18px 60px #000b;
+}
+
+.player-dialog::backdrop { background: #000b; }
+
+.player-dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+}
+
+.player-dialog h2 { margin: 0; color: var(--gold); font-size: 19px; }
+.player-dialog p { margin: 0; color: #a8967f; font-size: 13px; line-height: 1.45; }
+.player-dialog label { margin-top: 5px; font-size: 12px; font-weight: 700; }
+.player-dialog input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: inherit;
+  font: inherit;
+}
+.player-dialog .form-error { min-height: 18px; color: var(--none); }
+.player-dialog .actions { justify-content: flex-end; margin-top: 4px; }
+
 
 /* forty cards against the clock, or as long as you like: the two are different
    games rather than two lengths of the same one, so they sit apart from the
@@ -1655,6 +1701,15 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .scoreboard .place { width: 20px; color: #8a7a64; font-size: 12px; text-align: right; }
+.scoreboard .player {
+  width: 110px;
+  overflow: hidden;
+  color: #e2d4c0;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .scoreboard .tally { width: 62px; color: var(--gold); font-size: 16px; font-weight: 700; }
 .scoreboard .of { width: 46px; color: #a8967f; font-size: 12px; }
 .scoreboard .when { margin-left: auto; color: #8a7a64; font-size: 11px; }
@@ -1667,3 +1722,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .scoreboard .badge .split img { border-radius: 0; }
 .scoreboard .topics em { font-style: normal; font-size: 11px; color: #8a7a64; }
 .scoreboard .format-tag { color: #a8967f; font-size: 9px; font-style: normal; text-transform: capitalize; }
+
+@media (max-width: 520px) {
+  .scoreboard .player { width: 90px; }
+  .scoreboard .topics { display: none; }
+}

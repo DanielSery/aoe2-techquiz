@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AoE2 Tech Quiz</title>
 <meta name="description" content="Learn which Age of Empires II civilisations have which units and upgrades.">
-<link rel="stylesheet" href="css/style.css?v=44">
+<link rel="stylesheet" href="css/style.css?v=45">
 <link rel="icon" href="img/topics/unit-5.png">
 </head>
 <body>
@@ -24,7 +24,6 @@
   <symbol id="icon-star" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.2 6.1L12 16.8 6.6 19.7l1.2-6.1L3.3 9.4l6.1-.8z" fill="currentColor"/></symbol>
   <symbol id="icon-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
   <symbol id="icon-custom" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
-  <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="icon-single" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="icon-all" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor"/></symbol>
 </svg>
@@ -65,8 +64,8 @@
     <p id="pool-note" class="pool-note"></p>
 
     <div class="menu-actions">
-      <button id="clear-data" class="ghost danger" title="Clear all saved data"><svg><use href="#icon-trash"/></svg></button>
-      <button id="to-board" class="ghost" title="Best rounds"><svg><use href="#icon-board"/></svg></button>
+      <button id="player-name" class="ghost player-name" title="Set player name"><span>Choose name</span></button>
+      <button id="to-board" class="ghost" title="Global leaderboard"><svg><use href="#icon-board"/></svg></button>
       <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
     </div>
   </section>
@@ -97,7 +96,7 @@
     </div>
     <div id="review" class="review"></div>
     <div class="actions">
-      <button id="see-board" class="ghost" title="Best rounds" hidden><svg><use href="#icon-board"/></svg></button>
+      <button id="see-board" class="ghost" title="Global leaderboard" hidden><svg><use href="#icon-board"/></svg></button>
       <button id="again-wrong" class="primary"><svg><use href="#icon-replay"/></svg><span id="wrong-count"></span></button>
       <button id="again-all" class="ghost"><svg><use href="#icon-replay"/></svg><span id="all-count"></span></button>
       <button id="to-menu" class="ghost"><svg><use href="#icon-home"/></svg></button>
@@ -105,7 +104,7 @@
   </section>
 
   <section id="scores" class="screen">
-    <h2 class="board-title"><svg><use href="#icon-board"/></svg> Best rounds</h2>
+    <h2 class="board-title"><svg><use href="#icon-board"/></svg> Global leaderboard</h2>
     <ol id="scoreboard" class="scoreboard"></ol>
     <div class="actions">
       <button id="board-back" class="ghost"><svg><use href="#icon-home"/></svg></button>
@@ -114,6 +113,20 @@
 
 </main>
 
+<dialog id="player-dialog" class="player-dialog">
+  <form id="player-form">
+    <h2>Choose your player name</h2>
+    <p>This name is saved only in this browser and shown with your scores.</p>
+    <label for="player-input">Player name</label>
+    <input id="player-input" name="player" type="text" minlength="2" maxlength="24" autocomplete="nickname" required>
+    <p id="player-error" class="form-error" role="alert"></p>
+    <div class="actions">
+      <button id="player-cancel" type="button" class="ghost">Cancel</button>
+      <button id="player-submit" type="submit" class="primary">Save name</button>
+    </div>
+  </form>
+</dialog>
+
 <footer>
   Game data from <a href="https://github.com/SiegeEngineers/aoe2techtree">aoe2techtree</a>.
   Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
@@ -121,6 +134,8 @@
 
 <script src="data/topics.js?v=44"></script>
 <script src="js/data.js?v=44"></script>
-<script src="js/app.js?v=44"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js?v=1"></script>
+<script src="js/app.js?v=50"></script>
 </body>
 </html>

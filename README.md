@@ -129,12 +129,15 @@ claimed charged as ever, so the clock costs exactly what pressing ✔ blind woul
 Forty whatever the topics: a selection bigger than forty is drawn from at
 random, a smaller one is simply all of it.
 
-At the end of the round every topic it could have drawn on is worth **+50**
-(`PER_TOPIC`). Forty cards of Crossbowman is a narrower thing to know than forty
-drawn from all twenty topics, and without that the two would score the same;
-the results screen shows the bonus on its own line rather than folding it into
-the last card. It lands once, only on a full round — a retry of the ones you
-missed is a different, easier round and is not scored against the others.
+Full Play rounds multiply their final net score by a difficulty coefficient.
+With one question format, the first topic is the **×1.00** baseline and every
+additional topic adds **25%**. Two formats make the first topic **×1.05**, then
+every additional topic adds **30%**. All three formats make the first topic
+**×1.10**, then every additional topic adds **35%**. For example, two topics are
+×1.25 with one format, ×1.35 with two, and ×1.45 with three. The menu shows the
+coefficient before the round and the results show the calculation. A retry of
+missed cards is a different, easier round, so it does not receive the coefficient
+or enter the leaderboard.
 
 **Learn** has no length and no clock. It stops when you go back to the menu, and
 the bar along the top is how much of the selection you know.
@@ -238,23 +241,23 @@ record.
 
 Those percentages live in `localStorage` (`aoe2-techquiz.known`), **not** in a
 cookie: a cookie is capped around 4KB and is sent to the server on every
-request, and 20 topics × 56 civilisations do not fit in one. Nothing leaves the
-browser either way. Cards at nothing are dropped rather than stored, so a fresh
-start is an empty object.
+request, and 20 topics × 56 civilisations do not fit in one. Learning progress
+never leaves the browser. Cards at nothing are dropped rather than stored, so a
+fresh start is an empty object.
 
 ## The board
 
-Every full round of Play is kept — score, how many you got right, **and the
-topics it was drawn from**, because a round of Crossbowman and a round of
-everything are both forty cards and only the topics say which was which. The
-best 25 are on it, reachable from the menu (🏆) and from the end of a round,
-where the one you have just played is outlined in gold.
+Every full round of Play is submitted to the global Supabase leaderboard with
+the player's name, score, correct count, topics and question format. The best 25
+are reachable from the menu (🏆) and from the end of a round; the round just
+played is outlined in gold when it is in the top 25.
 
-**The board is this browser's, by design.** It lives in `localStorage`
-(`aoe2-techquiz.scores`, one `{score, right, cards, topics, at}` per round) and
-nothing is sent anywhere — which keeps the game what it is: a static page with
-no backend, no account and no name to type. Another browser, another device or a
-cleared store is another board.
+There is no account or password. After a player's first full Play round, they
+may enter a display name and publish the score or cancel and keep the result
+private. The chosen name is stored only in their browser under
+`aoe2-techquiz.player`; later scores publish under it automatically without
+showing the dialog again. It can be changed from the menu. Names are not
+reserved or guaranteed unique.
 
 ## How a round is dealt
 
@@ -363,8 +366,9 @@ card is saved as you go.
 
 ## Playing it
 
-It is a static page with no build step and no dependencies. Opening
-`index.html` straight off disk works, and so does any web server:
+It is a static page with no build step. Opening `index.html` straight off disk
+works, and so does any web server. The Supabase browser client is loaded from
+jsDelivr:
 
 ```powershell
 python -m http.server 8080
@@ -372,6 +376,20 @@ python -m http.server 8080
 ```
 
 On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(root)`**.
+
+### Supabase leaderboard setup
+
+1. Create a Supabase project and run `supabase/schema.sql` in its SQL Editor.
+2. In **Project Settings → API**, copy the Project URL and publishable key into
+   `js/supabase-config.js`.
+3. Deploy the site. Never put a `service_role` or secret key in the browser.
+
+The schema enables RLS, grants the unauthenticated `anon` role only `SELECT` and
+`INSERT`, and provides no client-side update or delete access. Because there is
+deliberately no authentication, a determined visitor can still forge names and
+scores or automate submissions with the public API. Preventing that requires a
+trusted server or authentication; the database constraints here limit malformed
+rows, not cheating.
 
 The scripts and stylesheet are loaded with a `?v=` marker; bump it in
 `index.html` when you change them, or a plain reload can keep serving the old

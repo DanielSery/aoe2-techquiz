@@ -5,7 +5,7 @@ const MODE_KEY = "aoe2-techquiz.mode";
 const GAME_KEY = "aoe2-techquiz.game";
 const FORMAT_KEY = "aoe2-techquiz.format";
 const KNOWN_KEY = "aoe2-techquiz.known";
-const SCORES_KEY = "aoe2-techquiz.scores";
+const PLAYER_KEY = "aoe2-techquiz.player";
 const MODES = ["single", "custom", "all"];
 const GAMES = ["play", "learn"];
 const FORMATS = ["normal", "reverse", "difference"];
@@ -18,12 +18,6 @@ const AUTO_NEXT_MS = 30000;
 const PLAY_CARDS = 40;
 const CARD_SECONDS = 30;
 
-/* Forty cards drawn from one topic is a narrower thing to know than forty drawn
-   from nineteen, and the same score for both would say otherwise. Every topic
-   the round could draw on is worth this much at the end of it, so the board can
-   compare them -- and it shows which topics they were, because the number alone
-   still cannot. */
-const PER_TOPIC = 50;
 const TOP_SCORES = 25;
 
 /* Learn keeps a percentage per card and deals the ones you know least, so it
@@ -136,7 +130,13 @@ const state = {
   // changed under a finished round
   played: [],
   whole: false,
-  place: -1,
+  playerName: "",
+  lastScoreId: null,
+  scoreSubmission: null,
+  pendingScore: null,
+  publishAfterName: false,
+  resultCoefficientNote: "",
+  supabase: null,
   scores: [],
   timer: 0,
   wait: 0,
@@ -165,17 +165,22 @@ function start() {
   prepareUnitBlacksmithUpgrades();
   prepareDefenseControls();
   restoreSelection();
+  connectLeaderboard();
   renderMenu();
 
-  el("start").addEventListener("click", () =>
-    state.game === "learn" ? beginLearning() : beginRound(deckToPlay(), true)
-  );
+  el("start").addEventListener("click", startSelectedGame);
   el("quit").addEventListener("click", () => show("menu"));
   el("to-menu").addEventListener("click", () => show("menu"));
-  el("to-board").addEventListener("click", () => openBoardScreen(-1));
-  el("see-board").addEventListener("click", () => openBoardScreen(state.place));
+  el("to-board").addEventListener("click", () => openBoardScreen(null));
+  el("see-board").addEventListener("click", () => openBoardScreen(state.lastScoreId));
   el("board-back").addEventListener("click", () => show("menu"));
-  el("clear-data").addEventListener("click", clearAllData);
+  el("player-name").addEventListener("click", () => openPlayerDialog());
+  el("player-cancel").addEventListener("click", cancelPlayerDialog);
+  el("player-dialog").addEventListener("cancel", (event) => {
+    event.preventDefault();
+    cancelPlayerDialog();
+  });
+  el("player-form").addEventListener("submit", savePlayerName);
   el("again-all").addEventListener("click", () => beginRound(shuffle(state.fullDeck), true));
   el("again-wrong").addEventListener("click", () =>
     beginRound(
@@ -212,6 +217,78 @@ function start() {
     if (button) setFormat(button.dataset.format);
   });
   document.addEventListener("keydown", onKey);
+}
+
+function connectLeaderboard() {
+  const config = window.SUPABASE_CONFIG || {};
+  const configured =
+    /^https:\/\//.test(config.url || "") &&
+    !config.url.includes("YOUR_PROJECT") &&
+    config.publishableKey &&
+    config.publishableKey !== "YOUR_PUBLISHABLE_KEY";
+  if (!configured || !window.supabase?.createClient) return;
+  state.supabase = window.supabase.createClient(config.url, config.publishableKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
+}
+
+function startSelectedGame() {
+  if (state.game === "learn") return beginLearning();
+  beginRound(deckToPlay(), true);
+}
+
+function openPlayerDialog(publishScore = false) {
+  state.publishAfterName = publishScore;
+  const input = el("player-input");
+  input.value = state.playerName;
+  el("player-dialog").querySelector("h2").textContent = publishScore
+    ? "Publish your score"
+    : "Choose your player name";
+  el("player-submit").textContent = publishScore ? "Publish score" : "Save name";
+  el("player-error").textContent = "";
+  el("player-dialog").showModal();
+  requestAnimationFrame(() => input.focus());
+}
+
+function cancelPlayerDialog() {
+  const wasPublishing = state.publishAfterName;
+  state.publishAfterName = false;
+  state.pendingScore = null;
+  el("player-dialog").close();
+  if (wasPublishing) setResultNote(state.resultCoefficientNote, "score not published");
+}
+
+function savePlayerName(event) {
+  event.preventDefault();
+  const input = el("player-input");
+  const name = input.value.trim().replace(/\s+/g, " ");
+  if (name.length < 2 || name.length > 24) {
+    el("player-error").textContent = "Use between 2 and 24 characters.";
+    return;
+  }
+  state.playerName = name;
+  try {
+    localStorage.setItem(PLAYER_KEY, name);
+  } catch (ignored) {
+    /* private mode, or opened off disk */
+  }
+  const shouldPublish = state.publishAfterName;
+  state.publishAfterName = false;
+  el("player-dialog").close();
+  renderPlayerName();
+  if (shouldPublish) publishPendingScore();
+}
+
+function publishPendingScore() {
+  const entry = state.pendingScore;
+  state.pendingScore = null;
+  if (!entry || !state.supabase) return;
+  setResultNote(state.resultCoefficientNote, "submitting score…");
+  state.scoreSubmission = recordScore(entry);
+  state.scoreSubmission.then(
+    () => setResultNote(state.resultCoefficientNote, "score submitted"),
+    () => setResultNote(state.resultCoefficientNote, "score could not be submitted")
+  );
 }
 
 function normalizeChampionTopic() {
@@ -287,23 +364,6 @@ function mergeSiegeTopics() {
     id: "siege_units", name: "Ram / Onager / Scorpion", group: "Siege",
     icon: "img/topics/building-siege-workshop.png",
   });
-}
-
-function clearAllData() {
-  if (!window.confirm("Clear all saved progress, settings, and scores?")) return;
-  try {
-    for (const key of [STORE_KEY, MODE_KEY, GAME_KEY, FORMAT_KEY, KNOWN_KEY, SCORES_KEY]) localStorage.removeItem(key);
-  } catch (ignored) {
-    /* private mode, or opened off disk */
-  }
-  state.known = {};
-  state.scores = [];
-  state.due = {};
-  state.mode = "single";
-  state.game = "play";
-  state.formats = new Set(["normal"]);
-  state.selected = new Set(state.data.topics.slice(0, 1).map((topic) => topic.id));
-  renderMenu();
 }
 
 function mergeArcherTopics() {
@@ -486,8 +546,8 @@ function restoreSelection() {
     }
     const known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
     if (known && typeof known === "object") state.known = known;
-    const scores = JSON.parse(localStorage.getItem(SCORES_KEY) || "[]");
-    if (Array.isArray(scores)) state.scores = scores;
+    const playerName = (localStorage.getItem(PLAYER_KEY) || "").trim();
+    if (playerName.length >= 2 && playerName.length <= 24) state.playerName = playerName;
   } catch (ignored) {
     saved = [];
   }
@@ -611,17 +671,46 @@ function isNew(card) {
   return recordOf(card) === null;
 }
 
-/* Every round of Play that was the whole forty, best first. A retry of the ones
-   you missed is not one of them: it is a different and easier round, and putting
-   it beside the others would say they were comparable. */
-function recordScore(entry) {
-  state.scores = [...state.scores, entry].sort((a, b) => b.score - a.score).slice(0, TOP_SCORES);
-  try {
-    localStorage.setItem(SCORES_KEY, JSON.stringify(state.scores));
-  } catch (ignored) {
-    /* private mode, or opened off disk */
-  }
-  return state.scores.indexOf(entry);
+/* Only complete Play rounds reach the shared board. The public client may read
+   and insert, while the database denies updates and deletes. */
+async function recordScore(entry) {
+  if (!state.supabase) throw new Error("Leaderboard is not configured");
+  const { data, error } = await state.supabase
+    .from("scores")
+    .insert({
+      player_name: state.playerName,
+      score: entry.score,
+      right_answers: entry.right,
+      cards: entry.cards,
+      topics: entry.topics,
+      question_format: entry.format,
+    })
+    .select("id")
+    .single();
+  if (error) throw error;
+  state.lastScoreId = data.id;
+  return data.id;
+}
+
+async function loadScores() {
+  if (!state.supabase) throw new Error("Leaderboard is not configured");
+  const { data, error } = await state.supabase
+    .from("scores")
+    .select("id, player_name, score, right_answers, cards, topics, question_format, created_at")
+    .order("score", { ascending: false })
+    .order("created_at", { ascending: true })
+    .limit(TOP_SCORES);
+  if (error) throw error;
+  state.scores = data.map((entry) => ({
+    id: entry.id,
+    player: entry.player_name,
+    score: entry.score,
+    right: entry.right_answers,
+    cards: entry.cards,
+    topics: entry.topics,
+    format: entry.question_format,
+    at: entry.created_at,
+  }));
 }
 
 /* How well the selection is known as one number, for the menu and the bar. */
@@ -716,12 +805,26 @@ function renderMenu() {
     ? ""
     : learning
     ? `${pool.length} cards, ${knownShare(pool)}% known${fresh(pool)}`
-    : `${pool.length} cards to draw from, ${CARD_SECONDS}s each`;
+    : `${pool.length} cards to draw from, ${CARD_SECONDS}s each, points ×${scoreCoefficient().toFixed(2)}`;
+  renderPlayerName();
   markScrollable(grid);
+}
+
+function renderPlayerName() {
+  el("player-name").querySelector("span").textContent = state.playerName || "Choose name";
 }
 
 function playSize(pool) {
   return Math.min(PLAY_CARDS, pool.length);
+}
+
+/* With one question format the first topic is the baseline and every extra
+   topic adds 25%. Mixing formats adds a small 5%/10% to that first topic, then
+   every additional topic adds 30% with two formats or 35% with all three. */
+function scoreCoefficient(topicCount = state.selected.size, formatCount = state.formats.size) {
+  const rate = formatCount === 1 ? 0.25 : formatCount === 2 ? 0.3 : 0.35;
+  const formatBonus = formatCount === 1 ? 0 : formatCount === 2 ? 0.05 : 0.1;
+  return 1 + formatBonus + Math.max(0, topicCount - 1) * rate;
 }
 
 /* how many of them have never been answered at all */
@@ -1955,39 +2058,38 @@ function advance() {
 function showResults() {
   const right = state.results.filter(wasRight).length;
 
-  // The breadth bonus lands once, at the end, where it reads as its own line
-  // rather than disappearing into whichever card happened to be last.
   const topics = state.played.filter((id) => state.data.topics.some((topic) => topic.id === id));
   const whole = state.game === "play" && state.whole;
-  const bonus = whole ? topics.length * PER_TOPIC : 0;
-  if (bonus) bumpScore(bonus);
+  const baseScore = state.score;
+  const coefficient = whole ? scoreCoefficient(topics.length, state.formats.size) : 1;
+  const adjustedScore = Math.round(baseScore * coefficient);
+  const coefficientPoints = adjustedScore - baseScore;
+  if (coefficientPoints) bumpScore(coefficientPoints);
 
-  state.place = whole
-      ? recordScore({
-        score: state.score,
-        right,
-        cards: state.results.length,
-        topics,
-        format: state.formats.size > 1 ? "mixed" : [...state.formats][0],
-        at: Date.now(),
-      })
-    : -1;
+  state.lastScoreId = null;
+  const scoreEntry = {
+    score: state.score,
+    right,
+    cards: state.results.length,
+    topics,
+    format: state.formats.size > 1 ? "mixed" : [...state.formats][0],
+  };
+  state.scoreSubmission = null;
+  state.pendingScore = whole && state.supabase ? scoreEntry : null;
 
   el("final-score").textContent = state.score > 0 ? `+${state.score}` : `${state.score}`;
   el("final-tally").textContent = `${right} / ${state.results.length}`;
-  el("final-note").innerHTML = [
-    bonus
-      ? `${topics.length} ${topics.length === 1 ? "topic" : "topics"} &times; ${PER_TOPIC} = +${bonus}`
-      : "",
-    state.place === 0
-      ? `<b class="best">best yet</b>`
-      : state.place > 0
-      ? `<b>${ordinal(state.place + 1)} best</b>`
-      : "",
-  ]
-    .filter(Boolean)
-    .join(" &middot; ");
-  el("see-board").hidden = state.scores.length === 0;
+  const coefficientNote = coefficient !== 1
+    ? `${baseScore} &times; ${coefficient.toFixed(2)} = ${adjustedScore}`
+    : "";
+  state.resultCoefficientNote = coefficientNote;
+  const publishStatus = whole
+    ? state.supabase
+      ? state.playerName ? "submitting score…" : "choose a name to publish"
+      : "leaderboard not configured"
+    : "";
+  setResultNote(coefficientNote, publishStatus);
+  el("see-board").hidden = !state.supabase;
 
   const wrong = state.results.filter((result) => !wasRight(result));
   el("review").innerHTML = [...wrong, ...state.results.filter(wasRight)]
@@ -2009,16 +2111,26 @@ function showResults() {
   el("wrong-count").textContent = wrong.length ? `${wrong.length}` : "0";
   el("all-count").textContent = `${state.deck.length}`;
   show("results");
+  if (state.pendingScore) {
+    if (state.playerName) publishPendingScore();
+    else openPlayerDialog(true);
+  }
 }
 
-function ordinal(n) {
-  const tail = n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
-  return `${n}${tail}`;
+function setResultNote(coefficientNote, status) {
+  el("final-note").innerHTML = [coefficientNote, status].filter(Boolean).join(" &middot; ");
 }
 
-function openBoardScreen(highlight) {
-  renderScores(highlight);
+async function openBoardScreen(highlight) {
   show("scores");
+  el("scoreboard").innerHTML = `<li class="empty">Loading global scores…</li>`;
+  try {
+    if (state.scoreSubmission) await state.scoreSubmission.catch(() => null);
+    await loadScores();
+    renderScores(highlight || state.lastScoreId);
+  } catch (ignored) {
+    el("scoreboard").innerHTML = `<li class="empty">The global leaderboard is unavailable.</li>`;
+  }
 }
 
 /* The board is the scores and what they were scored on: a round of Crossbowman
@@ -2027,7 +2139,7 @@ function openBoardScreen(highlight) {
 function renderScores(highlight) {
   const board = el("scoreboard");
   if (!state.scores.length) {
-    board.innerHTML = `<li class="empty">No rounds yet — play forty and you are on it.</li>`;
+    board.innerHTML = `<li class="empty">No global scores yet — finish a Play round to be first.</li>`;
     return;
   }
   board.innerHTML = state.scores
@@ -2037,8 +2149,9 @@ function renderScores(highlight) {
         .filter(Boolean);
       const shown = topics.slice(0, 5);
       const more = topics.length - shown.length;
-      return `<li class="${i === highlight ? "mine" : ""}">
+      return `<li class="${entry.id === highlight ? "mine" : ""}">
         <b class="place">${i + 1}</b>
+        <span class="player" title="${escapeHtml(entry.player)}">${escapeHtml(entry.player)}</span>
         <span class="tally">${entry.score > 0 ? `+${entry.score}` : entry.score}</span>
         <span class="of">${entry.right}/${entry.cards}</span>
         <span class="topics" title="${topics.map((topic) => topic.name).join(", ")}">
@@ -2050,6 +2163,15 @@ function renderScores(highlight) {
       </li>`;
     })
     .join("");
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function when(at) {
