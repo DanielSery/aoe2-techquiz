@@ -96,6 +96,31 @@ Speed is only ever a bonus on a card you got completely right: a card you half
 knew is worth no more for being rushed. The clock is Play's; there is none in
 Learn, and no speed bonus with it.
 
+## Question formats
+
+The format buttons are independent toggles. Enable any combination; the deck
+contains one shuffled variant per enabled format, so enabling all three mixes
+Standard, Reverse, and Difference questions throughout the session. At least
+one format always remains enabled.
+
+**Standard** shows a civilisation and asks for its unit level and upgrades.
+
+**Reverse** shows the full configuration without naming the civilisation. It
+offers a shuffled set of eight civilisations and asks for every displayed
+civilisation with that exact configuration. Up to three matching answers are
+included, with the closest configurations used as distractors. The configuration
+lives on the card itself; each civilisation is marked right or wrong as soon as
+it is selected.
+
+**Difference** shows two civilisations and asks which unit levels and upgrade
+slots differ. It favors nearby configurations so the answer depends on the few
+details that distinguish otherwise similar tech trees. Every selected unit or
+technology is evaluated immediately, while Done reveals differences left out.
+
+Each format keeps its own learning record. Knowing a configuration when the
+civilisation is supplied does not automatically mark its reverse or comparison
+card as mastered.
+
 ## The two games
 
 **Play** is forty cards, **30 seconds** each. Run out of time and the card is
@@ -106,7 +131,7 @@ random, a smaller one is simply all of it.
 
 At the end of the round every topic it could have drawn on is worth **+50**
 (`PER_TOPIC`). Forty cards of Crossbowman is a narrower thing to know than forty
-drawn from all nineteen topics, and without that the two would score the same;
+drawn from all twenty topics, and without that the two would score the same;
 the results screen shows the bonus on its own line rather than folding it into
 the last card. It lands once, only on a full round — a retry of the ones you
 missed is a different, easier round and is not scored against the others.
@@ -173,12 +198,15 @@ appointments themselves are for the session only; the percentages are what
 learning remembers, and a spacing from yesterday means nothing today.
 
 The percentage moves in **shares, not steps**. A right answer closes part of the
-gap to 100, adjusted by how long that particular card took relative to its
-number of decisions. A fast answer can close a little more than the normal 70%
-share; a slow answer closes as little as 38.5%, so correctness without fluency
-keeps the card nearby. Recent response pace is smoothed with the card's previous
-pace so one lucky guess cannot make it look mastered. Wrong and half keep a
-share of what was there, so
+gap to 100, adjusted by its response pace. Pace separates recall from operating
+the board: it allows four seconds of thinking and subtracts **300ms for every
+selection click**. A card with many present upgrades can therefore still count
+as fluent when the player already knows it and is simply tapping the answers.
+A fast answer can close a little more than the normal 70% share; a slow answer
+closes as little as 38.5%, so correctness without fluency keeps the card nearby.
+Recent response pace is smoothed with the card's previous pace so one lucky
+guess cannot make it look mastered. Wrong and half keep a share of what was
+there, so
 forgetting is proportional too — a card at 91 answered wrong falls to 23, and a
 half answer to 55, rather than shrugging off a fixed ten. The three shares are
 `KNOWN_STEP`.

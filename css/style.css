@@ -515,6 +515,29 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   gap: clamp(3px, 2cqh, 8px);
 }
 
+.formats {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--edge);
+  border-radius: 9px;
+}
+
+.format {
+  min-height: 32px;
+  padding: 6px 11px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #8a7a64;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.format + .format { border-left: 1px solid var(--edge); }
+.format[aria-pressed="true"] { color: var(--gold); background: var(--panel-2); }
+
 .face.back > :not(.configuration-neighbors) { flex-shrink: 0; }
 .face.back .card-note:empty,
 .face.back .bonus-slot:empty { display: none; }
@@ -650,6 +673,26 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .face.back .emblem { width: clamp(24px, 12cqw, 40px); }
 .face.back .civ-name { font-size: clamp(12px, 5.5cqw, 17px); }
+
+.reverse-card-configuration {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 7cqw, 22px);
+  width: 100%;
+  padding: 8px 10px 16px;
+}
+
+.reverse-question { color: var(--gold); font-size: clamp(16px, 7cqw, 22px); font-weight: 600; text-align: center; }
+.reverse-card-configuration .configuration-prompt { max-width: 92%; gap: 5px; }
+.reverse-card-configuration .configuration-answer { width: clamp(38px, 15cqw, 48px); height: clamp(38px, 15cqw, 48px); }
+.difference-plate { gap: clamp(8px, 4cqw, 14px); }
+.difference-plate > b { color: #8a7a64; font-size: 12px; }
+.quiz-civ { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; }
+.quiz-civ img { width: clamp(38px, 18cqw, 58px); height: clamp(38px, 18cqw, 58px); object-fit: contain; }
+.quiz-civ b { max-width: 100%; color: #d5c6ae; font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
 
 /* the card waits for you; this says so */
 .next-hint {
@@ -1133,6 +1176,87 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .claim-actions { display: flex; align-items: center; justify-content: center; gap: 8px; }
 
+.pad.alternate { gap: 8px; }
+
+.configuration-prompt {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: min(94vw, 560px);
+}
+
+.configuration-answer {
+  position: relative;
+  display: inline-flex;
+  width: clamp(34px, 8vw, 46px);
+  height: clamp(34px, 8vw, 46px);
+  overflow: hidden;
+  border: 1px solid #4d4335;
+  border-radius: 7px;
+  background: #17130f;
+}
+
+.configuration-answer.off { filter: grayscale(1) brightness(.45); }
+.configuration-answer > img,
+.configuration-answer > .split { width: 100%; height: 100%; }
+.configuration-answer > b { position: absolute; right: 1px; bottom: 1px; width: 13px; height: 13px; color: var(--full); }
+.configuration-answer.off > b { color: var(--none); }
+.configuration-answer > b svg,
+.configuration-answer > .missing-mark { width: 100%; height: 100%; }
+
+.answer-options {
+  display: grid;
+  gap: 6px;
+  width: min(94vw, 620px);
+}
+
+.answer-options.reverse { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.answer-options.difference { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.answer-option {
+  position: relative;
+  min-width: 0;
+  min-height: 58px;
+  padding: 5px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: var(--panel);
+  color: #b8a78f;
+}
+
+.answer-option.selected { border-color: var(--gold); background: #332817; box-shadow: 0 0 0 1px #d9ab5244 inset; }
+.answer-option.spotted { border-color: var(--full); background: #172a1a; }
+.answer-option.falsely { border-color: var(--none); background: #321817; }
+.answer-option.missed { border-color: var(--partial); }
+.civ-option .quiz-civ img { width: 38px; height: 38px; }
+.civ-option .quiz-civ b { font-size: 10px; }
+
+.difference-option { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.difference-option .difference-art { display: block; width: 34px; height: 34px; overflow: hidden; border-radius: 5px; }
+.difference-option .difference-art > img,
+.difference-option .difference-art > .split { width: 100%; height: 100%; }
+.difference-option > b { width: 100%; overflow: hidden; color: inherit; font-size: 9px; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
+.answer-option .verdict { position: absolute; right: 2px; top: 2px; width: 15px; height: 15px; }
+.answer-option .verdict svg { width: 100%; height: 100%; }
+.answer-option.spotted .verdict { color: var(--full); }
+.answer-option.falsely .verdict { color: var(--none); }
+.answer-option.missed .verdict { color: var(--partial); }
+
+.alternate-answer { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.answer-civs, .reveal-pair, .difference-summary { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 7px; }
+.alternate-answer > b { color: var(--gold); font-size: 12px; }
+.alternate-answer .quiz-civ img, .reveal-pair .quiz-civ img { width: 32px; height: 32px; }
+.alternate-answer .quiz-civ b, .reveal-pair .quiz-civ b { font-size: 9px; }
+.difference-summary > span { display: flex; flex-direction: column; align-items: center; width: 38px; gap: 2px; }
+.difference-summary > span > img, .difference-summary > span > .split { width: 30px; height: 30px; }
+.difference-summary em { max-width: 100%; overflow: hidden; color: #b8a78f; font-size: 8px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+
+@media (max-width: 520px) {
+  .answer-options.reverse { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .answer-options.difference { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 /* everything that is not an upgrade tile: the two rails, the bonus, and done */
 .act {
   position: relative;
@@ -1542,3 +1666,4 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .scoreboard .badge .split { width: 100%; height: 100%; border-radius: 5px; }
 .scoreboard .badge .split img { border-radius: 0; }
 .scoreboard .topics em { font-style: normal; font-size: 11px; color: #8a7a64; }
+.scoreboard .format-tag { color: #a8967f; font-size: 9px; font-style: normal; text-transform: capitalize; }

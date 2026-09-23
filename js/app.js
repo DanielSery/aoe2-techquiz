@@ -3,10 +3,12 @@ const { buildDeck, truth, shuffle } = window.Quiz;
 const STORE_KEY = "aoe2-techquiz.topics";
 const MODE_KEY = "aoe2-techquiz.mode";
 const GAME_KEY = "aoe2-techquiz.game";
+const FORMAT_KEY = "aoe2-techquiz.format";
 const KNOWN_KEY = "aoe2-techquiz.known";
 const SCORES_KEY = "aoe2-techquiz.scores";
 const MODES = ["single", "custom", "all"];
 const GAMES = ["play", "learn"];
+const FORMATS = ["normal", "reverse", "difference"];
 
 // how long a revealed card waits before it deals the next one itself
 const AUTO_NEXT_MS = 30000;
@@ -34,6 +36,13 @@ const TOP_SCORES = 25;
    forgetting is proportional too -- a card at 91 answered wrong falls to 23
    rather than shrugging off a fixed ten. */
 const KNOWN_STEP = { right: 0.7, half: 0.6, wrong: 0.25 };
+
+/* Response pace measures recall separately from operating the board. Four
+   seconds is the thinking allowance; each selection gets another 300ms for the
+   physical click. A known card with many present upgrades therefore does not
+   look slow merely because it needs many taps. */
+const RESPONSE_THINK_SECONDS = 4;
+const RESPONSE_CLICK_SECONDS = 0.3;
 
 /* A card you keep getting wrong does not come back to known at the rate of one
    you have never missed. Every miss on its record damps the climb -- the seven
@@ -112,6 +121,7 @@ const state = {
   mode: "single",
   // which game: a round of forty against the clock, or endless learning
   game: "play",
+  formats: new Set(["normal"]),
   // how well each card is known, 0 to 100, keyed topic:civ -- learn's whole
   // memory, and the only thing here that outlives a round
   known: {},
@@ -132,6 +142,8 @@ const state = {
   wait: 0,
   clock: 0,
   answerStartedAt: 0,
+  answerClicks: 0,
+  question: null,
 };
 
 start();
@@ -173,6 +185,8 @@ function start() {
   );
   el("pad").addEventListener("click", (event) => {
     if (event.target.closest("#picker-done")) return finishPicks();
+    const option = event.target.closest(".answer-option");
+    if (option) return evaluateAlternateAnswer(option);
     if (event.target.closest("#claim-all")) return claimAll();
     const unitState = event.target.closest(".unit-state");
     if (unitState) return chooseUnitState(unitState.dataset.unitState, unitState.dataset.unitKey || "");
@@ -192,6 +206,10 @@ function start() {
   el("games").addEventListener("click", (event) => {
     const button = event.target.closest(".game");
     if (button) setGame(button.dataset.game);
+  });
+  el("formats").addEventListener("click", (event) => {
+    const button = event.target.closest(".format");
+    if (button) setFormat(button.dataset.format);
   });
   document.addEventListener("keydown", onKey);
 }
@@ -274,7 +292,7 @@ function mergeSiegeTopics() {
 function clearAllData() {
   if (!window.confirm("Clear all saved progress, settings, and scores?")) return;
   try {
-    for (const key of [STORE_KEY, MODE_KEY, GAME_KEY, KNOWN_KEY, SCORES_KEY]) localStorage.removeItem(key);
+    for (const key of [STORE_KEY, MODE_KEY, GAME_KEY, FORMAT_KEY, KNOWN_KEY, SCORES_KEY]) localStorage.removeItem(key);
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
@@ -283,6 +301,7 @@ function clearAllData() {
   state.due = {};
   state.mode = "single";
   state.game = "play";
+  state.formats = new Set(["normal"]);
   state.selected = new Set(state.data.topics.slice(0, 1).map((topic) => topic.id));
   renderMenu();
 }
@@ -453,6 +472,18 @@ function restoreSelection() {
     if (MODES.includes(mode)) state.mode = mode;
     const game = localStorage.getItem(GAME_KEY);
     if (GAMES.includes(game)) state.game = game;
+    const storedFormats = localStorage.getItem(FORMAT_KEY);
+    if (storedFormats) {
+      let formats;
+      try {
+        const parsed = JSON.parse(storedFormats);
+        formats = Array.isArray(parsed) ? parsed : [parsed];
+      } catch (ignored) {
+        formats = [storedFormats];
+      }
+      const valid = formats.filter((format) => FORMATS.includes(format));
+      if (valid.length) state.formats = new Set(valid);
+    }
     const known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
     if (known && typeof known === "object") state.known = known;
     const scores = JSON.parse(localStorage.getItem(SCORES_KEY) || "[]");
@@ -478,6 +509,7 @@ function rememberSelection() {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
     localStorage.setItem(MODE_KEY, state.mode);
     localStorage.setItem(GAME_KEY, state.game);
+    localStorage.setItem(FORMAT_KEY, JSON.stringify([...state.formats]));
   } catch (ignored) {
     /* private mode, or opened off disk */
   }
@@ -495,7 +527,9 @@ function rememberKnown() {
 }
 
 function knownKey(card) {
-  return `${card.topicId}:${card.civId}`;
+  const format = card.format || "normal";
+  const prefix = format === "normal" ? "" : `${format}:`;
+  return `${prefix}${card.topicId}:${card.civId}`;
 }
 
 /* What is remembered about a card: how well it is known, how many times it has
@@ -521,12 +555,16 @@ function missesOf(card) {
 /* Answered at nothing is not the same as never answered, so the entry is kept
    even at 0: it is the difference between a card you keep failing and one the
    deck has never put in front of you, and the menu counts the second sort. */
-function learnFrom(card, verdict, elapsedSeconds, decisions) {
+function responsePace(elapsedSeconds, clicks) {
+  const thinkingSeconds = Math.max(0, elapsedSeconds - Math.max(0, clicks) * RESPONSE_CLICK_SECONDS);
+  return thinkingSeconds / RESPONSE_THINK_SECONDS;
+}
+
+function learnFrom(card, verdict, elapsedSeconds, clicks) {
   const was = knownOf(card);
   const misses = missesOf(card);
   const previous = recordOf(card);
-  const expectedSeconds = 4 + Math.max(1, decisions) * 1.5;
-  const measuredPace = Math.max(0, elapsedSeconds) / expectedSeconds;
+  const measuredPace = responsePace(elapsedSeconds, clicks);
   const pace = previous?.t == null ? measuredPace : previous.t * 0.65 + measuredPace * 0.35;
   const confidence = pace <= 0.65
     ? 1.08
@@ -607,6 +645,18 @@ function setGame(game) {
   renderMenu();
 }
 
+function setFormat(format) {
+  if (!FORMATS.includes(format)) return;
+  if (state.formats.has(format)) {
+    if (state.formats.size === 1) return;
+    state.formats.delete(format);
+  } else {
+    state.formats.add(format);
+  }
+  rememberSelection();
+  renderMenu();
+}
+
 function setMode(mode) {
   if (!MODES.includes(mode)) return;
   state.mode = mode;
@@ -653,6 +703,9 @@ function renderMenu() {
   }
   for (const button of el("games").querySelectorAll(".game")) {
     button.setAttribute("aria-pressed", String(button.dataset.game === state.game));
+  }
+  for (const button of el("formats").querySelectorAll(".format")) {
+    button.setAttribute("aria-pressed", String(state.formats.has(button.dataset.format)));
   }
 
   const pool = deckNow();
@@ -716,7 +769,8 @@ function tileUnits(topic) {
 }
 
 function deckNow() {
-  return buildDeck(state.data, [...state.selected]);
+  const cards = buildDeck(state.data, [...state.selected]);
+  return shuffle(cards.flatMap((card) => [...state.formats].map((format) => ({ ...card, format }))));
 }
 
 /* Forty cards, whatever the topics: the deck is already shuffled, so the cut is
@@ -887,10 +941,68 @@ function renderCard() {
   const card = state.deck[state.index];
   state.phase = "answer";
   state.answerStartedAt = Date.now();
+  state.question = buildQuestion(card);
   layStack();
   renderBoardCard(card);
   renderProgress();
   startClock();
+}
+
+function buildQuestion(card) {
+  const format = card.format || "normal";
+  if (format === "normal") return { format: "normal" };
+  const { topic, answer } = truth(state.data, card);
+  if (format === "reverse") {
+    const target = configurationOf(topic, answer, card.civId);
+    const others = Object.keys(topic.civs).filter((id) => id !== card.civId);
+    const matching = shuffle(others.filter((id) =>
+      configurationDistance(target, configurationOf(topic, topic.civs[id], id)) === 0
+    )).slice(0, 2);
+    const distractors = shuffle(others.filter((id) => !matching.includes(id)))
+      .map((id) => ({ id, distance: configurationDistance(target, configurationOf(topic, topic.civs[id], id)) }))
+      .filter((item) => item.distance > 0)
+      .sort((a, b) => a.distance - b.distance);
+    const size = 8;
+    const choices = shuffle([card.civId, ...matching, ...distractors.slice(0, size - matching.length - 1).map((item) => item.id)]);
+    const correct = new Set(choices.filter((id) =>
+      configurationDistance(target, configurationOf(topic, topic.civs[id], id)) === 0
+    ));
+    return { format: "reverse", target, choices, correct };
+  }
+
+  const own = configurationOf(topic, answer, card.civId);
+  const candidates = shuffle(Object.keys(topic.civs).filter((id) => id !== card.civId))
+    .map((id) => ({ id, distance: configurationDistance(own, configurationOf(topic, topic.civs[id], id)) }))
+    .filter((item) => item.distance > 0)
+    .sort((a, b) => a.distance - b.distance);
+  const nearby = candidates.slice(0, Math.min(8, candidates.length));
+  const partnerId = (nearby[Math.floor(Math.random() * nearby.length)] || candidates[0])?.id
+    || Object.keys(topic.civs).find((id) => id !== card.civId);
+  const partner = configurationOf(topic, topic.civs[partnerId], partnerId);
+  const children = topic.merged || [topic];
+  const unitOptions = children
+    .filter((child) => unitStateData(child, topic.merged ? answer.mergedFacts[child.id] : answer, card.civId))
+    .map((child, index) => ({
+      id: `difference-unit:${child.id}`,
+      name: `${child.name} level`,
+      art: tileHtml(child),
+      differs: own.units[index] !== partner.units[index],
+    }));
+  const upgradeOptions = claimables(topic)
+    .filter(({ id }) => id !== BONUS_ID)
+    .map((item, index) => ({
+      id: `difference-upgrade:${item.id}`,
+      name: item.name,
+      art: item.art,
+      differs: own.upgrades[index] !== partner.upgrades[index],
+    }));
+  const options = [...unitOptions, ...upgradeOptions];
+  return {
+    format: "difference",
+    partnerId,
+    options,
+    correct: new Set(options.filter((item) => item.differs).map((item) => item.id)),
+  };
 }
 
 /* ---------- the clock ---------- */
@@ -949,6 +1061,7 @@ function layStack() {
    card rather than swapping two. */
 function renderBoardCard(card) {
   const { topic, civ, answer: fact } = truth(state.data, card);
+  const question = state.question;
   const node = document.createElement("div");
   node.className = "card";
   // Defense and Economy are their own section, so the kicker would say the name
@@ -958,15 +1071,28 @@ function renderBoardCard(card) {
       ${topic.group === topic.name ? "" : `<span class="topic-where">${topic.group}</span>`}
       <span class="topic-what">${topic.name}</span>
     </span>`;
+  const frontIdentity = question.format === "reverse"
+    ? `<div class="reverse-card-configuration">
+         <span class="reverse-question">Which civilisations match?</span>
+         ${configurationPromptHtml(topic, fact, card.civId)}
+       </div>`
+    : question.format === "difference"
+    ? `<div class="plate difference-plate">
+         ${civChoiceHtml(card.civId, false)}
+         <b>vs</b>
+         ${civChoiceHtml(question.partnerId, false)}
+       </div>
+       <div class="civ-name">What is different?</div>`
+    : `<div class="plate">
+         <img class="emblem" src="${civ.img}" alt="${civ.name}">
+         <span class="subject">${tileHtml(topic)}</span>
+       </div>
+       <div class="civ-name">${civ.name}</div>`;
   node.innerHTML = `
     <div class="card-inner">
       <div class="face front">
         <div class="topic-band">${band}</div>
-        <div class="plate">
-          <img class="emblem" src="${civ.img}" alt="${civ.name}">
-          <span class="subject">${tileHtml(topic)}</span>
-        </div>
-        <div class="civ-name">${civ.name}</div>
+        ${frontIdentity}
       </div>
       <div class="face back">
         <div class="topic-band">${band}
@@ -986,7 +1112,84 @@ function renderBoardCard(card) {
       </div>
     </div>`;
   el("stack").append(node);
-  openBoard(card);
+  if (question.format === "normal") openBoard(card);
+  else openAlternateBoard(card);
+}
+
+function civChoiceHtml(civId, showName = true) {
+  const civ = state.data.civs[civId];
+  return `<span class="quiz-civ"><img src="${civ.img}" alt="${civ.name}">${showName ? `<b>${civ.name}</b>` : ""}</span>`;
+}
+
+function configurationPromptHtml(topic, fact, civId) {
+  const children = topic.merged || [topic];
+  const units = children
+    .filter((child) => unitStateData(child, topic.merged ? fact.mergedFacts[child.id] : fact, civId))
+    .map((child) => {
+      const childFact = topic.merged ? fact.mergedFacts[child.id] : fact;
+      const data = unitStateData(child, childFact, civId);
+      const id = unitStateFor(child, childFact, civId);
+      const unit = data.states.find((item) => item.id === id);
+      const art = id === NO_UNIT_ID
+        ? '<svg class="missing-mark"><use href="#mark-none"/></svg>'
+        : child.parts.some((part) => part.id === id)
+        ? splitHtml(slotImages(child, id), slotName(child, unit))
+        : `<img src="${unit.img || child.icon}" alt="${unit.name}">`;
+      return `<span class="configuration-answer unit" title="${child.name}: ${unit.name}">${art}</span>`;
+    });
+  const upgrades = claimables(topic)
+    .filter(({ id }) => id !== BONUS_ID)
+    .map(({ id, name, art }) => {
+      const on = wanted(fact, id);
+      return `<span class="configuration-answer ${on ? "on" : "off"}" title="${name}: ${on ? "present" : "missing"}">
+        ${art}<b><svg><use href="#mark-${on ? "right" : "wrong"}"/></svg></b>
+      </span>`;
+    });
+  return `<div class="configuration-prompt">${[...units, ...upgrades].join("")}</div>`;
+}
+
+function openAlternateBoard(card) {
+  const question = state.question;
+  state.phase = "picking";
+  state.picked = {};
+  state.answerClicks = 0;
+  state.results[state.index] = { card, right: false, clean: true, delta: 0, picks: null, format: question.format };
+
+  const reverse = question.format === "reverse";
+  const options = reverse
+    ? question.choices.map((civId) => `<button class="answer-option civ-option" data-answer-id="${civId}" aria-pressed="false">${civChoiceHtml(civId)}<i class="verdict"></i></button>`).join("")
+    : question.options.map((item) => `<button class="answer-option difference-option" data-answer-id="${item.id}" aria-pressed="false">
+        <span class="difference-art">${item.art}</span><b>${item.name}</b><i class="verdict"></i>
+      </button>`).join("");
+  const prompt = reverse
+    ? `Select every matching civilisation`
+    : `Which parts differ between <b>${state.data.civs[card.civId].name}</b> and <b>${state.data.civs[question.partnerId].name}</b>?`;
+  el("pad").className = `pad claiming alternate ${question.format}`;
+  el("pad").innerHTML = `
+    <p class="ask-words">${prompt}</p>
+    <div class="answer-options ${question.format}">${options}</div>
+    <div class="claim-actions">
+      <button id="picker-done" class="act primary" title="check these selections">
+        <svg><use href="#mark-right"/></svg><span>done</span>
+      </button>
+    </div>`;
+}
+
+function evaluateAlternateAnswer(button) {
+  if (state.phase !== "picking") return;
+  const id = button.dataset.answerId;
+  if (state.picked[id]) return;
+  const hit = state.question.correct.has(id);
+  const outcome = hit ? "spotted" : "falsely";
+  state.picked[id] = outcome;
+  state.answerClicks += 1;
+  button.classList.add(outcome, "done");
+  button.setAttribute("aria-pressed", "true");
+  const verdict = button.querySelector(".verdict");
+  if (verdict) verdict.innerHTML = `<svg><use href="#mark-${hit ? "right" : "wrong"}"/></svg>`;
+  const worth = hit ? POINTS.upgrade : POINTS.upgradeWrong;
+  state.results[state.index].delta += worth;
+  bumpScore(worth);
 }
 
 /* One entry per slot, so the pad asks the question the same way of every civ:
@@ -1088,6 +1291,7 @@ function openBoard(card) {
   const { topic, civ } = truth(state.data, card);
   state.phase = "picking";
   state.picked = {};
+  state.answerClicks = 0;
   state.unitState = topic.merged ? Object.fromEntries(topic.merged.map((child) => [child.id, defaultUnitStateId(child)])) : defaultUnitStateId(topic);
   state.results[state.index] = { card, right: false, clean: true, delta: 0, picks: null };
 
@@ -1259,11 +1463,12 @@ function currentUnitFact(unitTopic) {
   return topic?.merged ? fact?.mergedFacts?.[unitTopic.id] : fact;
 }
 
-function chooseUnitState(id, unitKey = "") {
+function chooseUnitState(id, unitKey = "", holding = false) {
   const topic = state.data.topics.find((item) => item.id === state.deck[state.index].topicId);
   const unitTopic = topic.merged ? topic.merged.find((item) => item.id === unitKey) : topic;
   const pickedKey = unitKey ? `${UNIT_STATE_ID}:${unitKey}` : UNIT_STATE_ID;
   if (state.phase !== "picking" || !unitStateData(unitTopic) || state.picked[pickedKey]) return;
+  if (!holding) state.answerClicks += 1;
   const { answer } = truth(state.data, state.deck[state.index]);
   const fact = topic.merged ? answer.mergedFacts[unitKey] : answer;
   if (unitKey) state.unitState[unitKey] = id;
@@ -1353,6 +1558,7 @@ function claimables(topic) {
    that is the answer -- the bonus is not an upgrade, so this does not claim it. */
 function claimAll() {
   if (state.phase !== "picking") return;
+  state.answerClicks += 1;
   const card = state.deck[state.index];
   const { topic } = truth(state.data, card);
   const unitData = unitStateData(topic);
@@ -1360,10 +1566,10 @@ function claimAll() {
     for (const child of topic.merged) {
       const key = `${UNIT_STATE_ID}:${child.id}`;
       const childData = unitStateData(child);
-      if (!state.picked[key]) chooseUnitState((childData.upper || childData.middle).id, child.id);
+      if (!state.picked[key]) chooseUnitState((childData.upper || childData.middle).id, child.id, true);
     }
   } else if (unitData && !state.picked[UNIT_STATE_ID]) {
-    chooseUnitState((unitData.upper || unitData.middle).id);
+    chooseUnitState((unitData.upper || unitData.middle).id, "", true);
   }
   for (const button of el("pad").querySelectorAll(".upgrade")) {
     if (!state.picked[button.dataset.id]) pick(button.dataset.id, true);
@@ -1387,6 +1593,7 @@ function wanted(fact, id) {
    up until Done finalizes every unselected upgrade as absent. */
 function pick(id, holding) {
   if (state.phase !== "picking" || state.picked[id]) return;
+  if (!holding) state.answerClicks += 1;
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
 
@@ -1419,6 +1626,7 @@ function markClaim(id, outcome) {
    make a right card a half one. */
 function finishPicks(answered, timedOut) {
   if (state.phase !== "picking") return;
+  if (state.question?.format !== "normal") return finishAlternatePicks(Boolean(timedOut));
   stopClock();
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
@@ -1518,10 +1726,59 @@ function finishPicks(answered, timedOut) {
   result.delta += delta;
   if (delta) bumpScore(delta);
   const elapsedSeconds = (Date.now() - state.answerStartedAt) / 1000;
-  const decisions = (topic.merged
-    ? topic.merged.filter((child) => unitStateData(child)).length
-    : unitStateData(topic) ? 1 : 0) + claimables(topic).filter(({ id }) => id !== BONUS_ID).length;
-  learnFrom(card, verdictOf(result), elapsedSeconds, decisions);
+  learnFrom(card, verdictOf(result), elapsedSeconds, state.answerClicks);
+  reveal();
+}
+
+function finishAlternatePicks(timedOut) {
+  stopClock();
+  const card = state.deck[state.index];
+  const question = state.question;
+  const ids = question.format === "reverse" ? question.choices : question.options.map((item) => item.id);
+  const correct = question.correct;
+  let delta = 0;
+  let named = false;
+  let clean = !timedOut;
+
+  for (const id of ids) {
+    const wantedAnswer = correct.has(id);
+    let outcome = state.picked[id];
+    if (!outcome) {
+      outcome = wantedAnswer ? "missed" : "cleared";
+      state.picked[id] = outcome;
+      delta += outcome === "cleared" ? POINTS.upgrade : POINTS.upgradeWrong;
+    }
+    if (outcome === "spotted") named = true;
+    if (outcome === "falsely" || outcome === "missed") clean = false;
+    const button = el("pad").querySelector(`[data-answer-id="${id}"]`);
+    if (button) {
+      button.classList.add(outcome, "done");
+      const verdict = button.querySelector(".verdict");
+      if (verdict && outcome !== "cleared") {
+        verdict.innerHTML = `<svg><use href="#mark-${outcome === "spotted" ? "right" : outcome === "falsely" ? "wrong" : "partial"}"/></svg>`;
+      }
+    }
+  }
+
+  let quick = 0;
+  if (clean) {
+    delta += POINTS.complete;
+    if (state.game === "play") {
+      quick = Math.round((POINTS.speed * Math.max(state.left, 0)) / CARD_SECONDS);
+      delta += quick;
+    }
+  }
+  else if (!named) delta += POINTS.whollyWrong;
+  const result = state.results[state.index];
+  result.right = clean;
+  result.clean = clean || !named;
+  result.timedOut = timedOut;
+  result.quick = quick;
+  result.picks = { ...state.picked };
+  result.delta += delta;
+  if (delta) bumpScore(delta);
+  const elapsedSeconds = (Date.now() - state.answerStartedAt) / 1000;
+  learnFrom(card, verdictOf(result), elapsedSeconds, state.answerClicks);
   reveal();
 }
 
@@ -1634,8 +1891,25 @@ function reveal() {
   back.classList.add(verdict);
   const comparison = back.querySelector(".parts");
   comparison.className = "parts configuration-neighbors";
-  comparison.innerHTML = configurationHtml(topic, card.civId);
-  back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact);
+  if (state.question.format === "reverse") {
+    comparison.className = "parts alternate-answer";
+    comparison.innerHTML = `<b>Matching choices</b><div class="answer-civs">${state.question.choices
+      .filter((id) => state.question.correct.has(id))
+      .map((id) => civChoiceHtml(id))
+      .join("")}</div>`;
+    back.querySelector(".bonus-slot").innerHTML = "";
+  } else if (state.question.format === "difference") {
+    back.querySelector(".who").innerHTML = `<div class="reveal-pair">${civChoiceHtml(card.civId)}<b>vs</b>${civChoiceHtml(state.question.partnerId)}</div>`;
+    comparison.className = "parts alternate-answer";
+    comparison.innerHTML = `<b>${state.question.correct.size ? "Different parts" : "No differences"}</b><div class="difference-summary">${state.question.options
+      .filter((item) => state.question.correct.has(item.id))
+      .map((item) => `<span>${item.art}<em>${item.name}</em></span>`)
+      .join("")}</div>`;
+    back.querySelector(".bonus-slot").innerHTML = "";
+  } else {
+    comparison.innerHTML = configurationHtml(topic, card.civId);
+    back.querySelector(".bonus-slot").innerHTML = bonusHtml(fact);
+  }
   const delta = back.querySelector(".card-delta");
   delta.className = `card-delta ${result.delta >= 0 ? "up" : "down"}`;
   delta.textContent = result.delta > 0 ? `+${result.delta}` : `${result.delta}`;
@@ -1689,11 +1963,12 @@ function showResults() {
   if (bonus) bumpScore(bonus);
 
   state.place = whole
-    ? recordScore({
+      ? recordScore({
         score: state.score,
         right,
         cards: state.results.length,
         topics,
+        format: state.formats.size > 1 ? "mixed" : [...state.formats][0],
         at: Date.now(),
       })
     : -1;
@@ -1770,6 +2045,7 @@ function renderScores(highlight) {
           ${shown.map((topic) => `<span class="badge">${tileHtml(topic)}</span>`).join("")}
           ${more > 0 ? `<em>+${more}</em>` : ""}
         </span>
+        ${entry.format && entry.format !== "normal" ? `<em class="format-tag">${entry.format}</em>` : ""}
         <span class="when">${when(entry.at)}</span>
       </li>`;
     })
