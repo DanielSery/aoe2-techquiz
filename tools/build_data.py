@@ -418,6 +418,10 @@ UNIT_ENABLER = {
     2700: None, 2701: None, 2703: None, 2704: None,
 }
 
+# These emblems were added after the original asset set. Keep a URL revision so
+# a browser that saw an early placeholder does not retain it after an update.
+CIV_ASSET_VERSION = {"Danes": 2, "Saxons": 2, "Varangians": 2}
+
 # The same blind spot on the tech side. The .dat extraction on this machine has
 # never heard of the Khitans' Pasture line, so nothing turns Grazing Grasslands
 # off for anybody and the enable side hands it to all 53 -- it disagreed for
@@ -786,7 +790,11 @@ def main() -> int:
                      "civ availability extracted from the game's .dat by aoe2techtree"),
         },
         "civs": {
-            name.lower(): {"name": name, "img": f"img/civs/{name.lower()}.png"}
+            name.lower(): {
+                "name": name,
+                "img": f"img/civs/{name.lower()}.png"
+                + (f"?v={CIV_ASSET_VERSION[name]}" if name in CIV_ASSET_VERSION else ""),
+            }
             for name in sorted(techtree["civs"])
         },
         "topics": [build_topic(spec, techtree, icons, descriptions) for spec in TOPICS],

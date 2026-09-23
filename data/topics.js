@@ -59,7 +59,7 @@ window.QUIZ_DATA = {
   },
   "danes": {
    "name": "Danes",
-   "img": "img/civs/danes.png"
+   "img": "img/civs/danes.png?v=2"
   },
   "dravidians": {
    "name": "Dravidians",
@@ -175,7 +175,7 @@ window.QUIZ_DATA = {
   },
   "saxons": {
    "name": "Saxons",
-   "img": "img/civs/saxons.png"
+   "img": "img/civs/saxons.png?v=2"
   },
   "shu": {
    "name": "Shu",
@@ -211,7 +211,7 @@ window.QUIZ_DATA = {
   },
   "varangians": {
    "name": "Varangians",
-   "img": "img/civs/varangians.png"
+   "img": "img/civs/varangians.png?v=2"
   },
   "vietnamese": {
    "name": "Vietnamese",

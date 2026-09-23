@@ -1123,7 +1123,7 @@ function openBoard(card) {
         <svg><use href="#mark-right"/></svg><span>done</span>
       </button>
     </div>`;
-  syncDoneState(topic);
+  syncDoneState();
 }
 
 function unitStates(topic) {
@@ -1282,14 +1282,14 @@ function chooseUnitState(id, unitKey = "") {
     button.setAttribute("aria-pressed", String(selected));
   }
   markUnitState(outcome, unitKey);
-  syncDoneState(topic);
+  syncDoneState();
 }
 
-function syncDoneState(topic) {
+function syncDoneState() {
   const done = el("picker-done");
   if (!done) return;
-  done.disabled = !unitAnswersComplete(topic);
-  done.title = done.disabled ? "choose one state for every unit line first" : "mark the remaining upgrades absent and reveal";
+  done.disabled = false;
+  done.title = "use the selected unit states, mark the remaining upgrades absent and reveal";
 }
 
 function tileCount(topic) {
@@ -1308,13 +1308,6 @@ function unitStatePoints(topic) {
     .filter((state) => state.id !== NO_UNIT_ID && topic.parts.some((part) => part.id === state.id))
     .map((state) => slotGroup(topic, state.id).length));
   return states.length * POINTS.unitPerState + (alternatives - 1) * POINTS.unitAlternative;
-}
-
-function unitAnswersComplete(topic) {
-  if (topic.merged) {
-    return topic.merged.every((child) => !unitStateData(child) || state.picked[`${UNIT_STATE_ID}:${child.id}`]);
-  }
-  return !unitStateData(topic) || state.picked[UNIT_STATE_ID];
 }
 
 /* "Full" is the top of the line, so it wears the unit the line ends at -- the
@@ -1816,8 +1809,7 @@ function onKey(event) {
   if (state.phase === "picking") {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      const topic = state.data.topics.find((item) => item.id === state.deck[state.index].topicId);
-      if (unitAnswersComplete(topic)) finishPicks();
+      finishPicks();
     }
     return;
   }
