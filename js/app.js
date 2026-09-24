@@ -262,7 +262,7 @@ function applyAuthSession(session) {
   state.avatarUrl = /^https:\/\/(cdn\.discordapp\.com|media\.discordapp\.net)\//.test(metadata.avatar_url || "")
     ? metadata.avatar_url
     : "";
-  if (!state.playerName && !state.user?.is_anonymous) {
+  if (!state.playerName && hasDiscordIdentity(state.user)) {
     const suggested = String(metadata.full_name || metadata.name || metadata.preferred_username || "").trim();
     if (suggested.length >= 2 && suggested.length <= 24) state.playerName = suggested;
   }
@@ -272,9 +272,10 @@ function applyAuthSession(session) {
 
 async function connectDiscord() {
   if (!state.supabase) return;
+  if (hasDiscordIdentity(state.user)) return openPlayerDialog();
   el("player-error").textContent = "";
   const options = { redirectTo: `${location.origin}${location.pathname}` };
-  const request = state.user?.is_anonymous
+  const request = state.user
     ? state.supabase.auth.linkIdentity({ provider: "discord", options })
     : state.supabase.auth.signInWithOAuth({ provider: "discord", options });
   const { error } = await request;
@@ -321,7 +322,7 @@ function openPlayerDialog(publishScore = false) {
   const input = el("player-input");
   input.value = state.playerName;
   el("player-dialog").querySelector("h2").textContent = publishScore ? "Publish your score" : "Player profile";
-  const discord = state.user && !state.user.is_anonymous;
+  const discord = hasDiscordIdentity(state.user);
   el("auth-status").textContent = discord
     ? "Connected with Discord. Your scores and profile belong to this account."
     : state.user
@@ -333,6 +334,10 @@ function openPlayerDialog(publishScore = false) {
   el("player-error").textContent = "";
   el("player-dialog").showModal();
   requestAnimationFrame(() => input.focus());
+}
+
+function hasDiscordIdentity(user) {
+  return Boolean(user?.identities?.some((identity) => identity.provider === "discord"));
 }
 
 function cancelPlayerDialog() {
