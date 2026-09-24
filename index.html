@@ -3,10 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AoE2 Tech Quiz</title>
-<meta name="description" content="Learn which Age of Empires II civilisations have which units and upgrades.">
-<link rel="stylesheet" href="css/style.css?v=47">
+<title>AoE2 Tech Quiz — Learn the Age of Empires II Tech Tree</title>
+<meta name="description" content="Test and learn the Age of Empires II: Definitive Edition tech tree with a free interactive quiz covering civilisations, units and upgrades.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://danielsery.github.io/aoe2-techquiz/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AoE2 Tech Quiz">
+<meta property="og:title" content="AoE2 Tech Quiz — Learn the Tech Tree">
+<meta property="og:description" content="Test your knowledge of Age of Empires II civilisations, units and upgrades with a free interactive quiz.">
+<meta property="og:url" content="https://danielsery.github.io/aoe2-techquiz/">
+<meta property="og:image" content="https://danielsery.github.io/aoe2-techquiz/img/topics/unit-5.png">
+<meta property="og:image:alt" content="AoE2 Tech Quiz icon">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AoE2 Tech Quiz — Learn the Tech Tree">
+<meta name="twitter:description" content="Test your knowledge of Age of Empires II civilisations, units and upgrades.">
+<meta name="twitter:image" content="https://danielsery.github.io/aoe2-techquiz/img/topics/unit-5.png">
+<meta name="theme-color" content="#17130f">
+<link rel="stylesheet" href="css/style.css?v=49">
 <link rel="icon" href="img/topics/unit-5.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "AoE2 Tech Quiz",
+  "url": "https://danielsery.github.io/aoe2-techquiz/",
+  "description": "A free interactive quiz for learning the Age of Empires II: Definitive Edition tech tree, civilisations, units and upgrades.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "inLanguage": "en"
+}
+</script>
 </head>
 <body>
 
@@ -31,29 +61,15 @@
 <main>
 
   <section id="menu" class="screen is-active">
-    <h1><img src="img/topics/unit-5.png" alt=""><span>Tech Quiz</span></h1>
+    <header class="menu-bar">
+      <h1><img src="img/topics/unit-5.png" alt=""><span>AoE2 Tech Quiz</span></h1>
+      <div class="menu-account">
+        <button id="player-name" class="ghost player-name" title="Set player name"><span>Choose name</span></button>
+        <button id="to-board" class="ghost icon-button" title="Global leaderboard" aria-label="Global leaderboard"><svg><use href="#icon-board"/></svg></button>
+      </div>
+    </header>
     <p class="lede">Pick your topics, then say what each civilisation gets.</p>
     <div id="topic-grid" class="topic-grid"></div>
-    <div class="modes" id="modes">
-      <button class="mode" data-mode="single" aria-pressed="true">
-        <svg><use href="#icon-single"/></svg><span>Single</span>
-      </button>
-      <button class="mode" data-mode="custom" aria-pressed="false">
-        <svg><use href="#icon-custom"/></svg><span>Custom</span>
-      </button>
-      <button class="mode" data-mode="all" aria-pressed="false">
-        <svg><use href="#icon-all"/></svg><span>All</span>
-      </button>
-    </div>
-
-    <div class="games" id="games">
-      <button class="game" data-game="play" aria-pressed="true">
-        <svg><use href="#icon-play"/></svg><span>Play</span>
-      </button>
-      <button class="game" data-game="learn" aria-pressed="false">
-        <svg><use href="#icon-learn"/></svg><span>Learn</span>
-      </button>
-    </div>
 
     <div class="formats" id="formats" aria-label="Question format">
       <button class="format" data-format="normal" aria-pressed="true">Standard</button>
@@ -63,10 +79,13 @@
 
     <p id="pool-note" class="pool-note"></p>
 
-    <div class="menu-actions">
-      <button id="player-name" class="ghost player-name" title="Set player name"><span>Choose name</span></button>
-      <button id="to-board" class="ghost" title="Global leaderboard"><svg><use href="#icon-board"/></svg></button>
-      <button id="start" class="primary" disabled><svg><use href="#icon-play"/></svg><span id="start-count"></span></button>
+    <div class="games" id="games">
+      <button class="game" data-game="learn">
+        <svg><use href="#icon-learn"/></svg><span>Learn</span>
+      </button>
+      <button class="game primary" data-game="play">
+        <svg><use href="#icon-play"/></svg><span>Play</span>
+      </button>
     </div>
   </section>
 
@@ -105,6 +124,19 @@
 
   <section id="scores" class="screen">
     <h2 class="board-title"><svg><use href="#icon-board"/></svg> Global leaderboard</h2>
+    <label class="leaderboard-filter" for="leaderboard-format">
+      <span>Question formats</span>
+      <select id="leaderboard-format">
+        <option value="normal">Standard</option>
+        <option value="reverse">Reverse</option>
+        <option value="difference">Difference</option>
+        <option value="normal+reverse">Standard + Reverse</option>
+        <option value="normal+difference">Standard + Difference</option>
+        <option value="reverse+difference">Reverse + Difference</option>
+        <option value="normal+reverse+difference">All three</option>
+        <option value="legacy-mixed">Mixed (legacy)</option>
+      </select>
+    </label>
     <ol id="scoreboard" class="scoreboard"></ol>
     <div class="actions">
       <button id="board-back" class="ghost"><svg><use href="#icon-home"/></svg></button>
@@ -132,10 +164,10 @@
   Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
 </footer>
 
-<script src="data/topics.js?v=44"></script>
+<script src="data/topics.js?v=46"></script>
 <script src="js/data.js?v=44"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js?v=1"></script>
-<script src="js/app.js?v=53"></script>
+<script src="js/app.js?v=58"></script>
 </body>
 </html>

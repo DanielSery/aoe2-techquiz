@@ -18,7 +18,7 @@ the full height of the tiles, so the board is one block whatever the topic:
  │    ▣    │  ▣ ▣ ▣ ▣         │  ▣✓  │
  │ MISSING │  ▣ ▣ ▣  upgrades │ FULL │
  └─────────┴──────────────────┴──────┘
-            ★ BONUS    ✔ DONE
+                        ✔ DONE
 ```
 
 **The tiles are shuffled for every card.** Held still, "the third one" becomes an
@@ -60,11 +60,9 @@ what a card asks.
 |---|---|---|
 | **missing**, left rail | it has none of this line — only the unit drawn there, or nothing where that one is struck out | ±5, **and that is the answer** |
 | ✓ **full**, right rail | every upgrade is there | claims every tile, **and that is the answer** |
-| ★ **bonus** | it has a civ bonus, team bonus or unique tech about this unit | ±10, bonus points only |
 | ✔ **done** | that is all of them | ends the card |
 
-The two under the board are the two that are not a reading of the scale: the
-bonus, which is points rather than an answer, and done.
+Done is not a reading of the scale; it finalizes the selected answer.
 
 **✗ and ⊞ evaluate the card on the tap** — they are whole answers, not claims you
 build on. ✗ said and true ends it there: the civ may own the techs anyway (the
@@ -72,11 +70,12 @@ Aztecs have Bracer and no Cavalry Archer), the reveal names them, and nothing is
 charged for not claiming them. Said and wrong, the card is answered all the
 same, and what you never claimed is charged as ever.
 
-**★ is bonus points and nothing else.** Leaving it costs nothing and cannot turn
-a right card into a half one; claiming one that is not there costs its **−10**
-and no more. Everything else on the board counts: ✔ (or `Enter`) charges **−5**
+Everything on the board counts: ✔ (or `Enter`) charges **−5**
 for each upgrade you never claimed, and naming them all and nothing else is worth
 a further **+100**, so the card is right only when the set is exactly right.
+
+Civilisation bonuses are shown only as informational context after the card is
+revealed. They are never selected, scored, or required for a correct answer.
 
 | the card | worth |
 |---|---|
@@ -100,8 +99,8 @@ Learn, and no speed bonus with it.
 
 The format buttons are independent toggles. Enable any combination; the deck
 contains one shuffled variant per enabled format, so enabling all three mixes
-Standard, Reverse, and Difference questions throughout the session. At least
-one format always remains enabled.
+Standard, Reverse, and Difference questions throughout the session. All formats
+may be cleared; Learn and Play remain disabled until a format is selected.
 
 **Standard** shows a civilisation and asks for its unit level and upgrades.
 
@@ -109,13 +108,15 @@ one format always remains enabled.
 offers a shuffled set of eight civilisations and asks for every displayed
 civilisation with that exact configuration. Up to three matching answers are
 included, with the closest configurations used as distractors. The configuration
-lives on the card itself; each civilisation is marked right or wrong as soon as
-it is selected.
+lives on the card itself. In Learn, each civilisation is marked right or wrong
+as soon as it is selected. In Play, selections stay editable and are graded by
+Done.
 
 **Difference** shows two civilisations and asks which unit levels and upgrade
 slots differ. It favors nearby configurations so the answer depends on the few
-details that distinguish otherwise similar tech trees. Every selected unit or
-technology is evaluated immediately, while Done reveals differences left out.
+details that distinguish otherwise similar tech trees. Learn evaluates every
+selected unit or technology immediately, while Play keeps selections editable
+and grades them, along with differences left out, when Done is pressed.
 
 All formats share one learning record for each topic/civilisation. Answering a
 fact in Standard, Reverse or Difference changes the same mastery percentage, so
@@ -130,15 +131,14 @@ claimed charged as ever, so the clock costs exactly what pressing ✔ blind woul
 Forty whatever the topics: a selection bigger than forty is drawn from at
 random, a smaller one is simply all of it.
 
-Full Play rounds multiply their final net score by a difficulty coefficient.
-With one question format, the first topic is the **×1.00** baseline and every
-additional topic adds **25%**. Two formats make the first topic **×1.05**, then
-every additional topic adds **30%**. All three formats make the first topic
-**×1.10**, then every additional topic adds **35%**. For example, two topics are
-×1.25 with one format, ×1.35 with two, and ×1.45 with three. The menu shows the
-coefficient before the round and the results show the calculation. A retry of
-missed cards is a different, easier round, so it does not receive the coefficient
-or enter the leaderboard.
+Full Play rounds multiply their final net score by a breadth coefficient with
+diminishing returns: `1 + 0.15 × √(topics − 1)`. The first topic is the
+**×1.00** baseline, two are ×1.15, five are ×1.30, and nineteen are ×1.64.
+Question formats do not change the coefficient because every exact format
+selection has its own leaderboard. The menu shows the coefficient before the
+round and the results show the calculation. A retry of missed cards is a
+different, easier round, so it does not receive the coefficient or enter the
+leaderboard.
 
 **Learn** has no length and no clock. It stops when you go back to the menu, and
 the bar along the top is how much of the selection you know.
@@ -250,9 +250,10 @@ fresh start is an empty object.
 
 Every full round of Play is submitted to the global Supabase leaderboard with
 the player's name, score, correct count, exact topics and selected question
-formats. A name has only one row: Supabase replaces it when a higher score is
-submitted and leaves it unchanged for an equal or lower score. The results say
-where the attempted score would rank and, when it was not a new best, where the
+formats. Standard, Reverse, Difference and each of the four mixed format sets
+have separate rankings. A name can hold one best row in every format set; a
+higher score replaces only the best in that same ranking. The results say where
+the attempted score would rank and, when it was not a new best, where the
 player's saved best remains. The best 25 are reachable from the menu (🏆) and
 from the end of a round; the player's saved row is outlined when it is visible,
 and the top three receive gold, silver and bronze treatments.
@@ -261,10 +262,11 @@ There is no account or password. After a player's first full Play round, they
 may enter a display name and publish the score or cancel and keep the result
 private. The chosen name is stored only in their browser under
 `aoe2-techquiz.player`; later scores publish under it automatically without
-showing the dialog again. It can be changed from the menu. The leaderboard has
-one row per case-insensitive name, but names are not identities and anyone can
-enter the same one. The menu shows the saved name together with its current
-global rank; no rank label is shown before that name has a published score.
+showing the dialog again. It can be changed from the menu. Each format
+leaderboard has one row per case-insensitive name, but names are not identities
+and anyone can enter the same one. The menu shows the saved name together with
+its rank for the formats currently selected; no rank label is shown before that
+name has a published score there.
 
 ## How a round is dealt
 
@@ -356,14 +358,19 @@ it is Wei's **Xianbei Raider**: it is already the top of its line,
 so it stands in its own last-upgrade slot and Wei is never missing an upgrade
 that does not exist.
 
-**Single / Custom / All** under the tiles says how many topics a set draws from:
-Single replaces the selection as you pick, Custom lets the tiles toggle for a
-mixed set, All takes every topic. Picking a tile outside Custom drops back to
-Single on that topic, and the choice is remembered between visits.
+Every topic tile is independently checkable, and **All topics** selects or
+clears the whole set. The selection is remembered between visits. The summary
+under the question formats shows the pool size, learning progress, Play timer,
+and current score coefficient before the game starts.
 
-**Play / Learn** under that is which game, and the line beneath says what you
-are in for: how many cards the selection holds, and — in Learn — how much of it
-you know. Both choices are remembered between visits, like the topics.
+The Stable material is split into **Scout + Knight** for the two common lines
+and **Special Cavalry** for Camels, Battle Elephants, Steppe Lancers and their
+regional replacements. This keeps one card from presenting every cavalry line
+at once. Selections and learning progress saved under the former combined
+Stable topic migrate to both new topics.
+
+**Learn / Play** are the final actions at the bottom of the menu. Clicking one
+starts that game immediately; there is no separate run button.
 
 At the end of a round of Play you can repeat the ones you did not get right --
 the wrong ones *and* the amber half-answers, which is the same set the tally
@@ -391,10 +398,15 @@ On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(ro
    `js/supabase-config.js`.
 3. Deploy the site. Never put a `service_role` or secret key in the browser.
 
-Run the whole schema again after pulling leaderboard changes. It acts as a
-migration: existing duplicate names are reduced to their highest score, exact
-format selections are added, and the best-score submission function is replaced
-in place.
+Run the whole schema again after pulling leaderboard changes. It is a rerunnable,
+additive migration: existing rows are assigned to their exact format ranking,
+their original totals are retained in `original_score`, and their displayed
+scores are converted once from the old linear coefficient to the new
+diminishing coefficient. Rows are never deleted. Old `mixed` rows whose exact
+combination predates the `formats` column remain available under **Mixed
+(legacy)**. The submission and rank functions are replaced in place.
+The script runs in one transaction, so any failure rolls the complete migration
+back instead of leaving partially converted scores.
 
 The schema enables RLS and grants the unauthenticated `anon` role only `SELECT`
 on the table plus `EXECUTE` on a narrowly scoped best-score function. Direct

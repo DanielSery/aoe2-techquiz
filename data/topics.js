@@ -1,8 +1,8 @@
 window.QUIZ_DATA = {
  "source": {
   "repo": "SiegeEngineers/aoe2techtree",
-  "commit": "local-game-data",
-  "note": "civ availability extracted from the September 22, 2026 game data"
+  "commit": "3bb43b1439eef88dfe7fe892d7f7dc41ac9dd76f",
+  "note": "civ availability extracted from the game's .dat by aoe2techtree"
  },
  "civs": {
   "armenians": {
@@ -3085,7 +3085,7 @@ window.QUIZ_DATA = {
   },
   {
    "id": "onager",
-   "name": "Onager",
+   "name": "Onager / Rocket Cart",
    "group": "Siege",
    "icon": "img/topics/unit-550.png",
    "below": {
@@ -3096,11 +3096,13 @@ window.QUIZ_DATA = {
    },
    "unit": "unit-550",
    "gate": [
-    "unit-550"
+    "unit-550",
+    "unit-1907"
    ],
    "alts": {
     "unit-550": [
-     "unit-550"
+     "unit-550",
+     "unit-1907"
     ]
    },
    "upgrades": [
@@ -3115,6 +3117,12 @@ window.QUIZ_DATA = {
      "icon_index": 101
     },
     {
+     "id": "unit-1907",
+     "name": "Heavy Rocket Cart",
+     "img": "img/topics/unit-1907.png",
+     "icon_index": 460
+    },
+    {
      "id": "unit-588",
      "name": "Siege Onager",
      "img": "img/topics/unit-588.png",
@@ -3125,6 +3133,12 @@ window.QUIZ_DATA = {
      "name": "Siege Engineers",
      "img": "img/topics/tech-377.png",
      "icon_index": 101
+    },
+    {
+     "id": "unit-1904",
+     "name": "Rocket Cart",
+     "img": "img/topics/unit-1904.png",
+     "icon_index": 459
     }
    ],
    "tiers": [
@@ -3139,7 +3153,8 @@ window.QUIZ_DATA = {
      "dir": "up",
      "mark": "partial",
      "has": [
-      "unit-550"
+      "unit-550",
+      "unit-1907"
      ]
     },
     {
@@ -3148,6 +3163,7 @@ window.QUIZ_DATA = {
      "mark": "full",
      "has": [
       "unit-550",
+      "unit-1907",
       "unit-588",
       "tech-377"
      ]
@@ -3301,14 +3317,19 @@ window.QUIZ_DATA = {
      ]
     },
     "chinese": {
-     "tier": "none",
-     "has": [],
+     "tier": "partial",
+     "has": [
+      "unit-1907",
+      "unit-1904"
+     ],
      "missing": [
       "unit-588",
       "tech-377"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Rocketry (Scorpions, Rocket Carts and Lou Chuans +25% attack; Lou Chuans fire rockets)"
+     ]
     },
     "cumans": {
      "tier": "partial",
@@ -3486,23 +3507,28 @@ window.QUIZ_DATA = {
      "why": []
     },
     "jurchens": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
-      "tech-377"
+      "unit-1907",
+      "tech-377",
+      "unit-1904"
      ],
      "missing": [
       "unit-588"
      ],
-     "bonus": false,
+     "bonus": true,
      "why": [
       "Siege Engineers available in Castle Age",
-      "Siege and Fortification upgrades cost -75% wood and research +100% faster"
+      "Siege and Fortification upgrades cost -75% wood and research +100% faster",
+      "Thunderclap Bombs (Rocket Carts, Grenadiers and Lou Chuans detonate when defeated; projectiles produce additional explosions)"
      ]
     },
     "khitans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
-      "tech-377"
+      "unit-1907",
+      "tech-377",
+      "unit-1904"
      ],
      "missing": [
       "unit-588"
@@ -3524,15 +3550,19 @@ window.QUIZ_DATA = {
      "why": []
     },
     "koreans": {
-     "tier": "none",
+     "tier": "partial",
      "has": [
-      "tech-377"
+      "unit-1907",
+      "tech-377",
+      "unit-1904"
      ],
      "missing": [
       "unit-588"
      ],
-     "bonus": false,
-     "why": []
+     "bonus": true,
+     "why": [
+      "Shinkichon (Rocket Carts and Turtle Ships +1 range, fire additional projectiles)"
+     ]
     },
     "lithuanians": {
      "tier": "partial",
@@ -4232,10 +4262,8 @@ window.QUIZ_DATA = {
       "tech-219",
       "tech-437"
      ],
-     "bonus": true,
-     "why": [
-      "Ordonnance Companies (Mounted Crossbowmen cost -40% gold)"
-     ]
+     "bonus": false,
+     "why": []
     },
     "georgians": {
      "tier": "partial",
@@ -17401,7 +17429,7 @@ window.QUIZ_DATA = {
    "id": "economy",
    "name": "Economy",
    "group": "Economy",
-   "icon": "img/topics/tech-12.png",
+   "icon": "img/topics/tech-249.png",
    "below": null,
    "unit": null,
    "gate": [],

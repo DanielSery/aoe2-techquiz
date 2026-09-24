@@ -20,6 +20,7 @@ import re
 import sys
 import urllib.request
 from pathlib import Path
+from urllib.parse import urlsplit
 
 REPO = "SiegeEngineers/aoe2techtree"
 API = f"https://api.github.com/repos/{REPO}"
@@ -113,15 +114,16 @@ TOPICS = [
         "words": [r"scorpions?", r"siege"],
     },
     {
-        # Like the Light Cavalry: the Mangonel is what a civ without the Onager
-        # is left with, except where it has no Mangonel line at all.
+        # Rocket Cart replaces the Mangonel and Heavy Rocket Cart replaces the
+        # Onager. The regional line has no Siege Onager-equivalent third rung.
         "id": "onager",
         "group": "Siege",
-        "name": "Onager",
-        "unit": 550,
+        "name": "Onager / Rocket Cart",
+        "unit": [550, 1907],
         "below": ("Unit", 280),
+        "parts": [("Unit", 1904)],
         "upgrades": [("Unit", 588), 377],
-        "words": [r"onagers?", r"mangonels?", r"siege"],
+        "words": [r"onagers?", r"mangonels?", r"rocket carts?", r"siege"],
     },
     {
         # Gated on the Crossbowman, so a civ that stops at crossbows is partial
@@ -136,6 +138,7 @@ TOPICS = [
         "words": [r"archers?", r"archer-line", r"arbalest\w*", r"crossbow\w*", r"archery ranges?",
                   r"ranged soldiers?", r"archer armou?r"],
         "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer",
+                 r"mounted crossbow",
                  r"fire archer", r"genitour", r"ballista", r"scorpion", r"chu ko nu",
                  r"double crossbow"],
     },
@@ -154,7 +157,8 @@ TOPICS = [
         "upgrades": [201, 219],
         "words": [r"skirmishers?", r"skirmisher-line", r"foot archers?", r"archery ranges?",
                   r"ranged soldiers?", r"archer armou?r"],
-        "veto": [r"cavalry archer", r"mounted archer", r"elephant archer", r"camel archer"],
+        "veto": [r"cavalry archer", r"mounted archer", r"mounted crossbow",
+                 r"elephant archer", r"camel archer"],
     },
     {
         # Seven civs field a mounted archer of their own instead of the Cavalry
@@ -336,6 +340,7 @@ TOPICS = [
         "id": "economy",
         "group": "Economy",
         "name": "Economy",
+        "icon": ("Tech", 249),  # Hand Cart
         "upgrades": [[12, 1012], 221, 182, 279],
         "words": [r"farm\w*", r"lumberjacks?", r"lumber camps?", r"mining camps?",
                   r"gold miners?", r"stone miners?", r"miners?", r"mills?",
@@ -552,7 +557,7 @@ def nodes_of(spec: dict) -> list:
     never a thing the card asks about, so it stays out of `parts` -- out of the
     bonus words, out of `has`, and out of the cross-check."""
     blacksmith = [("Tech", item) for line in spec.get("blacksmith_lines", []) for item in line]
-    ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec) + blacksmith
+    ordered = [("Unit", u) for u in gate_units(spec)] + upgrade_nodes(spec) + spec.get("parts", []) + blacksmith
     return list(dict.fromkeys(ordered))
 
 
@@ -608,8 +613,10 @@ def build_topic(spec: dict, techtree: dict, icons: dict, descriptions: dict) -> 
         )
 
     gate_ids = [part_id("Unit", u) for u in gate_units(spec)]
-    wanted_icon = part_id(*spec["icon"]) if spec.get("icon") else parts[0]["id"]
-    icon_part = next(part for part in parts if part["id"] == wanted_icon)
+    if spec.get("icon"):
+        icon_part = {"img": f"img/topics/{part_id(*spec['icon'])}.png"}
+    else:
+        icon_part = parts[0]
     groups = [[part_id(kind, item) for kind, item in group] for group in upgrade_groups(spec)]
     upgrade_ids = [group[0] for group in groups]          # a slot answers to its first
     alts = {group[0]: group for group in groups if len(group) > 1}
@@ -717,14 +724,19 @@ def cross_check(techtree: dict, civdata_path: Path) -> int:
     return problems
 
 
-def download_images(commit: str, data: dict) -> None:
+def download_images(commit: str, data: dict, icons: dict) -> None:
     wanted = {}
     for civ in data["civs"].values():
-        wanted[civ["img"]] = f"img/Civs/{Path(civ['img']).name}"
+        local = urlsplit(civ["img"]).path
+        wanted[local] = f"img/Civs/{Path(local).name}"
     for topic in data["topics"]:
         for part in topic["parts"] + [p for p in [topic["below"]] if p] + topic.get("buildingLevels", {}).get("parts", []):
             folder = "Building" if part["id"].startswith("building") else "Unit" if part["id"].startswith("unit") else "Tech"
             wanted[part["img"]] = f"img/{folder}/{part['icon_index']}.png"
+        if topic["icon"] not in wanted:
+            kind, item = topic["icon"].rsplit("/", 1)[-1].removesuffix(".png").split("-", 1)
+            source_kind = kind.title()
+            wanted[topic["icon"]] = f"img/{source_kind}/{icons[(source_kind, int(item))][0]}.png"
 
     for local, remote in sorted(wanted.items()):
         target = ROOT / local
@@ -763,6 +775,7 @@ def main() -> int:
             return 1
 
     wanted_nodes = {node for spec in TOPICS for node in nodes_of(spec)}
+    wanted_nodes |= {spec["icon"] for spec in TOPICS if spec.get("icon")}
     wanted_nodes |= {spec["below"] for spec in TOPICS if spec.get("below")}
     wanted_nodes |= set(DEFENSE_LEVEL_NODES)
     icons = icon_indices(commit, techtree, wanted_nodes, args.local_tree)
@@ -809,7 +822,7 @@ def main() -> int:
     print(f"{out.relative_to(ROOT)}: {len(data['civs'])} civs, {len(data['topics'])} topics")
 
     if not args.local_tree:
-        download_images(commit, data)
+        download_images(commit, data, icons)
     for topic in data["topics"]:
         counts = {}
         for civ in topic["civs"].values():

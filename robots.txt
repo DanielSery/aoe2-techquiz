@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danielsery.github.io/aoe2-techquiz/sitemap.xml

@@ -1,12 +1,10 @@
 const { buildDeck, truth, shuffle } = window.Quiz;
 
 const STORE_KEY = "aoe2-techquiz.topics";
-const MODE_KEY = "aoe2-techquiz.mode";
 const GAME_KEY = "aoe2-techquiz.game";
 const FORMAT_KEY = "aoe2-techquiz.format";
 const KNOWN_KEY = "aoe2-techquiz.known";
 const PLAYER_KEY = "aoe2-techquiz.player";
-const MODES = ["single", "custom", "all"];
 const GAMES = ["play", "learn"];
 const FORMATS = ["normal", "reverse", "difference"];
 
@@ -17,6 +15,7 @@ const AUTO_NEXT_MS = 30000;
 // every time, so two scores are comparable.
 const PLAY_CARDS = 40;
 const CARD_SECONDS = 30;
+const SCORING_VERSION = 2;
 
 const TOP_SCORES = 25;
 
@@ -67,10 +66,6 @@ const LEARN_PULL = 10;
    confident right answers. Ranges keep the rotation from becoming predictable. */
 const AGAIN_AFTER = { wrong: [2, 4], half: [3, 6] };
 
-// Two claims that are not upgrades and sit with the actions rather than on the
-// board: the civ's bonus, and "it cannot build this at all". The bonus is part
-// of the answer; the other is a shortcut that says the answer is nothing.
-const BONUS_ID = "bonus";
 const NO_UNIT_ID = "no-unit";
 const UNIT_STATE_ID = "unit-state";
 
@@ -85,8 +80,6 @@ const POINTS = {
   upgradeWrong: -10,
   unitPerState: 5,
   unitAlternative: 2,
-  bonus: 15,
-  bonusWrong: -15,
   // the most a whole right card can earn for being quick, all of it or none of
   // it: a card you only half knew is worth no more for being rushed
   speed: 20,
@@ -112,7 +105,6 @@ const state = {
   phase: "answer",
   score: 0,
   picked: {},
-  mode: "single",
   // which game: a round of forty against the clock, or endless learning
   game: "play",
   formats: new Set(["normal"]),
@@ -139,6 +131,7 @@ const state = {
   resultCoefficientNote: "",
   supabase: null,
   scores: [],
+  boardKey: "normal",
   timer: 0,
   wait: 0,
   clock: 0,
@@ -169,12 +162,15 @@ function start() {
   connectLeaderboard();
   renderMenu();
 
-  el("start").addEventListener("click", startSelectedGame);
   el("quit").addEventListener("click", () => show("menu"));
   el("to-menu").addEventListener("click", () => show("menu"));
   el("to-board").addEventListener("click", () => openBoardScreen(null));
   el("see-board").addEventListener("click", () => openBoardScreen(state.lastScoreId));
   el("board-back").addEventListener("click", () => show("menu"));
+  el("leaderboard-format").addEventListener("change", (event) => {
+    state.boardKey = event.target.value;
+    openBoardScreen(null, false);
+  });
   el("player-name").addEventListener("click", () => openPlayerDialog());
   el("player-cancel").addEventListener("click", cancelPlayerDialog);
   el("player-dialog").addEventListener("cancel", (event) => {
@@ -205,13 +201,9 @@ function start() {
   screens.game.addEventListener("pointerdown", (event) => {
     if (state.phase === "reveal" && !event.target.closest(".hud")) advance();
   });
-  el("modes").addEventListener("click", (event) => {
-    const button = event.target.closest(".mode");
-    if (button) setMode(button.dataset.mode);
-  });
   el("games").addEventListener("click", (event) => {
     const button = event.target.closest(".game");
-    if (button) setGame(button.dataset.game);
+    if (button && !button.disabled) startGame(button.dataset.game);
   });
   el("formats").addEventListener("click", (event) => {
     const button = event.target.closest(".format");
@@ -237,16 +229,23 @@ function connectLeaderboard() {
 async function refreshPlayerRank() {
   state.playerRank = null;
   renderPlayerName();
-  if (!state.supabase || !state.playerName) return;
+  if (!state.supabase || !state.playerName || !state.formats.size) return;
   const { data, error } = await state.supabase
-    .rpc("get_player_rank", { p_player_name: state.playerName })
+    .rpc("get_player_rank", {
+      p_player_name: state.playerName,
+      p_leaderboard_key: formatKey([...state.formats]),
+      p_scoring_version: SCORING_VERSION,
+    })
     .maybeSingle();
   if (!error && data) state.playerRank = Number(data.player_rank);
   renderPlayerName();
 }
 
-function startSelectedGame() {
-  if (state.game === "learn") return beginLearning();
+function startGame(game) {
+  if (!GAMES.includes(game)) return;
+  state.game = game;
+  rememberSelection();
+  if (game === "learn") return beginLearning();
   beginRound(deckToPlay(), true);
 }
 
@@ -433,10 +432,12 @@ function mergeBarracksTopics() {
 }
 
 function mergeStableTopics() {
+  const hussar = state.data.topics.find((topic) => topic.id === "hussar");
   const knight = state.data.topics.find((topic) => topic.id === "paladin");
+  const camel = state.data.topics.find((topic) => topic.id === "camel");
   const elephant = state.data.topics.find((topic) => topic.id === "battle_elephant");
   const steppe = state.data.topics.find((topic) => topic.id === "steppe_lancer");
-  if (!knight || !elephant || !steppe) return;
+  if (!hussar || !knight || !camel || !elephant || !steppe) return;
   const riderIds = ["unit-1751", "unit-1753"];
   const special = {
     ...elephant, id: "regional_cavalry", name: "Battle Elephant / Steppe Lancer / Shrivamsha Rider",
@@ -474,8 +475,13 @@ function mergeStableTopics() {
   knight.alts = Object.fromEntries(Object.entries(knight.alts).map(([id, alts]) => [id, alts.filter((alt) => !riderIds.includes(alt))]));
   state.data.topics = state.data.topics.filter((topic) => ![elephant.id, steppe.id].includes(topic.id));
   state.data.topics.push(special);
-  mergeUnitTopics(["hussar", "paladin", "camel", "regional_cavalry"], {
-    id: "stable_units", name: "Stable", group: "Stable", icon: "img/topics/building-stable.png",
+  mergeUnitTopics(["hussar", "paladin"], {
+    id: "scout_knight", name: "Scout + Knight", group: "Stable",
+    icon: "img/topics/building-stable.png", images: [hussar.icon, knight.icon],
+  });
+  mergeUnitTopics(["camel", "regional_cavalry"], {
+    id: "special_cavalry", name: "Special Cavalry", group: "Stable",
+    icon: "img/topics/building-stable.png", images: [camel.icon, special.icon],
   });
 }
 
@@ -533,7 +539,8 @@ function prepareUnitBlacksmithUpgrades() {
     archer_skirmisher: [2, 3],
     barracks_units: [0, 4],
     cavalry_archer: [2, 3],
-    stable_units: [1, 4],
+    scout_knight: [1, 4],
+    special_cavalry: [1, 4],
   };
 
   for (const [topicId, lineIndexes] of Object.entries(assignments)) {
@@ -547,11 +554,10 @@ function prepareUnitBlacksmithUpgrades() {
 /* ---------- menu ---------- */
 
 function restoreSelection() {
-  let saved = [];
+  let saved = null;
   try {
-    saved = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
-    const mode = localStorage.getItem(MODE_KEY);
-    if (MODES.includes(mode)) state.mode = mode;
+    const storedSelection = localStorage.getItem(STORE_KEY);
+    saved = storedSelection === null ? null : JSON.parse(storedSelection);
     const game = localStorage.getItem(GAME_KEY);
     if (GAMES.includes(game)) state.game = game;
     const storedFormats = localStorage.getItem(FORMAT_KEY);
@@ -564,7 +570,7 @@ function restoreSelection() {
         formats = [storedFormats];
       }
       const valid = formats.filter((format) => FORMATS.includes(format));
-      if (valid.length) state.formats = new Set(valid);
+      state.formats = new Set(valid);
     }
     const known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
     if (known && typeof known === "object") {
@@ -574,25 +580,26 @@ function restoreSelection() {
     const playerName = (localStorage.getItem(PLAYER_KEY) || "").trim();
     if (playerName.length >= 2 && playerName.length <= 24) state.playerName = playerName;
   } catch (ignored) {
-    saved = [];
+    saved = null;
   }
   const known = state.data.topics.map((t) => t.id);
   const mergedIds = Object.fromEntries(state.data.topics.flatMap((topic) =>
     (topic.merged || []).map((child) => [child.id, topic.id])
   ));
-  if (known.includes("stable_units")) {
-    mergedIds.battle_elephant = "stable_units";
-    mergedIds.steppe_lancer = "stable_units";
+  if (known.includes("special_cavalry")) {
+    mergedIds.battle_elephant = "special_cavalry";
+    mergedIds.steppe_lancer = "special_cavalry";
   }
-  const wanted = Array.isArray(saved) ? saved.map((id) => mergedIds[id] || id).filter((id) => known.includes(id)) : [];
-  state.selected = new Set(wanted.length ? wanted : known.slice(0, 1));
-  applyMode();
+  const legacyIds = { stable_units: ["scout_knight", "special_cavalry"] };
+  const wanted = Array.isArray(saved)
+    ? saved.flatMap((id) => legacyIds[id] || [mergedIds[id] || id]).filter((id) => known.includes(id))
+    : null;
+  state.selected = new Set(wanted === null ? known.slice(0, 1) : wanted);
 }
 
 function rememberSelection() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify([...state.selected]));
-    localStorage.setItem(MODE_KEY, state.mode);
     localStorage.setItem(GAME_KEY, state.game);
     localStorage.setItem(FORMAT_KEY, JSON.stringify([...state.formats]));
   } catch (ignored) {
@@ -623,6 +630,18 @@ function mergeFormatKnowledge(records) {
       || candidate.k > current.k
       || (candidate.k === current.k && (candidate.w || 0) < (current.w || 0));
     if (better) merged[sharedKey] = candidate;
+  }
+  for (const [key, candidate] of Object.entries(merged)) {
+    if (!key.startsWith("stable_units:")) continue;
+    const suffix = key.slice("stable_units".length);
+    for (const topicId of ["scout_knight", "special_cavalry"]) {
+      const target = `${topicId}${suffix}`;
+      const current = merged[target];
+      if (!current || candidate.k > current.k || (candidate.k === current.k && (candidate.w || 0) < (current.w || 0))) {
+        merged[target] = candidate;
+      }
+    }
+    delete merged[key];
   }
   return merged;
 }
@@ -722,6 +741,7 @@ async function recordScore(entry) {
       p_cards: entry.cards,
       p_topics: entry.topics,
       p_formats: entry.formats,
+      p_scoring_version: SCORING_VERSION,
     })
     .single();
   if (error) throw error;
@@ -733,7 +753,9 @@ async function loadScores() {
   if (!state.supabase) throw new Error("Leaderboard is not configured");
   const { data, error } = await state.supabase
     .from("scores")
-    .select("id, player_name, score, right_answers, cards, topics, formats, question_format, created_at")
+    .select("id, player_name, score, right_answers, cards, topics, formats, question_format, leaderboard_key, scoring_version, created_at")
+    .eq("leaderboard_key", state.boardKey)
+    .eq("scoring_version", SCORING_VERSION)
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(TOP_SCORES);
@@ -747,6 +769,8 @@ async function loadScores() {
     topics: entry.topics,
     formats: entry.formats || [entry.question_format || "normal"],
     format: entry.question_format,
+    leaderboardKey: entry.leaderboard_key,
+    scoringVersion: entry.scoring_version,
     at: entry.created_at,
   }));
 }
@@ -757,93 +781,82 @@ function knownShare(cards) {
   return Math.round(cards.reduce((sum, card) => sum + knownOf(card), 0) / cards.length);
 }
 
-// Single keeps one topic, All takes every one, Custom leaves the choice alone.
-function applyMode() {
-  if (state.mode === "all") state.selected = new Set(state.data.topics.map((t) => t.id));
-  else if (state.mode === "single" && state.selected.size > 1) {
-    state.selected = new Set([[...state.selected][0]]);
-  }
-}
-
-function setGame(game) {
-  if (!GAMES.includes(game)) return;
-  state.game = game;
-  rememberSelection();
-  renderMenu();
-}
-
 function setFormat(format) {
   if (!FORMATS.includes(format)) return;
   if (state.formats.has(format)) {
-    if (state.formats.size === 1) return;
     state.formats.delete(format);
   } else {
     state.formats.add(format);
   }
   rememberSelection();
   renderMenu();
+  refreshPlayerRank();
 }
 
-function setMode(mode) {
-  if (!MODES.includes(mode)) return;
-  state.mode = mode;
-  applyMode();
-  rememberSelection();
-  renderMenu();
-}
-
-/* A tile toggles only in Custom; anywhere else picking one is picking it alone. */
 function chooseTopic(id) {
-  if (state.mode === "custom") {
-    if (!state.selected.has(id)) state.selected.add(id);
-    else if (state.selected.size > 1) state.selected.delete(id);
-    else return;
-  } else {
-    state.mode = "single";
-    state.selected = new Set([id]);
-  }
+  if (state.selected.has(id)) state.selected.delete(id);
+  else state.selected.add(id);
   rememberSelection();
   renderMenu();
+}
+
+function chooseTopicGroup(ids) {
+  const select = ids.some((id) => !state.selected.has(id));
+  for (const id of ids) select ? state.selected.add(id) : state.selected.delete(id);
+  rememberSelection();
+  renderMenu();
+}
+
+function topicToggle(label, ids, extraClass = "") {
+  const chosen = ids.filter((id) => state.selected.has(id)).length;
+  const pressed = chosen === ids.length;
+  const mixed = chosen > 0 && !pressed;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `topic-section-toggle ${extraClass}`.trim();
+  button.setAttribute("aria-pressed", String(pressed));
+  if (mixed) button.dataset.mixed = "true";
+  button.innerHTML = `<span class="section-check"><svg><use href="#mark-${pressed ? "full" : mixed ? "partial" : "none"}"/></svg></span><span>${label}</span>`;
+  button.addEventListener("click", () => chooseTopicGroup(ids));
+  return button;
 }
 
 function renderMenu() {
   const grid = el("topic-grid");
   grid.innerHTML = "";
 
+  const topics = [...state.data.topics].sort((a, b) => {
+    return a.id === "cavalry_archer" ? 1 : b.id === "cavalry_archer" ? -1 : 0;
+  });
+  grid.append(topicToggle("All topics", topics.map((topic) => topic.id), "all-topics"));
+
   const tiles = document.createElement("div");
   tiles.className = "tiles";
-  for (const topic of state.data.topics) {
-      const tile = document.createElement("button");
-      tile.className = "topic";
-      tile.type = "button";
-      tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
-      tile.title = `${topic.name} — ${Object.keys(topic.civs).length} civilisations`;
-      tile.setAttribute("aria-label", topic.name);
-      tile.innerHTML = tileHtml(topic);
-      tile.addEventListener("click", () => chooseTopic(topic.id));
-      tiles.append(tile);
+  for (const topic of topics) {
+    const tile = document.createElement("button");
+    tile.className = "topic";
+    tile.type = "button";
+    tile.setAttribute("aria-pressed", String(state.selected.has(topic.id)));
+    tile.title = `${topic.name} — ${Object.keys(topic.civs).length} civilisations`;
+    tile.setAttribute("aria-label", topic.name);
+    tile.innerHTML = tileHtml(topic);
+    tile.addEventListener("click", () => chooseTopic(topic.id));
+    tiles.append(tile);
   }
   grid.append(tiles);
-
-  for (const button of el("modes").querySelectorAll(".mode")) {
-    button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode));
-  }
-  for (const button of el("games").querySelectorAll(".game")) {
-    button.setAttribute("aria-pressed", String(button.dataset.game === state.game));
-  }
   for (const button of el("formats").querySelectorAll(".format")) {
     button.setAttribute("aria-pressed", String(state.formats.has(button.dataset.format)));
   }
 
   const pool = deckNow();
-  const learning = state.game === "learn";
-  el("start").disabled = pool.length === 0;
-  el("start-count").textContent = pool.length === 0 ? "" : learning ? "∞" : `${playSize(pool)}`;
+  for (const button of el("games").querySelectorAll(".game")) button.disabled = pool.length === 0;
   el("pool-note").textContent = !pool.length
-    ? ""
-    : learning
-    ? `${pool.length} cards, ${knownShare(pool)}% known${fresh(pool)}`
-    : `${pool.length} cards to draw from, ${CARD_SECONDS}s each, points ×${scoreCoefficient().toFixed(2)}`;
+    ? !state.selected.size && !state.formats.size
+      ? "Select at least one topic and question format"
+      : !state.selected.size
+      ? "Select at least one topic"
+      : "Select at least one question format"
+    : `${pool.length} cards · ${knownShare(pool)}% known${fresh(pool)} · Play: ${CARD_SECONDS}s each, points ×${scoreCoefficient().toFixed(2)}`;
   renderPlayerName();
   markScrollable(grid);
 }
@@ -871,13 +884,15 @@ function playSize(pool) {
   return Math.min(PLAY_CARDS, pool.length);
 }
 
-/* With one question format the first topic is the baseline and every extra
-   topic adds 25%. Mixing formats adds a small 5%/10% to that first topic, then
-   every additional topic adds 30% with two formats or 35% with all three. */
-function scoreCoefficient(topicCount = state.selected.size, formatCount = state.formats.size) {
-  const rate = formatCount === 1 ? 0.25 : formatCount === 2 ? 0.3 : 0.35;
-  const formatBonus = formatCount === 1 ? 0 : formatCount === 2 ? 0.05 : 0.1;
-  return 1 + formatBonus + Math.max(0, topicCount - 1) * rate;
+/* Breadth is harder, but its reward has diminishing returns. Formats have
+   separate leaderboards, so mixing them no longer changes the score. */
+function scoreCoefficient(topicCount = state.selected.size) {
+  return 1 + 0.15 * Math.sqrt(Math.max(0, topicCount - 1));
+}
+
+function formatKey(formats) {
+  const selected = new Set(formats);
+  return FORMATS.filter((format) => selected.has(format)).join("+") || "normal";
 }
 
 /* how many of them have never been answered at all */
@@ -1145,7 +1160,6 @@ function buildQuestion(card) {
       differs: own.units[index] !== partner.units[index],
     }));
   const upgradeOptions = claimables(topic)
-    .filter(({ id }) => id !== BONUS_ID)
     .map((item, index) => ({
       id: `difference-upgrade:${item.id}`,
       name: item.name,
@@ -1294,7 +1308,6 @@ function configurationPromptHtml(topic, fact, civId) {
       return `<span class="configuration-answer unit" title="${child.name}: ${unit.name}">${art}</span>`;
     });
   const upgrades = claimables(topic)
-    .filter(({ id }) => id !== BONUS_ID)
     .map(({ id, name, art }) => {
       const on = wanted(fact, id);
       return `<span class="configuration-answer ${on ? "on" : "off"}" title="${name}: ${on ? "present" : "missing"}">
@@ -1334,6 +1347,15 @@ function openAlternateBoard(card) {
 function evaluateAlternateAnswer(button) {
   if (state.phase !== "picking") return;
   const id = button.dataset.answerId;
+  if (state.game === "play") {
+    state.answerClicks += 1;
+    const selected = state.picked[id] !== "selected";
+    if (selected) state.picked[id] = "selected";
+    else delete state.picked[id];
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+    return;
+  }
   if (state.picked[id]) return;
   const hit = state.question.correct.has(id);
   const outcome = hit ? "spotted" : "falsely";
@@ -1462,7 +1484,7 @@ function openBoard(card) {
         ? `<div class="unit-state-pair">${topic.merged.map((unitTopic) => unitStatesHtml(unitTopic, unitTopic.id)).join("")}</div>`
         : unitStatesHtml(topic)}
       <div class="claims" style="--columns: ${columnsFor(tileCount(topic))}">
-        ${shuffle(claimables(topic).filter(({ id }) => id !== BONUS_ID))
+        ${shuffle(claimables(topic))
           .map(
             ({ id, name, art }) => `<button class="upgrade" data-id="${id}" title="${name}">
               ${art}<b class="verdict"></b>
@@ -1472,10 +1494,6 @@ function openBoard(card) {
       </div>
     </div>
     <div class="claim-actions">
-      <button class="act star" data-claim="${BONUS_ID}"
-        title="a civ bonus, team bonus or unique tech about this unit">
-        <svg><use href="#icon-star"/></svg><span>bonus</span><b class="verdict"></b>
-      </button>
       <button id="claim-all" class="act full" title="every upgrade and the highest unit state">
         <svg><use href="#mark-full"/></svg><span>full</span>
       </button>
@@ -1525,16 +1543,23 @@ function unitStatesHtml(topic, unitKey = "") {
 function stateLabel(topic, unit, index) {
   if (unit.id === NO_UNIT_ID) return unit.name;
   if (topic.blacksmithLine && index === 0) return `${unit.name} / No upgrade`;
+  if (topic.id === "onager") return ["Mangonel / Rocket Cart", "Onager / Heavy Rocket Cart", "Siege Onager"][index];
   if (topic.id === "hussar" && index === 0) return "Scout Cavalry / Missing Scout";
   if (topic.id === "hand_cannoneer") return ["Missing", "Hand Cannoneer without Ring Archer Armor", "Hand Cannoneer + Ring Archer Armor"][index];
   if (topic.id === "bombard_cannon") return ["Missing", "Bombard Cannon / Traction Trebuchet without Siege Engineers", "Bombard Cannon / Traction Trebuchet + Siege Engineers"][index];
-  if (["cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) return slotName(topic, unit);
+  if (["onager", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) return slotName(topic, unit);
   if (topic.id === "siege_ram") return ["Battering Ram / Armored Elephant", "Capped Ram / Siege Elephant", "Siege Ram / Nothing"][index];
   if (topic.id !== "champion") return unit.name;
   return ["Long Swordsman / Champi Warrior", "Two-Handed Swordsman / Elite Champi Warrior", "Champion / Legionary"][index] || unit.name;
 }
 
 function stateArt(topic, unit, index, label) {
+  if (topic.id === "onager" && index === 0) {
+    return splitHtml([
+      topic.below.img,
+      topic.parts.find((part) => part.id === "unit-1904").img,
+    ], label);
+  }
   if (topic.blacksmithLine && index === 0) {
     return `<span class="split n2 unit-or-missing"><img src="${unit.img}" alt="${unit.name}" title="${unit.name}"><svg class="split-missing" aria-label="No upgrade"><use href="#mark-none"/></svg></span>`;
   }
@@ -1556,7 +1581,7 @@ function stateArt(topic, unit, index, label) {
       topic.parts.find((part) => part.id === "unit-1942").img,
     ], label);
   }
-  if (["champion", "siege_ram", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) {
+  if (["champion", "siege_ram", "onager", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) {
     const parts = slotGroup(topic, unit.id);
     if (parts.length > 1) return `<span class="split n${parts.length}">${parts.map((part) => `<img src="${part.img}" alt="${part.name}" title="${part.name}">`).join("")}</span>`;
   }
@@ -1623,12 +1648,22 @@ function chooseUnitState(id, unitKey = "", holding = false) {
   const topic = state.data.topics.find((item) => item.id === state.deck[state.index].topicId);
   const unitTopic = topic.merged ? topic.merged.find((item) => item.id === unitKey) : topic;
   const pickedKey = unitKey ? `${UNIT_STATE_ID}:${unitKey}` : UNIT_STATE_ID;
-  if (state.phase !== "picking" || !unitStateData(unitTopic) || state.picked[pickedKey]) return;
+  if (state.phase !== "picking" || !unitStateData(unitTopic) || (state.game === "learn" && state.picked[pickedKey])) return;
   if (!holding) state.answerClicks += 1;
   const { answer } = truth(state.data, state.deck[state.index]);
   const fact = topic.merged ? answer.mergedFacts[unitKey] : answer;
   if (unitKey) state.unitState[unitKey] = id;
   else state.unitState = id;
+  for (const button of el("pad").querySelectorAll(".unit-state")) {
+    if ((button.dataset.unitKey || "") !== unitKey) continue;
+    const selected = button.dataset.unitState === id && (button.dataset.unitKey || "") === unitKey;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  }
+  if (state.game === "play") {
+    syncDoneState();
+    return;
+  }
   const hit = id === unitStateFor(unitTopic, fact);
   const outcome = hit ? "spotted" : "falsely";
   state.picked[pickedKey] = outcome;
@@ -1636,12 +1671,6 @@ function chooseUnitState(id, unitKey = "", holding = false) {
   const worth = hit ? value : -value;
   state.results[state.index].delta += worth;
   bumpScore(worth);
-  for (const button of el("pad").querySelectorAll(".unit-state")) {
-    if ((button.dataset.unitKey || "") !== unitKey) continue;
-    const selected = button.dataset.unitState === id && (button.dataset.unitKey || "") === unitKey;
-    button.classList.toggle("selected", selected);
-    button.setAttribute("aria-pressed", String(selected));
-  }
   markUnitState(outcome, unitKey);
   syncDoneState();
 }
@@ -1654,7 +1683,7 @@ function syncDoneState() {
 }
 
 function tileCount(topic) {
-  return claimables(topic).filter(({ id }) => id !== BONUS_ID).length;
+  return claimables(topic).length;
 }
 
 /* Two even rows rather than a full one and a remainder: five upgrades are 3 and
@@ -1693,8 +1722,7 @@ function cannotTitle(topic) {
   return unit ? "it cannot build this unit at all" : "it has none of these";
 }
 
-/* The board itself is the upgrades. The bonus is a claim too, but it is not an
-   upgrade, so it sits with the actions. */
+/* The board itself is the upgrades. */
 function claimables(topic) {
   const unitData = unitStateData(topic);
   const mergedUnits = new Set(topic.merged ? topic.merged.flatMap((item) => item.parts.filter((part) => part.id.startsWith("unit-")).map((part) => part.id)) : []);
@@ -1707,7 +1735,7 @@ function claimables(topic) {
     const name = slotName(topic, part);
     return { id, name, art: splitHtml(slotImages(topic, id), name) };
   });
-  return tiles.concat({ id: BONUS_ID, name: "a bonus about this unit", art: "" });
+  return tiles;
 }
 
 /* "all of them are there": every tile still unanswered, claimed at once, and
@@ -1740,24 +1768,32 @@ function closePicker() {
 
 /* A right claim is one the civ has. The bonus reads its own fact. */
 function wanted(fact, id) {
-  if (id === BONUS_ID) return Boolean(fact.bonus);
   if (id === NO_UNIT_ID) return fact.tier === "none";
   return !fact.missing.includes(id);
 }
 
-/* A claim is answered on the spot and cannot be taken back. The card stays face
-   up until Done finalizes every unselected upgrade as absent. */
+/* Learn answers a claim on the spot. Play keeps it as an editable selection;
+   Done grades all selections and finalizes every unselected upgrade as absent. */
 function pick(id, holding) {
-  if (state.phase !== "picking" || state.picked[id]) return;
+  if (state.phase !== "picking" || (state.game === "learn" && state.picked[id])) return;
   if (!holding) state.answerClicks += 1;
+  if (state.game === "play") {
+    const selected = state.picked[id] !== "selected";
+    if (selected) state.picked[id] = "selected";
+    else delete state.picked[id];
+    const button = el("pad").querySelector(`[data-id="${id}"], [data-claim="${id}"]`);
+    if (button) {
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    }
+    return;
+  }
   const card = state.deck[state.index];
   const { topic, answer: fact } = truth(state.data, card);
 
   const hit = wanted(fact, id);
   const outcome = hit ? "spotted" : "falsely";
-  const worth = id === BONUS_ID
-    ? (hit ? POINTS.bonus : POINTS.bonusWrong)
-    : (hit ? POINTS.upgrade : POINTS.upgradeWrong);
+  const worth = hit ? POINTS.upgrade : POINTS.upgradeWrong;
   state.picked[id] = outcome;
   state.results[state.index].delta += worth;
   bumpScore(worth);
@@ -1777,9 +1813,7 @@ function markClaim(id, outcome) {
   if (verdict) verdict.innerHTML = mark;
 }
 
-/* What you never claimed: the ones you missed. The bonus is not one of them --
-   it is worth points and nothing else, so leaving it costs nothing and cannot
-   make a right card a half one. */
+/* What you never claimed: the upgrades you missed. */
 function finishPicks(answered, timedOut) {
   if (state.phase !== "picking") return;
   if (state.question?.format !== "normal") return finishAlternatePicks(Boolean(timedOut));
@@ -1788,6 +1822,14 @@ function finishPicks(answered, timedOut) {
   const { topic, answer: fact } = truth(state.data, card);
 
   let delta = 0;
+  for (const [id, outcome] of Object.entries(state.picked)) {
+    if (outcome !== "selected") continue;
+    const hit = wanted(fact, id);
+    const graded = hit ? "spotted" : "falsely";
+    state.picked[id] = graded;
+    markClaim(id, graded);
+    delta += hit ? POINTS.upgrade : POINTS.upgradeWrong;
+  }
   const unitData = unitStateData(topic);
   const mergedUnitKeys = topic.merged ? topic.merged.map((item) => item.id) : [];
   const unitHit = topic.merged
@@ -1822,7 +1864,7 @@ function finishPicks(answered, timedOut) {
   }
   if (!answered) {
     for (const { id } of claimables(topic)) {
-      if (id === BONUS_ID || state.picked[id]) continue;
+      if (state.picked[id]) continue;
       if (wanted(fact, id)) {
         state.picked[id] = "missed";
         markClaim(id, "missed");
@@ -1847,12 +1889,10 @@ function finishPicks(answered, timedOut) {
      Some of them right is a half answer, worth what the claims came to and no
      more; none of them right is a wrong one and costs the wholly-wrong penalty. The clock running
      out is a wrong answer however much of it was right, so it takes the same. */
-  const outcomes = Object.entries(state.picked)
-    .filter(([id]) => id !== BONUS_ID)
-    .map(([, outcome]) => outcome);
+  const outcomes = Object.values(state.picked);
   const owing = claimables(topic)
     .concat({ id: NO_UNIT_ID })
-    .filter(({ id }) => id !== BONUS_ID && wanted(fact, id) && state.picked[id] !== "spotted");
+    .filter(({ id }) => wanted(fact, id) && state.picked[id] !== "spotted");
   const unitShortcut = !topic.merged && state.picked[UNIT_STATE_ID] === "spotted" && state.unitState === NO_UNIT_ID;
   const clean =
     !timedOut &&
@@ -1899,6 +1939,11 @@ function finishAlternatePicks(timedOut) {
   for (const id of ids) {
     const wantedAnswer = correct.has(id);
     let outcome = state.picked[id];
+    if (outcome === "selected") {
+      outcome = wantedAnswer ? "spotted" : "falsely";
+      state.picked[id] = outcome;
+      delta += wantedAnswer ? POINTS.upgrade : POINTS.upgradeWrong;
+    }
     if (!outcome) {
       outcome = wantedAnswer ? "missed" : "cleared";
       state.picked[id] = outcome;
@@ -1986,7 +2031,7 @@ function markUnitState(outcome, unitKey = "") {
 /* the civ's bonus, named on the reveal: it is why a civ a slot short can still
    be good */
 function bonusHtml(fact) {
-  if (!fact.bonus) return `<div class="bonus-note none"><svg><use href="#icon-star"/></svg><span>No civilisation bonus for this topic</span></div>`;
+  if (!fact.bonus) return "";
   const why = (fact.why || []).join(" • ");
   return `<div class="bonus-note"><svg><use href="#icon-star"/></svg><span>${why}</span></div>`;
 }
@@ -2000,7 +2045,6 @@ function configurationOf(topic, fact, civId) {
       return unitStateFor(child, childFact, civId);
     });
   const upgrades = claimables(topic)
-    .filter(({ id }) => id !== BONUS_ID)
     .map(({ id }) => wanted(fact, id));
   return { units, upgrades };
 }
@@ -2114,7 +2158,7 @@ function showResults() {
   const topics = state.played.filter((id) => state.data.topics.some((topic) => topic.id === id));
   const whole = state.game === "play" && state.whole;
   const baseScore = state.score;
-  const coefficient = whole ? scoreCoefficient(topics.length, state.formats.size) : 1;
+  const coefficient = whole ? scoreCoefficient(topics.length) : 1;
   const adjustedScore = Math.round(baseScore * coefficient);
   const coefficientPoints = adjustedScore - baseScore;
   if (coefficientPoints) bumpScore(coefficientPoints);
@@ -2181,8 +2225,10 @@ function ordinal(value) {
   return `${n}${tail}`;
 }
 
-async function openBoardScreen(highlight) {
+async function openBoardScreen(highlight, useCurrentFormats = true) {
+  if (useCurrentFormats) state.boardKey = formatKey([...state.formats]);
   show("scores");
+  el("leaderboard-format").value = state.boardKey;
   el("scoreboard").innerHTML = `<li class="empty">Loading global scores…</li>`;
   try {
     if (state.scoreSubmission) await state.scoreSubmission.catch(() => null);
@@ -2206,6 +2252,7 @@ function renderScores(highlight) {
     .map((entry, i) => {
       const rank = i + 1;
       const topics = (entry.topics || [])
+        .flatMap((id) => id === "stable_units" ? ["scout_knight", "special_cavalry"] : [id])
         .map((id) => state.data.topics.find((topic) => topic.id === id))
         .filter(Boolean);
       const shown = topics.slice(0, 5);
@@ -2270,7 +2317,7 @@ function onKey(event) {
   }
 
   if (screens.menu.classList.contains("is-active")) {
-    if (event.key === "Enter" && !el("start").disabled) el("start").click();
+    if (event.key === "Enter" && deckNow().length) startGame("play");
     return;
   }
 

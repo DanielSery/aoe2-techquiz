@@ -130,6 +130,17 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .lede { margin: 0; color: #a8967f; font-size: 13px; }
 
+.menu-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.menu-account { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.menu-account .icon-button { flex: none; width: 40px; height: 40px; padding: 8px; }
+
 .topic-grid {
   display: flex;
   flex-direction: column;
@@ -152,12 +163,52 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .topic-grid > .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 62px);
-  gap: 7px;
+  grid-template-columns: repeat(auto-fill, 78px);
+  gap: 9px;
+}
+
+.topic-section-toggle {
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 7px 9px;
+  border-color: transparent;
+  background: transparent;
+  color: #a8967f;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.topic-section-toggle:hover,
+.topic-section-toggle[aria-pressed="true"],
+.topic-section-toggle[data-mixed="true"] { color: var(--gold); }
+
+.section-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+}
+
+.section-check svg { width: 14px; height: 14px; }
+
+.all-topics {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  align-self: flex-start;
+  padding: 6px 9px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(5px);
 }
 
 .topic {
-  --tile-icon: 50px;
+  --tile-icon: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,16 +226,9 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .topic small { font-size: 11px; color: #8a7a64; }
 
-.menu-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding-bottom: max(6px, env(safe-area-inset-bottom));
-}
-
-.menu-actions .player-name {
+.menu-account .player-name {
   min-width: 0;
-  max-width: 150px;
+  max-width: 180px;
   padding-inline: 12px;
 }
 
@@ -242,30 +286,25 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .player-dialog .actions { justify-content: flex-end; margin-top: 4px; }
 
 
-/* forty cards against the clock, or as long as you like: the two are different
-   games rather than two lengths of the same one, so they sit apart from the
-   single/custom/all switch and not next to it */
+/* Learn and Play are the menu's final actions: clicking either begins it. */
 .games {
   display: flex;
   gap: 8px;
+  width: 100%;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
 }
 
 .game {
+  flex: 1;
   gap: 7px;
-  padding: 9px 18px;
-  color: #a8967f;
+  padding: 11px 18px;
+  color: var(--ink);
 }
 
 .game svg { width: 17px; height: 17px; }
 .game span { font-size: 13px; }
 
-.game[aria-pressed="true"] {
-  color: var(--gold);
-  border-color: var(--gold);
-  background: var(--panel-2);
-}
-
-.pool-note { margin: 0; font-size: 12px; color: #8a7a64; }
+.pool-note { margin: 0; min-height: 17px; font-size: 12px; color: #8a7a64; text-align: center; }
 
 /* single / custom / all, one of them always on */
 .modes {
@@ -1431,8 +1470,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .claim-actions .act svg { width: calc(var(--cell) * .38); height: calc(var(--cell) * .38); }
 .claim-actions .act span { font-size: min(12px, calc(var(--cell) * .22)); opacity: 1; }
-.claim-actions .act.star { color: var(--bonus); border-color: #4a3a5e; background: #2a1f38; }
 .claim-actions .act.full { color: var(--full); border-color: #2f5233; background: #172a1a; }
+.claim-actions .act.selected { box-shadow: 0 0 0 2px var(--gold) inset; }
 
 /* answered on the tap, and it outranks whatever the button wears at rest */
 .act.spotted { border-color: var(--full); color: var(--full); }
@@ -1517,6 +1556,10 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
   grid-template-columns: 1.35fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
 }
+
+.upgrade.selected { border-color: var(--gold); }
+.upgrade.selected > img,
+.upgrade.selected > .split { filter: none; }
 
 .split.n5 img:first-child { grid-row: 1 / span 2; }
 
@@ -1623,9 +1666,9 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 @media (max-width: 380px) {
   .screen { padding: 10px 10px 0; }
-  .mode { padding: 8px 10px; }
-  .mode span { font-size: 12px; }
   h1 { font-size: 19px; }
+  .menu-account .player-name { max-width: 122px; padding-inline: 9px; }
+  .topic-section-toggle { padding-inline: 4px; font-size: 11px; }
 }
 
 /* the topic list is the menu; everything else gives way to it */
@@ -1634,12 +1677,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 @media (max-height: 820px) {
-  .topic-grid > .tiles { grid-template-columns: repeat(auto-fill, 54px); }
-  .topic { --tile-icon: 42px; }
+  .topic-grid > .tiles { grid-template-columns: repeat(auto-fill, 66px); }
+  .topic { --tile-icon: 52px; }
 }
 
 @media (max-height: 700px) {
-  h1 span { display: none; }
+  h1 img { width: 27px; height: 27px; }
+  h1 { font-size: 17px; }
   footer { display: none; }
 }
 
@@ -1662,6 +1706,25 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .board-title svg { width: 18px; height: 18px; }
+
+.leaderboard-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  color: #a8967f;
+  font-size: 11px;
+}
+
+.leaderboard-filter select {
+  max-width: 220px;
+  padding: 6px 28px 6px 9px;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  color: #e2d4c0;
+  background: var(--panel-2);
+}
 
 .final-note {
   margin: 2px 0 0;
