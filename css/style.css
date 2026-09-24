@@ -1707,23 +1707,13 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 .board-title svg { width: 18px; height: 18px; }
 
-.leaderboard-filter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  color: #a8967f;
-  font-size: 11px;
-}
-
-.leaderboard-filter select {
-  max-width: 220px;
-  padding: 6px 28px 6px 9px;
-  border: 1px solid var(--edge);
-  border-radius: 8px;
-  color: #e2d4c0;
-  background: var(--panel-2);
+.leaderboard-formats { width: min(100%, 520px); }
+.leaderboard-formats .format {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-inline: 4px;
+  font-size: clamp(9px, 2.5vw, 11px);
+  white-space: nowrap;
 }
 
 .final-note {

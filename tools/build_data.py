@@ -85,14 +85,14 @@ TOPICS = [
         "words": [r"gunpowder", r"hand cannon\w*", r"archer armou?r"],
     },
     {
-        # Four civs field the Armored Elephant where everyone else has a ram,
-        # paired with the first two ram levels in the unit selector.
+        # The three selector levels group the regional elephant line by the
+        # requested quiz equivalence, not by its own upgrade order.
         "id": "siege_ram",
         "group": "Siege",
         "name": "Siege Ram / Siege Elephant",
-        "unit": [1258, 1744],
+        "unit": 1258,
         "icon": ("Unit", 548),
-        "upgrades": [[("Unit", 422), ("Unit", 1746)], ("Unit", 548), 377],
+        "upgrades": [[("Unit", 422), ("Unit", 1746)], [("Unit", 548), ("Unit", 1744)], 377],
         "words": [r"rams?", r"siege", r"siege elephants?"],
     },
     {
@@ -114,15 +114,13 @@ TOPICS = [
         "words": [r"scorpions?", r"siege"],
     },
     {
-        # Rocket Cart replaces the Mangonel and Heavy Rocket Cart replaces the
-        # Onager. The regional line has no Siege Onager-equivalent third rung.
+        # Rocket Cart shares the Onager level and Heavy Rocket Cart the Siege
+        # Onager level in the three-way selector.
         "id": "onager",
         "group": "Siege",
         "name": "Onager / Rocket Cart",
-        "unit": [550, 1907],
-        "below": ("Unit", 280),
-        "parts": [("Unit", 1904)],
-        "upgrades": [("Unit", 588), 377],
+        "unit": 280,
+        "upgrades": [[("Unit", 550), ("Unit", 1904)], [("Unit", 588), ("Unit", 1907)], 377],
         "words": [r"onagers?", r"mangonels?", r"rocket carts?", r"siege"],
     },
     {
@@ -196,10 +194,10 @@ TOPICS = [
     {
         "id": "champion",
         "group": "Barracks",
-        "name": "Long Swordsman / Champi Warrior",
-        "unit": [77, 2552],
-        "below": ("Unit", 75),
-        "upgrades": [[("Unit", 473), ("Unit", 2554)], [("Unit", 567), ("Unit", 1793)], 875, 215, 77, 75],
+        "name": "Swordsman / Champi",
+        "unit": [75, 77, 2588],
+        "upgrades": [[("Unit", 473), ("Unit", 2552)],
+                     [("Unit", 567), ("Unit", 1793), ("Unit", 2554)], 875, 215, 77, 75],
         "words": [r"militia-line", r"champions?", r"legionar\w*", r"champi\w*", r"infantry", r"barracks"],
         "veto": [r"villagers?"],
     },
@@ -234,14 +232,14 @@ TOPICS = [
                  r"xianbei raiders?"],
     },
     {
-        # Three civs field a knight of their own: the Persians' Savar tops the
-        # Knight line itself, the Gurjaras have the Shrivamsha Rider and Shu, Wei
-        # and Wu the Hei Guang Cavalry. No civ has two of them.
+        # Cavalier shares its level with Hei Guang Cavalry; Paladin and Savar
+        # share the final level with Elite Hei Guang Cavalry.
         "id": "paladin",
         "group": "Stable",
         "name": "Knight / Shrivamsha Rider / Hei Guang Cavalry",
-        "unit": [38, 1751, 1944],
-        "upgrades": [[("Unit", 569), ("Unit", 1813), ("Unit", 1753), ("Unit", 1946)], 435, 39, 80, 75],
+        "unit": [38, 1751],
+        "upgrades": [[("Unit", 283), ("Unit", 1944)],
+                     [("Unit", 569), ("Unit", 1813), ("Unit", 1753), ("Unit", 1946)], 435, 39, 80, 75],
         "words": [r"paladins?", r"knights?", r"knight-line", r"shrivamsha riders?",
                   r"hei guang cavalry", r"cavalry", r"stables?", r"mounted units?",
                   r"stable units?"],

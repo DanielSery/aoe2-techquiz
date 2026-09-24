@@ -14,6 +14,7 @@ create table if not exists public.scores (
   leaderboard_key text not null default 'normal',
   scoring_version smallint not null default 2,
   original_score integer,
+  is_current boolean not null default true,
   created_at timestamptz not null default now(),
   check (right_answers <= cards)
 );
@@ -23,20 +24,25 @@ alter table public.scores add column if not exists formats text[];
 alter table public.scores add column if not exists leaderboard_key text;
 alter table public.scores add column if not exists scoring_version smallint;
 alter table public.scores add column if not exists original_score integer;
+alter table public.scores add column if not exists is_current boolean;
 
 update public.scores
 set formats = case when question_format = 'mixed' then array['mixed']::text[] else array[question_format]::text[] end
 where formats is null;
 update public.scores set scoring_version = 1 where scoring_version is null;
+
+-- A previous schema revision may have constrained exact mixed combinations.
+-- Remove those database objects before folding them into one Mixed category.
+alter table public.scores drop constraint if exists scores_leaderboard_key_check;
+drop index if exists public.scores_player_name_unique_idx;
+drop index if exists public.scores_player_leaderboard_unique_idx;
+
 update public.scores
 set leaderboard_key = case
-  when 'mixed' = any(formats) then 'legacy-mixed'
-  else concat_ws('+',
-    case when 'normal' = any(formats) then 'normal' end,
-    case when 'reverse' = any(formats) then 'reverse' end,
-    case when 'difference' = any(formats) then 'difference' end)
-end
-where leaderboard_key is null or leaderboard_key = '';
+  when cardinality(formats) > 1 or 'mixed' = any(formats) then 'mixed'
+  else formats[1]
+end;
+update public.scores set is_current = true where is_current is null;
 
 alter table public.scores alter column formats set default array['normal']::text[];
 alter table public.scores alter column formats set not null;
@@ -44,6 +50,8 @@ alter table public.scores alter column leaderboard_key set default 'normal';
 alter table public.scores alter column leaderboard_key set not null;
 alter table public.scores alter column scoring_version set default 2;
 alter table public.scores alter column scoring_version set not null;
+alter table public.scores alter column is_current set default true;
+alter table public.scores alter column is_current set not null;
 
 alter table public.scores drop constraint if exists scores_score_check;
 alter table public.scores add constraint scores_score_check check (score between -250000 and 250000);
@@ -51,10 +59,8 @@ alter table public.scores drop constraint if exists scores_formats_check;
 alter table public.scores add constraint scores_formats_check check (
   cardinality(formats) between 1 and 3
   and formats <@ array['normal', 'reverse', 'difference', 'mixed']::text[]);
-alter table public.scores drop constraint if exists scores_leaderboard_key_check;
-alter table public.scores add constraint scores_leaderboard_key_check check (leaderboard_key in (
-  'normal', 'reverse', 'difference', 'normal+reverse', 'normal+difference',
-  'reverse+difference', 'normal+reverse+difference', 'legacy-mixed'));
+alter table public.scores add constraint scores_leaderboard_key_check
+  check (leaderboard_key in ('normal', 'reverse', 'difference', 'mixed'));
 alter table public.scores drop constraint if exists scores_scoring_version_check;
 alter table public.scores add constraint scores_scoring_version_check check (scoring_version between 1 and 2);
 
@@ -79,10 +85,23 @@ set original_score = coalesce(scores.original_score, scores.score),
 from converted where scores.id = converted.id;
 
 -- Replace the former global one-row-per-name rule with one best per name and
--- exact format set. No rows are removed.
-drop index if exists public.scores_player_name_unique_idx;
+-- format family. If this follows an earlier exact-combination migration, keep
+-- every row but expose only the strongest one in the combined Mixed ranking.
+with ranked as (
+  select id, row_number() over (
+    partition by lower(btrim(player_name)), leaderboard_key, scoring_version
+    order by score desc, created_at asc, id
+  ) as position
+  from public.scores
+  where is_current
+)
+update public.scores as scores
+set is_current = false
+from ranked
+where scores.id = ranked.id and ranked.position > 1;
 create unique index if not exists scores_player_leaderboard_unique_idx
-  on public.scores (lower(btrim(player_name)), leaderboard_key, scoring_version);
+  on public.scores (lower(btrim(player_name)), leaderboard_key, scoring_version)
+  where is_current;
 drop index if exists public.scores_leaderboard_idx;
 create index if not exists scores_leaderboard_idx
   on public.scores (leaderboard_key, scoring_version, score desc, created_at asc);
@@ -111,10 +130,7 @@ declare
   v_best_score integer;
   v_best_created_at timestamptz;
 begin
-  v_key := concat_ws('+',
-    case when 'normal' = any(p_formats) then 'normal' end,
-    case when 'reverse' = any(p_formats) then 'reverse' end,
-    case when 'difference' = any(p_formats) then 'difference' end);
+  v_key := case when cardinality(p_formats) > 1 then 'mixed' else p_formats[1] end;
 
   if char_length(v_name) not between 2 and 24 or p_score not between -250000 and 250000
     or p_cards not between 1 and 40 or p_right_answers not between 0 and p_cards
@@ -127,7 +143,7 @@ begin
   perform pg_advisory_xact_lock(hashtextextended(lower(v_name) || '|' || v_key || '|2', 0));
   select * into v_existing from public.scores
   where lower(btrim(player_name)) = lower(v_name) and leaderboard_key = v_key
-    and scoring_version = p_scoring_version for update;
+    and scoring_version = p_scoring_version and is_current for update;
 
   if not found then
     insert into public.scores (player_name, score, right_answers, cards, topics, formats,
@@ -154,15 +170,15 @@ begin
   return query select v_id, v_saved,
     case when v_saved then
       (select count(*) + 1 from public.scores where id <> v_id and leaderboard_key = v_key
-        and scoring_version = p_scoring_version and (score > v_best_score
+        and scoring_version = p_scoring_version and is_current and (score > v_best_score
           or (score = v_best_score and created_at < v_best_created_at)
           or (score = v_best_score and created_at = v_best_created_at and id < v_id)))
     else
       (select count(*) + 1 from public.scores where id <> v_id and leaderboard_key = v_key
-        and scoring_version = p_scoring_version and score >= p_score)
+        and scoring_version = p_scoring_version and is_current and score >= p_score)
     end,
     (select count(*) + 1 from public.scores where id <> v_id and leaderboard_key = v_key
-      and scoring_version = p_scoring_version and (score > v_best_score
+      and scoring_version = p_scoring_version and is_current and (score > v_best_score
         or (score = v_best_score and created_at < v_best_created_at)
         or (score = v_best_score and created_at = v_best_created_at and id < v_id)));
 end;
@@ -181,7 +197,7 @@ as $$
     select lower(btrim(player_name)) as player_key, score,
       row_number() over (order by score desc, created_at asc, id) as position
     from public.scores where leaderboard_key = p_leaderboard_key
-      and scoring_version = p_scoring_version
+      and scoring_version = p_scoring_version and is_current
   ) as ranked
   where ranked.player_key = lower(btrim(p_player_name)) limit 1;
 $$;

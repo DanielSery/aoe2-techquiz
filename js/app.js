@@ -131,7 +131,7 @@ const state = {
   resultCoefficientNote: "",
   supabase: null,
   scores: [],
-  boardKey: "normal",
+  boardKey: "any",
   timer: 0,
   wait: 0,
   clock: 0,
@@ -167,9 +167,11 @@ function start() {
   el("to-board").addEventListener("click", () => openBoardScreen(null));
   el("see-board").addEventListener("click", () => openBoardScreen(state.lastScoreId));
   el("board-back").addEventListener("click", () => show("menu"));
-  el("leaderboard-format").addEventListener("change", (event) => {
-    state.boardKey = event.target.value;
-    openBoardScreen(null, false);
+  el("leaderboard-formats").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-leaderboard-format]");
+    if (!button) return;
+    state.boardKey = button.dataset.leaderboardFormat;
+    openBoardScreen(null);
   });
   el("player-name").addEventListener("click", () => openPlayerDialog());
   el("player-cancel").addEventListener("click", cancelPlayerDialog);
@@ -471,6 +473,8 @@ function mergeStableTopics() {
   }
   knight.name = "Knight / Hei Guang Cavalry";
   knight.parts = knight.parts.filter((part) => !riderIds.includes(part.id));
+  const eliteHeiGuang = knight.parts.find((part) => part.id === "unit-1946");
+  if (eliteHeiGuang) eliteHeiGuang.name = "Elite Hei Guang Cavalry";
   knight.gate = knight.gate.filter((id) => !riderIds.includes(id));
   knight.alts = Object.fromEntries(Object.entries(knight.alts).map(([id, alts]) => [id, alts.filter((alt) => !riderIds.includes(alt))]));
   state.data.topics = state.data.topics.filter((topic) => ![elephant.id, steppe.id].includes(topic.id));
@@ -594,7 +598,7 @@ function restoreSelection() {
   const wanted = Array.isArray(saved)
     ? saved.flatMap((id) => legacyIds[id] || [mergedIds[id] || id]).filter((id) => known.includes(id))
     : null;
-  state.selected = new Set(wanted === null ? known.slice(0, 1) : wanted);
+  state.selected = new Set(wanted || []);
 }
 
 function rememberSelection() {
@@ -749,18 +753,20 @@ async function recordScore(entry) {
   return data;
 }
 
-async function loadScores() {
+async function loadScores(boardKey) {
   if (!state.supabase) throw new Error("Leaderboard is not configured");
-  const { data, error } = await state.supabase
+  let query = state.supabase
     .from("scores")
     .select("id, player_name, score, right_answers, cards, topics, formats, question_format, leaderboard_key, scoring_version, created_at")
-    .eq("leaderboard_key", state.boardKey)
     .eq("scoring_version", SCORING_VERSION)
+    .eq("is_current", true);
+  if (boardKey !== "any") query = query.eq("leaderboard_key", boardKey);
+  const { data, error } = await query
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(TOP_SCORES);
   if (error) throw error;
-  state.scores = data.map((entry) => ({
+  return data.map((entry) => ({
     id: entry.id,
     player: entry.player_name,
     score: entry.score,
@@ -891,8 +897,8 @@ function scoreCoefficient(topicCount = state.selected.size) {
 }
 
 function formatKey(formats) {
-  const selected = new Set(formats);
-  return FORMATS.filter((format) => selected.has(format)).join("+") || "normal";
+  if (formats.length > 1) return "mixed";
+  return formats[0] || "normal";
 }
 
 /* how many of them have never been answered at all */
@@ -1542,23 +1548,29 @@ function unitStatesHtml(topic, unitKey = "") {
 
 function stateLabel(topic, unit, index) {
   if (unit.id === NO_UNIT_ID) return unit.name;
+  if (topic.id === "paladin") return [
+    "Missing / Knight",
+    "Cavalier / Hei Guang Cavalry",
+    "Paladin / Savar / Elite Hei Guang Cavalry",
+  ][index];
+  if (topic.id === "onager") return ["Mangonel", "Onager / Rocket Cart", "Siege Onager / Heavy Rocket Cart"][index];
+  if (topic.id === "siege_ram") return ["Battering Ram", "Capped Ram / Siege Elephant", "Siege Ram / Armored Elephant"][index];
+  if (topic.id === "champion") return [
+    "Man-at-Arms / Long Swordsman / Champi Runner",
+    "Two-Handed Swordsman / Champi Warrior",
+    "Champion / Legionary / Elite Champi Warrior",
+  ][index];
   if (topic.blacksmithLine && index === 0) return `${unit.name} / No upgrade`;
-  if (topic.id === "onager") return ["Mangonel / Rocket Cart", "Onager / Heavy Rocket Cart", "Siege Onager"][index];
   if (topic.id === "hussar" && index === 0) return "Scout Cavalry / Missing Scout";
   if (topic.id === "hand_cannoneer") return ["Missing", "Hand Cannoneer without Ring Archer Armor", "Hand Cannoneer + Ring Archer Armor"][index];
   if (topic.id === "bombard_cannon") return ["Missing", "Bombard Cannon / Traction Trebuchet without Siege Engineers", "Bombard Cannon / Traction Trebuchet + Siege Engineers"][index];
   if (["onager", "cavalry_archer", "eagle", "hussar", "paladin", "regional_cavalry"].includes(topic.id) && topic.parts.some((part) => part.id === unit.id)) return slotName(topic, unit);
-  if (topic.id === "siege_ram") return ["Battering Ram / Armored Elephant", "Capped Ram / Siege Elephant", "Siege Ram / Nothing"][index];
-  if (topic.id !== "champion") return unit.name;
-  return ["Long Swordsman / Champi Warrior", "Two-Handed Swordsman / Elite Champi Warrior", "Champion / Legionary"][index] || unit.name;
+  return unit.name;
 }
 
 function stateArt(topic, unit, index, label) {
-  if (topic.id === "onager" && index === 0) {
-    return splitHtml([
-      topic.below.img,
-      topic.parts.find((part) => part.id === "unit-1904").img,
-    ], label);
+  if (topic.id === "paladin" && index === 0) {
+    return `<span class="split n2 unit-or-missing"><img src="${unit.img}" alt="Knight" title="Knight"><svg class="split-missing" aria-label="Missing"><use href="#mark-none"/></svg></span>`;
   }
   if (topic.blacksmithLine && index === 0) {
     return `<span class="split n2 unit-or-missing"><img src="${unit.img}" alt="${unit.name}" title="${unit.name}"><svg class="split-missing" aria-label="No upgrade"><use href="#mark-none"/></svg></span>`;
@@ -1590,6 +1602,19 @@ function stateArt(topic, unit, index, label) {
 
 function unitStateData(topic, fact = currentUnitFact(topic), civId = state.deck[state.index]?.civId) {
   if (topic.id === "monk") return null;
+  const customLevels = {
+    champion: ["unit-75", "unit-473", "unit-567"],
+    paladin: ["unit-38", "unit-283", "unit-569"],
+    siege_ram: ["unit-1258", "unit-422", "unit-548"],
+    onager: ["unit-280", "unit-550", "unit-588"],
+  }[topic.id];
+  if (customLevels) {
+    const [lowerId, middleId, upperId] = customLevels;
+    const lower = topic.parts.find((part) => part.id === lowerId);
+    const middle = topic.parts.find((part) => part.id === middleId);
+    const upper = topic.parts.find((part) => part.id === upperId);
+    return { lower, middle, upper, states: [lower, middle, upper], three: true, default: middle.id };
+  }
   if (topic.stateIds) {
     const [low, mid, top] = topic.stateIds;
     const lowerId = topic.id === "defense_towers" && civId === "sicilians" ? "building-1665" : low;
@@ -1604,11 +1629,6 @@ function unitStateData(topic, fact = currentUnitFact(topic), civId = state.deck[
   const upper = topic.parts.find((part) => part.id === topic.upgrades.find((id) => id.startsWith("unit-")));
   if (!middle) return null;
   const lower = topic.below || { id: NO_UNIT_ID, name: "Missing", img: topic.icon };
-  if (topic.id === "siege_ram") {
-    const second = topic.parts.find((part) => part.id === "unit-422");
-    const siege = topic.parts.find((part) => part.id === "unit-548");
-    return { lower, middle, second, upper: siege, states: [middle, second, siege], three: true, default: second.id };
-  }
   if (["hand_cannoneer", "bombard_cannon"].includes(topic.id)) {
     const upgradeId = topic.id === "hand_cannoneer" ? "tech-219" : "tech-377";
     const full = topic.parts.find((part) => part.id === upgradeId);
@@ -1617,14 +1637,6 @@ function unitStateData(topic, fact = currentUnitFact(topic), civId = state.deck[
       return { lower: missing, middle, upper: full, states: [missing, middle, full], three: true, default: middle.id };
     }
     return { lower: missing, middle, upper: full, states: [missing, middle, full], three: true, default: middle.id };
-  }
-  if (topic.id === "champion") {
-    const second = topic.parts.find((part) => part.id === "unit-473");
-    const champion = topic.parts.find((part) => part.id === "unit-567");
-    const first = fact?.tier === "none"
-      ? { id: NO_UNIT_ID, name: "No swordsman line" }
-      : middle;
-    return { lower, middle: first, second, upper: champion, states: [first, second, champion], three: true, default: second.id };
   }
   if (!upper) return { lower, middle, states: [lower, middle], three: false };
   return {
@@ -1996,6 +2008,7 @@ function unitStateFor(topic, fact, civId) {
   if (data.upper && slotGroup(topic, data.upper.id).some((part) => fact.has.includes(part.id))) return data.upper.id;
   if (data.second && slotGroup(topic, data.second.id).some((part) => fact.has.includes(part.id))) return data.second.id;
   if (slotGroup(topic, data.middle.id).some((part) => fact.has.includes(part.id))) return data.middle.id;
+  if (["champion", "paladin", "siege_ram", "onager"].includes(topic.id)) return data.lower.id;
   if (data.lower.id !== NO_UNIT_ID && (["onager", "arbalester", "skirmisher", "halberdier", "hussar"].includes(topic.id) || fact.has.includes(data.lower.id))) {
     return data.lower.id;
   }
@@ -2225,14 +2238,18 @@ function ordinal(value) {
   return `${n}${tail}`;
 }
 
-async function openBoardScreen(highlight, useCurrentFormats = true) {
-  if (useCurrentFormats) state.boardKey = formatKey([...state.formats]);
+async function openBoardScreen(highlight) {
+  const requestedKey = state.boardKey;
   show("scores");
-  el("leaderboard-format").value = state.boardKey;
+  for (const button of el("leaderboard-formats").querySelectorAll("[data-leaderboard-format]")) {
+    button.setAttribute("aria-pressed", String(button.dataset.leaderboardFormat === state.boardKey));
+  }
   el("scoreboard").innerHTML = `<li class="empty">Loading global scores…</li>`;
   try {
     if (state.scoreSubmission) await state.scoreSubmission.catch(() => null);
-    await loadScores();
+    const scores = await loadScores(requestedKey);
+    if (requestedKey !== state.boardKey) return;
+    state.scores = scores;
     renderScores(highlight || state.lastScoreId);
   } catch (ignored) {
     el("scoreboard").innerHTML = `<li class="empty">The global leaderboard is unavailable.</li>`;

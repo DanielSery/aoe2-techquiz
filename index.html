@@ -124,19 +124,13 @@
 
   <section id="scores" class="screen">
     <h2 class="board-title"><svg><use href="#icon-board"/></svg> Global leaderboard</h2>
-    <label class="leaderboard-filter" for="leaderboard-format">
-      <span>Question formats</span>
-      <select id="leaderboard-format">
-        <option value="normal">Standard</option>
-        <option value="reverse">Reverse</option>
-        <option value="difference">Difference</option>
-        <option value="normal+reverse">Standard + Reverse</option>
-        <option value="normal+difference">Standard + Difference</option>
-        <option value="reverse+difference">Reverse + Difference</option>
-        <option value="normal+reverse+difference">All three</option>
-        <option value="legacy-mixed">Mixed (legacy)</option>
-      </select>
-    </label>
+    <div id="leaderboard-formats" class="formats leaderboard-formats" aria-label="Leaderboard question format">
+      <button class="format" data-leaderboard-format="any" aria-pressed="true">Any</button>
+      <button class="format" data-leaderboard-format="normal" aria-pressed="false">Standard</button>
+      <button class="format" data-leaderboard-format="reverse" aria-pressed="false">Reverse</button>
+      <button class="format" data-leaderboard-format="difference" aria-pressed="false">Difference</button>
+      <button class="format" data-leaderboard-format="mixed" aria-pressed="false">Mixed</button>
+    </div>
     <ol id="scoreboard" class="scoreboard"></ol>
     <div class="actions">
       <button id="board-back" class="ghost"><svg><use href="#icon-home"/></svg></button>
@@ -164,10 +158,10 @@
   Age of Empires II artwork &copy; Microsoft. Fan project, not affiliated with Microsoft.
 </footer>
 
-<script src="data/topics.js?v=46"></script>
+<script src="data/topics.js?v=47"></script>
 <script src="js/data.js?v=44"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js?v=1"></script>
-<script src="js/app.js?v=58"></script>
+<script src="js/app.js?v=61"></script>
 </body>
 </html>

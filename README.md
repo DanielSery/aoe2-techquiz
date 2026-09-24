@@ -134,8 +134,8 @@ random, a smaller one is simply all of it.
 Full Play rounds multiply their final net score by a breadth coefficient with
 diminishing returns: `1 + 0.15 × √(topics − 1)`. The first topic is the
 **×1.00** baseline, two are ×1.15, five are ×1.30, and nineteen are ×1.64.
-Question formats do not change the coefficient because every exact format
-selection has its own leaderboard. The menu shows the coefficient before the
+Question formats do not change the coefficient because Standard, Reverse,
+Difference and Mixed have separate leaderboard categories. The menu shows the coefficient before the
 round and the results show the calculation. A retry of missed cards is a
 different, easier round, so it does not receive the coefficient or enter the
 leaderboard.
@@ -250,8 +250,9 @@ fresh start is an empty object.
 
 Every full round of Play is submitted to the global Supabase leaderboard with
 the player's name, score, correct count, exact topics and selected question
-formats. Standard, Reverse, Difference and each of the four mixed format sets
-have separate rankings. A name can hold one best row in every format set; a
+formats. Standard, Reverse, Difference and Mixed have separate rankings, with an
+Any filter showing them together by default. A name can hold one best row in
+every category; a
 higher score replaces only the best in that same ranking. The results say where
 the attempted score would rank and, when it was not a new best, where the
 player's saved best remains. The best 25 are reachable from the menu (🏆) and
@@ -265,8 +266,8 @@ private. The chosen name is stored only in their browser under
 showing the dialog again. It can be changed from the menu. Each format
 leaderboard has one row per case-insensitive name, but names are not identities
 and anyone can enter the same one. The menu shows the saved name together with
-its rank for the formats currently selected; no rank label is shown before that
-name has a published score there.
+its rank for the corresponding format category; no rank label is shown before
+that name has a published score there.
 
 ## How a round is dealt
 
@@ -399,12 +400,13 @@ On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(ro
 3. Deploy the site. Never put a `service_role` or secret key in the browser.
 
 Run the whole schema again after pulling leaderboard changes. It is a rerunnable,
-additive migration: existing rows are assigned to their exact format ranking,
+additive migration: existing rows are assigned to their format category,
 their original totals are retained in `original_score`, and their displayed
 scores are converted once from the old linear coefficient to the new
-diminishing coefficient. Rows are never deleted. Old `mixed` rows whose exact
-combination predates the `formats` column remain available under **Mixed
-(legacy)**. The submission and rank functions are replaced in place.
+diminishing coefficient. Rows are never deleted. If an earlier schema allowed
+more than one row for the same player in Mixed, every row is retained and only
+the strongest is marked current for ranking. The submission and rank functions
+are replaced in place.
 The script runs in one transaction, so any failure rolls the complete migration
 back instead of leaving partially converted scores.
 
