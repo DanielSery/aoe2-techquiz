@@ -259,15 +259,17 @@ player's saved best remains. The best 25 are reachable from the menu (🏆) and
 from the end of a round; the player's saved row is outlined when it is visible,
 and the top three receive gold, silver and bronze treatments.
 
-There is no account or password. After a player's first full Play round, they
-may enter a display name and publish the score or cancel and keep the result
-private. The chosen name is stored only in their browser under
-`aoe2-techquiz.player`; later scores publish under it automatically without
-showing the dialog again. It can be changed from the menu. Each format
-leaderboard has one row per case-insensitive name, but names are not identities
-and anyone can enter the same one. The menu shows the saved name together with
-its rank for the corresponding format category; no rank label is shown before
-that name has a published score there.
+Every visitor receives an automatic anonymous Supabase account. They can play
+as a guest with a display name and generated initials, or connect Discord to
+link that same account and show their Discord avatar. Linking preserves the
+guest's scores; it does not create a second leaderboard identity. Signing out
+starts a new guest account on that browser. Each account can hold one best row
+per format category, while display names do not need to be unique.
+
+Historical leaderboard rows remain visible as unowned `legacy` entries. They
+cannot be safely attached to an account from a matching name alone. New guest
+and Discord scores use `auth.uid()` for ownership, so changing a display name
+does not lose a best score and another player cannot overwrite it.
 
 ## How a round is dealt
 
@@ -397,7 +399,16 @@ On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(ro
 1. Create a Supabase project and run `supabase/schema.sql` in its SQL Editor.
 2. In **Project Settings → API**, copy the Project URL and publishable key into
    `js/supabase-config.js`.
-3. Deploy the site. Never put a `service_role` or secret key in the browser.
+3. In **Authentication → Providers**, enable **Allow anonymous sign-ins**.
+4. Create a Discord application, add Supabase's callback URL
+   `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`, then enable the
+   Discord provider in Supabase with its client ID and secret.
+5. In **Authentication → URL Configuration**, set the deployed site URL and
+   add the deployed URL (and local development URL, if used) to Redirect URLs.
+6. In **Authentication → Settings**, enable manual identity linking so a guest
+   can connect Discord without losing the guest account's scores.
+7. Deploy the site. Never put the Discord secret, a `service_role`, or any other
+   server credential in browser code.
 
 Run the whole schema again after pulling leaderboard changes. It is a rerunnable,
 additive migration: existing rows are assigned to their format category,
@@ -410,13 +421,12 @@ are replaced in place.
 The script runs in one transaction, so any failure rolls the complete migration
 back instead of leaving partially converted scores.
 
-The schema enables RLS and grants the unauthenticated `anon` role only `SELECT`
-on the table plus `EXECUTE` on a narrowly scoped best-score function. Direct
-client inserts, updates and deletes are denied. Because there is deliberately no
-authentication, a determined visitor can still forge names and scores or call
-the public function directly. Preventing that requires a trusted server or
-authentication; the database checks here limit malformed rows and enforce the
-best-score rule, not cheating.
+The schema enables RLS and grants public read access, but score and rank
+functions only to authenticated sessions (anonymous guests count as
+authenticated Supabase users). Direct client inserts, updates and deletes are
+denied. Authentication protects score ownership, not score integrity: a
+determined player can still call the submission function with a forged total.
+Preventing cheating requires trusted server-side score verification.
 
 The scripts and stylesheet are loaded with a `?v=` marker; bump it in
 `index.html` when you change them, or a plain reload can keep serving the old

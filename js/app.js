@@ -123,6 +123,9 @@ const state = {
   played: [],
   whole: false,
   playerName: "",
+  user: null,
+  avatarUrl: "",
+  authReady: Promise.resolve(),
   playerRank: null,
   lastScoreId: null,
   scoreSubmission: null,
@@ -130,6 +133,7 @@ const state = {
   publishAfterName: false,
   resultCoefficientNote: "",
   supabase: null,
+  publicSupabase: null,
   scores: [],
   boardKey: "any",
   timer: 0,
@@ -180,6 +184,8 @@ function start() {
     cancelPlayerDialog();
   });
   el("player-form").addEventListener("submit", savePlayerName);
+  el("discord-auth").addEventListener("click", connectDiscord);
+  el("auth-sign-out").addEventListener("click", startNewGuest);
   el("again-all").addEventListener("click", () => beginRound(shuffle(state.fullDeck), true));
   el("again-wrong").addEventListener("click", () =>
     beginRound(
@@ -223,18 +229,77 @@ function connectLeaderboard() {
     config.publishableKey !== "YOUR_PUBLISHABLE_KEY";
   if (!configured || !window.supabase?.createClient) return;
   state.supabase = window.supabase.createClient(config.url, config.publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
   });
+  // A sessionless reader keeps the legacy public board available before the
+  // auth migration grants SELECT to authenticated users.
+  state.publicSupabase = window.supabase.createClient(config.url, config.publishableKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      storageKey: "aoe2-techquiz-public-reader",
+    },
+  });
+  state.supabase.auth.onAuthStateChange((_event, session) => applyAuthSession(session));
+  state.authReady = initializeAuth();
+}
+
+async function initializeAuth() {
+  const { data } = await state.supabase.auth.getSession();
+  if (data.session) return applyAuthSession(data.session);
+  const { data: signedIn, error } = await state.supabase.auth.signInAnonymously();
+  if (error) {
+    renderPlayerName();
+    return;
+  }
+  applyAuthSession(signedIn.session);
+}
+
+function applyAuthSession(session) {
+  state.user = session?.user || null;
+  const metadata = state.user?.user_metadata || {};
+  state.avatarUrl = /^https:\/\/(cdn\.discordapp\.com|media\.discordapp\.net)\//.test(metadata.avatar_url || "")
+    ? metadata.avatar_url
+    : "";
+  if (!state.playerName && !state.user?.is_anonymous) {
+    const suggested = String(metadata.full_name || metadata.name || metadata.preferred_username || "").trim();
+    if (suggested.length >= 2 && suggested.length <= 24) state.playerName = suggested;
+  }
+  renderPlayerName();
   refreshPlayerRank();
+}
+
+async function connectDiscord() {
+  if (!state.supabase) return;
+  el("player-error").textContent = "";
+  const options = { redirectTo: `${location.origin}${location.pathname}` };
+  const request = state.user?.is_anonymous
+    ? state.supabase.auth.linkIdentity({ provider: "discord", options })
+    : state.supabase.auth.signInWithOAuth({ provider: "discord", options });
+  const { error } = await request;
+  if (error) el("player-error").textContent = error.message;
+}
+
+async function startNewGuest() {
+  if (!state.supabase) return;
+  await state.supabase.auth.signOut();
+  const { data, error } = await state.supabase.auth.signInAnonymously();
+  if (error) {
+    el("player-error").textContent = error.message;
+    return;
+  }
+  state.avatarUrl = "";
+  applyAuthSession(data.session);
+  openPlayerDialog();
 }
 
 async function refreshPlayerRank() {
   state.playerRank = null;
   renderPlayerName();
-  if (!state.supabase || !state.playerName || !state.formats.size) return;
+  if (!state.supabase || !state.user || !state.playerName || !state.formats.size) return;
   const { data, error } = await state.supabase
     .rpc("get_player_rank", {
-      p_player_name: state.playerName,
       p_leaderboard_key: formatKey([...state.formats]),
       p_scoring_version: SCORING_VERSION,
     })
@@ -255,9 +320,15 @@ function openPlayerDialog(publishScore = false) {
   state.publishAfterName = publishScore;
   const input = el("player-input");
   input.value = state.playerName;
-  el("player-dialog").querySelector("h2").textContent = publishScore
-    ? "Publish your score"
-    : "Choose your player name";
+  el("player-dialog").querySelector("h2").textContent = publishScore ? "Publish your score" : "Player profile";
+  const discord = state.user && !state.user.is_anonymous;
+  el("auth-status").textContent = discord
+    ? "Connected with Discord. Your scores and profile belong to this account."
+    : state.user
+    ? "Playing as a guest. Connect Discord to keep this profile across browsers."
+    : "Guest accounts must be enabled in Supabase before scores can be published.";
+  el("discord-auth").hidden = discord;
+  el("auth-sign-out").hidden = !discord;
   el("player-submit").textContent = publishScore ? "Publish score" : "Save name";
   el("player-error").textContent = "";
   el("player-dialog").showModal();
@@ -295,7 +366,8 @@ function savePlayerName(event) {
   else refreshPlayerRank();
 }
 
-function publishPendingScore() {
+async function publishPendingScore() {
+  await state.authReady;
   const entry = state.pendingScore;
   state.pendingScore = null;
   if (!entry || !state.supabase) return;
@@ -746,6 +818,7 @@ async function recordScore(entry) {
       p_topics: entry.topics,
       p_formats: entry.formats,
       p_scoring_version: SCORING_VERSION,
+      p_avatar_url: state.avatarUrl || null,
     })
     .single();
   if (error) throw error;
@@ -757,26 +830,41 @@ async function loadScores(boardKey) {
   if (!state.supabase) throw new Error("Leaderboard is not configured");
   let query = state.supabase
     .from("scores")
-    .select("id, player_name, score, right_answers, cards, topics, formats, question_format, leaderboard_key, scoring_version, created_at")
+      .select("id, player_name, avatar_url, provider, score, right_answers, cards, topics, formats, question_format, leaderboard_key, scoring_version, created_at")
     .eq("scoring_version", SCORING_VERSION)
     .eq("is_current", true);
   if (boardKey !== "any") query = query.eq("leaderboard_key", boardKey);
-  const { data, error } = await query
+  let result = await query
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(TOP_SCORES);
+  // Keep the public board readable while the additive database migration has
+  // not yet been run. Old rows have question_format but not the v2 columns.
+  if (result.error && ["42501", "42703", "PGRST204"].includes(result.error.code)) {
+    let legacyQuery = (state.publicSupabase || state.supabase)
+      .from("scores")
+      .select("id, player_name, score, right_answers, cards, topics, formats, question_format, created_at");
+    if (boardKey !== "any") legacyQuery = legacyQuery.eq("question_format", boardKey);
+    result = await legacyQuery
+      .order("score", { ascending: false })
+      .order("created_at", { ascending: true })
+      .limit(TOP_SCORES);
+  }
+  const { data, error } = result;
   if (error) throw error;
   return data.map((entry) => ({
-    id: entry.id,
-    player: entry.player_name,
+      id: entry.id,
+      player: entry.player_name,
+      avatar: safeAvatarUrl(entry.avatar_url),
+      provider: entry.provider || "legacy",
     score: entry.score,
     right: entry.right_answers,
     cards: entry.cards,
     topics: entry.topics,
     formats: entry.formats || [entry.question_format || "normal"],
     format: entry.question_format,
-    leaderboardKey: entry.leaderboard_key,
-    scoringVersion: entry.scoring_version,
+    leaderboardKey: entry.leaderboard_key || entry.question_format,
+    scoringVersion: entry.scoring_version || 1,
     at: entry.created_at,
   }));
 }
@@ -868,15 +956,24 @@ function renderMenu() {
 }
 
 function renderPlayerName() {
-  const container = el("player-name").querySelector("span");
-  if (!state.playerName) {
-    container.textContent = "Choose name";
-    return;
+  const button = el("player-name");
+  const avatar = button.querySelector(".profile-avatar");
+  const container = button.querySelector(".profile-copy");
+  const label = state.playerName || "Choose name";
+  avatar.replaceChildren();
+  if (safeAvatarUrl(state.avatarUrl)) {
+    const image = document.createElement("img");
+    image.src = state.avatarUrl;
+    image.alt = "";
+    image.referrerPolicy = "no-referrer";
+    avatar.append(image);
+  } else {
+    avatar.textContent = initials(label);
   }
-  container.innerHTML = "";
+  container.replaceChildren();
   const name = document.createElement("span");
   name.className = "player-label";
-  name.textContent = state.playerName;
+  name.textContent = label;
   container.append(name);
   if (state.playerRank) {
     const rank = document.createElement("b");
@@ -2251,7 +2348,8 @@ async function openBoardScreen(highlight) {
     if (requestedKey !== state.boardKey) return;
     state.scores = scores;
     renderScores(highlight || state.lastScoreId);
-  } catch (ignored) {
+  } catch (error) {
+    console.error("Leaderboard request failed", error);
     el("scoreboard").innerHTML = `<li class="empty">The global leaderboard is unavailable.</li>`;
   }
 }
@@ -2278,9 +2376,12 @@ function renderScores(highlight) {
       const classes = [entry.id === highlight ? "mine" : "", rank <= 3 ? `top-${rank}` : ""]
         .filter(Boolean)
         .join(" ");
-      return `<li class="${classes}">
-        <b class="place">${rank}</b>
-        <span class="player" title="${escapeHtml(entry.player)}">${escapeHtml(entry.player)}</span>
+        return `<li class="${classes}">
+          <b class="place">${rank}</b>
+          <span class="score-avatar" aria-hidden="true">${entry.avatar
+            ? `<img src="${escapeHtml(entry.avatar)}" alt="" referrerpolicy="no-referrer">`
+            : escapeHtml(initials(entry.player))}</span>
+          <span class="player" title="${escapeHtml(entry.player)}">${escapeHtml(entry.player)}</span>
         <span class="tally">${entry.score > 0 ? `+${entry.score}` : entry.score}</span>
         <span class="of">${entry.right}/${entry.cards}</span>
         <span class="topics" title="${escapeHtml(topics.map((topic) => topic.name).join(", "))}">
@@ -2297,11 +2398,22 @@ function renderScores(highlight) {
     .join("");
 }
 
-function formatLabel(format) {
+  function formatLabel(format) {
   return { normal: "Standard", reverse: "Reverse", difference: "Difference", mixed: "Mixed (legacy)" }[format] || format;
-}
+  }
 
-function escapeHtml(value) {
+  function safeAvatarUrl(value) {
+    const url = String(value || "");
+    return /^https:\/\/(cdn\.discordapp\.com|media\.discordapp\.net)\//.test(url) ? url : "";
+  }
+
+  function initials(value) {
+    const parts = String(value || "?").trim().split(/\s+/).filter(Boolean);
+    const letters = parts.length > 1 ? parts[0][0] + parts.at(-1)[0] : parts[0]?.slice(0, 2) || "?";
+    return letters.toUpperCase();
+  }
+
+  function escapeHtml(value) {
   return String(value || "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")

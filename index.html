@@ -21,7 +21,7 @@
 <meta name="twitter:description" content="Test your knowledge of Age of Empires II civilisations, units and upgrades.">
 <meta name="twitter:image" content="https://danielsery.github.io/aoe2-techquiz/img/topics/unit-5.png">
 <meta name="theme-color" content="#17130f">
-<link rel="stylesheet" href="css/style.css?v=49">
+<link rel="stylesheet" href="css/style.css?v=51">
 <link rel="icon" href="img/topics/unit-5.png">
 <script type="application/ld+json">
 {
@@ -64,7 +64,7 @@
     <header class="menu-bar">
       <h1><img src="img/topics/unit-5.png" alt=""><span>AoE2 Tech Quiz</span></h1>
       <div class="menu-account">
-        <button id="player-name" class="ghost player-name" title="Set player name"><span>Choose name</span></button>
+        <button id="player-name" class="ghost player-name" title="Player profile"><span class="profile-avatar" aria-hidden="true"></span><span class="profile-copy">Guest</span></button>
         <button id="to-board" class="ghost icon-button" title="Global leaderboard" aria-label="Global leaderboard"><svg><use href="#icon-board"/></svg></button>
       </div>
     </header>
@@ -141,11 +141,13 @@
 
 <dialog id="player-dialog" class="player-dialog">
   <form id="player-form">
-    <h2>Choose your player name</h2>
-    <p>This name is saved only in this browser and shown with your scores.</p>
+    <h2>Player profile</h2>
+    <p id="auth-status">Setting up your guest account…</p>
     <label for="player-input">Player name</label>
     <input id="player-input" name="player" type="text" minlength="2" maxlength="24" autocomplete="nickname" required>
     <p id="player-error" class="form-error" role="alert"></p>
+    <button id="discord-auth" type="button" class="discord-button">Connect Discord</button>
+    <button id="auth-sign-out" type="button" class="ghost" hidden>Sign out</button>
     <div class="actions">
       <button id="player-cancel" type="button" class="ghost">Cancel</button>
       <button id="player-submit" type="submit" class="primary">Save name</button>
@@ -162,6 +164,6 @@
 <script src="js/data.js?v=44"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js?v=1"></script>
-<script src="js/app.js?v=61"></script>
+<script src="js/app.js?v=63"></script>
 </body>
 </html>

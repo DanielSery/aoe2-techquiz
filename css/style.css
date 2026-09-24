@@ -227,17 +227,39 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .topic small { font-size: 11px; color: #8a7a64; }
 
 .menu-account .player-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   min-width: 0;
   max-width: 180px;
-  padding-inline: 12px;
+  padding: 5px 10px 5px 6px;
 }
 
-.player-name > span {
+.profile-copy {
   display: flex;
   align-items: center;
   min-width: 0;
   gap: 6px;
 }
+
+.profile-avatar,
+.score-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #d9ab5266;
+  border-radius: 50%;
+  background: #17130e;
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+
+.profile-avatar { width: 25px; height: 25px; }
+.profile-avatar img,
+.score-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 .player-name .player-label {
   overflow: hidden;
@@ -284,6 +306,11 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 .player-dialog .form-error { min-height: 18px; color: var(--none); }
 .player-dialog .actions { justify-content: flex-end; margin-top: 4px; }
+.player-dialog .discord-button {
+  border-color: #7189da;
+  background: #5865f2;
+  color: white;
+}
 
 
 /* Learn and Play are the menu's final actions: clicking either begins it. */
@@ -1782,10 +1809,6 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 .scoreboard li.top-1 .place { color: #f2c75c; }
 .scoreboard li.top-2 .place { color: #d8e0e7; }
 .scoreboard li.top-3 .place { color: #d08b57; }
-.scoreboard li.top-1 .place::after { content: " ♛"; }
-.scoreboard li.top-2 .place::after { content: " ◆"; }
-.scoreboard li.top-3 .place::after { content: " ◆"; }
-
 @keyframes podium-gold {
   from { box-shadow: 0 0 0 1px #f2c75c55 inset, 0 0 10px #f2c75c18; }
   to { box-shadow: 0 0 0 1px #ffe49a88 inset, 0 0 24px #f2c75c35; }
@@ -1798,6 +1821,7 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 }
 
 .scoreboard .place { width: 20px; color: #8a7a64; font-size: 12px; text-align: right; }
+.scoreboard .score-avatar { width: 28px; height: 28px; font-size: 10px; }
 .scoreboard .player {
   width: 110px;
   overflow: hidden;
@@ -1843,7 +1867,8 @@ h1 img { width: 32px; height: 32px; border-radius: 6px; }
 
 @media (max-width: 520px) {
   .scoreboard li { gap: 6px; padding-inline: 7px; }
-  .scoreboard .player { width: 78px; }
+  .scoreboard .score-avatar { width: 24px; height: 24px; }
+  .scoreboard .player { width: 62px; }
   .scoreboard .tally { width: 55px; }
   .scoreboard .of { width: 38px; }
   .scoreboard .topics { display: none; }
