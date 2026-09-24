@@ -117,9 +117,10 @@ slots differ. It favors nearby configurations so the answer depends on the few
 details that distinguish otherwise similar tech trees. Every selected unit or
 technology is evaluated immediately, while Done reveals differences left out.
 
-Each format keeps its own learning record. Knowing a configuration when the
-civilisation is supplied does not automatically mark its reverse or comparison
-card as mastered.
+All formats share one learning record for each topic/civilisation. Answering a
+fact in Standard, Reverse or Difference changes the same mastery percentage, so
+mixing formats does not split progress into parallel records. Existing separate
+format records are migrated locally by keeping the strongest progress.
 
 ## The two games
 
@@ -248,16 +249,22 @@ fresh start is an empty object.
 ## The board
 
 Every full round of Play is submitted to the global Supabase leaderboard with
-the player's name, score, correct count, topics and question format. The best 25
-are reachable from the menu (🏆) and from the end of a round; the round just
-played is outlined in gold when it is in the top 25.
+the player's name, score, correct count, exact topics and selected question
+formats. A name has only one row: Supabase replaces it when a higher score is
+submitted and leaves it unchanged for an equal or lower score. The results say
+where the attempted score would rank and, when it was not a new best, where the
+player's saved best remains. The best 25 are reachable from the menu (🏆) and
+from the end of a round; the player's saved row is outlined when it is visible,
+and the top three receive gold, silver and bronze treatments.
 
 There is no account or password. After a player's first full Play round, they
 may enter a display name and publish the score or cancel and keep the result
 private. The chosen name is stored only in their browser under
 `aoe2-techquiz.player`; later scores publish under it automatically without
-showing the dialog again. It can be changed from the menu. Names are not
-reserved or guaranteed unique.
+showing the dialog again. It can be changed from the menu. The leaderboard has
+one row per case-insensitive name, but names are not identities and anyone can
+enter the same one. The menu shows the saved name together with its current
+global rank; no rank label is shown before that name has a published score.
 
 ## How a round is dealt
 
@@ -384,12 +391,18 @@ On GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(ro
    `js/supabase-config.js`.
 3. Deploy the site. Never put a `service_role` or secret key in the browser.
 
-The schema enables RLS, grants the unauthenticated `anon` role only `SELECT` and
-`INSERT`, and provides no client-side update or delete access. Because there is
-deliberately no authentication, a determined visitor can still forge names and
-scores or automate submissions with the public API. Preventing that requires a
-trusted server or authentication; the database constraints here limit malformed
-rows, not cheating.
+Run the whole schema again after pulling leaderboard changes. It acts as a
+migration: existing duplicate names are reduced to their highest score, exact
+format selections are added, and the best-score submission function is replaced
+in place.
+
+The schema enables RLS and grants the unauthenticated `anon` role only `SELECT`
+on the table plus `EXECUTE` on a narrowly scoped best-score function. Direct
+client inserts, updates and deletes are denied. Because there is deliberately no
+authentication, a determined visitor can still forge names and scores or call
+the public function directly. Preventing that requires a trusted server or
+authentication; the database checks here limit malformed rows and enforce the
+best-score rule, not cheating.
 
 The scripts and stylesheet are loaded with a `?v=` marker; bump it in
 `index.html` when you change them, or a plain reload can keep serving the old

@@ -131,6 +131,7 @@ const state = {
   played: [],
   whole: false,
   playerName: "",
+  playerRank: null,
   lastScoreId: null,
   scoreSubmission: null,
   pendingScore: null,
@@ -230,6 +231,18 @@ function connectLeaderboard() {
   state.supabase = window.supabase.createClient(config.url, config.publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
   });
+  refreshPlayerRank();
+}
+
+async function refreshPlayerRank() {
+  state.playerRank = null;
+  renderPlayerName();
+  if (!state.supabase || !state.playerName) return;
+  const { data, error } = await state.supabase
+    .rpc("get_player_rank", { p_player_name: state.playerName })
+    .maybeSingle();
+  if (!error && data) state.playerRank = Number(data.player_rank);
+  renderPlayerName();
 }
 
 function startSelectedGame() {
@@ -267,6 +280,7 @@ function savePlayerName(event) {
     return;
   }
   state.playerName = name;
+  state.playerRank = null;
   try {
     localStorage.setItem(PLAYER_KEY, name);
   } catch (ignored) {
@@ -277,6 +291,7 @@ function savePlayerName(event) {
   el("player-dialog").close();
   renderPlayerName();
   if (shouldPublish) publishPendingScore();
+  else refreshPlayerRank();
 }
 
 function publishPendingScore() {
@@ -286,7 +301,14 @@ function publishPendingScore() {
   setResultNote(state.resultCoefficientNote, "submitting score…");
   state.scoreSubmission = recordScore(entry);
   state.scoreSubmission.then(
-    () => setResultNote(state.resultCoefficientNote, "score submitted"),
+    (result) => {
+      state.playerRank = Number(result.best_rank);
+      renderPlayerName();
+      const status = result.saved
+        ? `new best &middot; ${ordinal(result.best_rank)} on the leaderboard`
+        : `this score would rank ${ordinal(result.attempt_rank)} &middot; your best stays ${ordinal(result.best_rank)}`;
+      setResultNote(state.resultCoefficientNote, status);
+    },
     () => setResultNote(state.resultCoefficientNote, "score could not be submitted")
   );
 }
@@ -545,7 +567,10 @@ function restoreSelection() {
       if (valid.length) state.formats = new Set(valid);
     }
     const known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
-    if (known && typeof known === "object") state.known = known;
+    if (known && typeof known === "object") {
+      state.known = mergeFormatKnowledge(known);
+      localStorage.setItem(KNOWN_KEY, JSON.stringify(state.known));
+    }
     const playerName = (localStorage.getItem(PLAYER_KEY) || "").trim();
     if (playerName.length >= 2 && playerName.length <= 24) state.playerName = playerName;
   } catch (ignored) {
@@ -586,10 +611,24 @@ function rememberKnown() {
   }
 }
 
+/* Older versions tracked Standard, Reverse and Difference independently. Keep
+   the strongest record for each topic/civilisation and use it for every format. */
+function mergeFormatKnowledge(records) {
+  const merged = {};
+  for (const [key, value] of Object.entries(records)) {
+    const sharedKey = key.replace(/^(reverse|difference):/, "");
+    const candidate = typeof value === "number" ? { k: value, w: 0, t: null } : value;
+    const current = merged[sharedKey];
+    const better = !current
+      || candidate.k > current.k
+      || (candidate.k === current.k && (candidate.w || 0) < (current.w || 0));
+    if (better) merged[sharedKey] = candidate;
+  }
+  return merged;
+}
+
 function knownKey(card) {
-  const format = card.format || "normal";
-  const prefix = format === "normal" ? "" : `${format}:`;
-  return `${prefix}${card.topicId}:${card.civId}`;
+  return `${card.topicId}:${card.civId}`;
 }
 
 /* What is remembered about a card: how well it is known, how many times it has
@@ -671,32 +710,30 @@ function isNew(card) {
   return recordOf(card) === null;
 }
 
-/* Only complete Play rounds reach the shared board. The public client may read
-   and insert, while the database denies updates and deletes. */
+/* The database owns the best-score rule so two tabs cannot race each other:
+   one case-insensitive player name has one row, replaced only by a higher score. */
 async function recordScore(entry) {
   if (!state.supabase) throw new Error("Leaderboard is not configured");
   const { data, error } = await state.supabase
-    .from("scores")
-    .insert({
-      player_name: state.playerName,
-      score: entry.score,
-      right_answers: entry.right,
-      cards: entry.cards,
-      topics: entry.topics,
-      question_format: entry.format,
+    .rpc("submit_best_score", {
+      p_player_name: state.playerName,
+      p_score: entry.score,
+      p_right_answers: entry.right,
+      p_cards: entry.cards,
+      p_topics: entry.topics,
+      p_formats: entry.formats,
     })
-    .select("id")
     .single();
   if (error) throw error;
-  state.lastScoreId = data.id;
-  return data.id;
+  state.lastScoreId = data.score_id;
+  return data;
 }
 
 async function loadScores() {
   if (!state.supabase) throw new Error("Leaderboard is not configured");
   const { data, error } = await state.supabase
     .from("scores")
-    .select("id, player_name, score, right_answers, cards, topics, question_format, created_at")
+    .select("id, player_name, score, right_answers, cards, topics, formats, question_format, created_at")
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(TOP_SCORES);
@@ -708,6 +745,7 @@ async function loadScores() {
     right: entry.right_answers,
     cards: entry.cards,
     topics: entry.topics,
+    formats: entry.formats || [entry.question_format || "normal"],
     format: entry.question_format,
     at: entry.created_at,
   }));
@@ -811,7 +849,22 @@ function renderMenu() {
 }
 
 function renderPlayerName() {
-  el("player-name").querySelector("span").textContent = state.playerName || "Choose name";
+  const container = el("player-name").querySelector("span");
+  if (!state.playerName) {
+    container.textContent = "Choose name";
+    return;
+  }
+  container.innerHTML = "";
+  const name = document.createElement("span");
+  name.className = "player-label";
+  name.textContent = state.playerName;
+  container.append(name);
+  if (state.playerRank) {
+    const rank = document.createElement("b");
+    rank.className = "player-rank";
+    rank.textContent = `#${state.playerRank}`;
+    container.append(rank);
+  }
 }
 
 function playSize(pool) {
@@ -2072,6 +2125,7 @@ function showResults() {
     right,
     cards: state.results.length,
     topics,
+    formats: [...state.formats],
     format: state.formats.size > 1 ? "mixed" : [...state.formats][0],
   };
   state.scoreSubmission = null;
@@ -2121,6 +2175,12 @@ function setResultNote(coefficientNote, status) {
   el("final-note").innerHTML = [coefficientNote, status].filter(Boolean).join(" &middot; ");
 }
 
+function ordinal(value) {
+  const n = Number(value);
+  const tail = n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
+  return `${n}${tail}`;
+}
+
 async function openBoardScreen(highlight) {
   show("scores");
   el("scoreboard").innerHTML = `<li class="empty">Loading global scores…</li>`;
@@ -2144,25 +2204,37 @@ function renderScores(highlight) {
   }
   board.innerHTML = state.scores
     .map((entry, i) => {
+      const rank = i + 1;
       const topics = (entry.topics || [])
         .map((id) => state.data.topics.find((topic) => topic.id === id))
         .filter(Boolean);
       const shown = topics.slice(0, 5);
       const more = topics.length - shown.length;
-      return `<li class="${entry.id === highlight ? "mine" : ""}">
-        <b class="place">${i + 1}</b>
+      const formats = (entry.formats || [entry.format || "normal"]).map(formatLabel);
+      const classes = [entry.id === highlight ? "mine" : "", rank <= 3 ? `top-${rank}` : ""]
+        .filter(Boolean)
+        .join(" ");
+      return `<li class="${classes}">
+        <b class="place">${rank}</b>
         <span class="player" title="${escapeHtml(entry.player)}">${escapeHtml(entry.player)}</span>
         <span class="tally">${entry.score > 0 ? `+${entry.score}` : entry.score}</span>
         <span class="of">${entry.right}/${entry.cards}</span>
-        <span class="topics" title="${topics.map((topic) => topic.name).join(", ")}">
+        <span class="topics" title="${escapeHtml(topics.map((topic) => topic.name).join(", "))}">
           ${shown.map((topic) => `<span class="badge">${tileHtml(topic)}</span>`).join("")}
           ${more > 0 ? `<em>+${more}</em>` : ""}
         </span>
-        ${entry.format && entry.format !== "normal" ? `<em class="format-tag">${entry.format}</em>` : ""}
+        <span class="configuration" title="${escapeHtml(`Topics: ${topics.map((topic) => topic.name).join(", ")} · Formats: ${formats.join(", ")}`)}">
+          <b>${topics.length}T · ${escapeHtml(topics.map((topic) => topic.name).join(", "))}</b>
+          <small>${formats.join(" + ")}</small>
+        </span>
         <span class="when">${when(entry.at)}</span>
       </li>`;
     })
     .join("");
+}
+
+function formatLabel(format) {
+  return { normal: "Standard", reverse: "Reverse", difference: "Difference", mixed: "Mixed (legacy)" }[format] || format;
 }
 
 function escapeHtml(value) {
