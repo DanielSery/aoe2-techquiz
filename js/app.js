@@ -761,10 +761,23 @@ async function loadScores(boardKey) {
     .eq("scoring_version", SCORING_VERSION)
     .eq("is_current", true);
   if (boardKey !== "any") query = query.eq("leaderboard_key", boardKey);
-  const { data, error } = await query
+  let result = await query
     .order("score", { ascending: false })
     .order("created_at", { ascending: true })
     .limit(TOP_SCORES);
+  // Keep the public board readable while the additive database migration has
+  // not yet been run. Old rows have question_format but not the v2 columns.
+  if (result.error && ["42703", "PGRST204"].includes(result.error.code)) {
+    let legacyQuery = state.supabase
+      .from("scores")
+      .select("id, player_name, score, right_answers, cards, topics, formats, question_format, created_at");
+    if (boardKey !== "any") legacyQuery = legacyQuery.eq("question_format", boardKey);
+    result = await legacyQuery
+      .order("score", { ascending: false })
+      .order("created_at", { ascending: true })
+      .limit(TOP_SCORES);
+  }
+  const { data, error } = result;
   if (error) throw error;
   return data.map((entry) => ({
     id: entry.id,
@@ -775,8 +788,8 @@ async function loadScores(boardKey) {
     topics: entry.topics,
     formats: entry.formats || [entry.question_format || "normal"],
     format: entry.question_format,
-    leaderboardKey: entry.leaderboard_key,
-    scoringVersion: entry.scoring_version,
+    leaderboardKey: entry.leaderboard_key || entry.question_format,
+    scoringVersion: entry.scoring_version || 1,
     at: entry.created_at,
   }));
 }
@@ -2251,7 +2264,8 @@ async function openBoardScreen(highlight) {
     if (requestedKey !== state.boardKey) return;
     state.scores = scores;
     renderScores(highlight || state.lastScoreId);
-  } catch (ignored) {
+  } catch (error) {
+    console.error("Leaderboard request failed", error);
     el("scoreboard").innerHTML = `<li class="empty">The global leaderboard is unavailable.</li>`;
   }
 }
